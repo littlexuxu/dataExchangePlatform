@@ -1,0 +1,2 @@
+host.url=http://192.168.0.138:8090/waf_ws/ws
+middleserviceurl=localhost:8061

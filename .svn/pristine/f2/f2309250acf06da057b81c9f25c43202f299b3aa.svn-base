@@ -1,0 +1,22 @@
+package com.ajie.wechat.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.ajie.wechat.dao.JTContractDao;
+import com.ajie.wechat.model.JTContract;
+
+@Service
+@Transactional
+public class JTContractService {
+	
+	@Autowired
+    private JTContractDao jtcontractdao;
+	
+	public String add(JTContract jtcontract){
+		jtcontractdao.save(jtcontract);
+        return "添加成功！";
+    }
+
+}

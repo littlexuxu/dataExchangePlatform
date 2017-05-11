@@ -1,0 +1,98 @@
+package com.ajie.wechat.controller;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+import com.ajie.wechat.dao.CommonDao;
+import com.ajie.wechat.service.UserService;
+
+import cn.ccccltd.webservice.construction.projectbaseinfo.GhscgzjzbVO;
+import cn.ccccltd.webservice.construction.projectbaseinfo.GhscgzjzbWs;
+import cn.ccccltd.webservice.construction.projectbaseinfo.ReturnMessage;
+import net.sf.json.JSONObject;
+
+@Controller
+@RequestMapping(value = "/frame")
+public class UserController {
+	@Autowired
+    private UserService userService;
+	@Autowired
+    private CommonDao commondao;
+    
+	@RequestMapping(value = "/jtintegrate/{recid}",method = RequestMethod.GET)
+    public String jtintegrate(@PathVariable String recid){
+		ApplicationContext ctx = new ClassPathXmlApplicationContext("classpath:cxf-Security.xml");  
+        
+        GhscgzjzbWs client = (GhscgzjzbWs)ctx.getBean("client");  
+        System.out.println("recid:"+recid);
+        String sql = "select * from jt_sg_project_base where recid="+recid;
+        List<GhscgzjzbVO> ghbases = (List<GhscgzjzbVO>) commondao.queryListEntity(sql, null, GhscgzjzbVO.class);
+        ReturnMessage returnmessage = null;
+        if(ghbases != null && ghbases.size()>0){
+        	GhscgzjzbVO projectBaseInfo = ghbases.get(0);
+        	System.out.println("stdname:"+projectBaseInfo.getStdname());
+        	returnmessage = client.addBaseInfo(projectBaseInfo);
+            System.out.println("message:"+returnmessage.getMessage());
+            System.out.println("statuscod:"+returnmessage.getStatusCode());
+            System.out.println("resultlist:"+returnmessage.getResultList());
+        }
+        JSONObject jsonObject = JSONObject.fromObject(returnmessage);
+        System.out.println(jsonObject.toString());
+        String resultstr = "";
+        try {
+        	resultstr = URLEncoder.encode(jsonObject.toString(),"UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+        return resultstr;
+    }
+	
+//    @RequestMapping(value = "/saveUser",method = RequestMethod.POST)
+//    public ModelAndView saveUser(User user){
+//        String returnstr = userService.add(user);
+//        
+//        return new ModelAndView("successful","message",returnstr);
+//    }
+//    
+//    @RequestMapping(value = "/findUser",method = RequestMethod.POST)
+//    public ModelAndView saveUser(Long id){
+////    	String sql = "select * from user a join jpa_school b where a.user_id=b.id";
+////    	List<UserSchool> userschools = (List<UserSchool>) commondao.queryListEntity(sql, null, UserSchool.class);
+////    	
+//////        User returnuser = userService.findOneUser(id);
+////        String returnmessage = "查不到改内容!";
+////    	if(userschools != null && userschools.size()>0){
+////    		returnmessage = userschools.get(0).getSchoolename();
+////    	}
+//    	
+//    	User user = new User();
+//    	user.setId(13L);
+//    	user.setAccount("test!!!");
+//    	userService.saveSchoolUser(user);
+//    	
+//        return new ModelAndView("successful","message",user.getAccount());
+//    }
+//    
+//    @RequestMapping(value = "/saveUser/{account}",
+//            method = RequestMethod.GET,
+//            produces = MediaType.APPLICATION_JSON_VALUE + ";charset=UTF-8")
+//    public String add(@PathVariable String account){
+//        return userService.addUser(account);
+//    }
+//    
+//    @RequestMapping(value = "/user/{id}",
+//            method = RequestMethod.GET,
+//            produces = MediaType.APPLICATION_JSON_VALUE + ";charset=UTF-8")
+//    public User add(@PathVariable Long id){
+//        return userService.getOneUser(id);
+//    }
+}

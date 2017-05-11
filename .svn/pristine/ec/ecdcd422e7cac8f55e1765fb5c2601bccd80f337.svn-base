@@ -1,0 +1,615 @@
+package com.ajie.wechat.service;
+
+import java.math.BigDecimal;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+
+import org.pentaho.di.core.database.util.DatabaseUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import cn.ccccltd.webservice.construction.contract.HwxmbxVO;
+import cn.ccccltd.webservice.construction.marketinfo.Ghscgzjzbzb;
+import cn.ccccltd.webservice.construction.projectbaseinfo.GhscgzjzbVO;
+import cn.ccccltd.webservice.construction.projectbaseinfo.GhscxxVO;
+import cn.ccccltd.webservice.construction.projectbaseinfo.GhxmjhtVO;
+import cn.ccccltd.webservice.construction.projectbaseinfo.VoSupport;
+import cn.ccccltd.webservice.design.contract.HwxmbcxxVO;
+import cn.ccccltd.webservice.design.contract.SjxmjhtVO;
+import cn.ccccltd.webservice.design.marketinfo.SjscgzjzbzbVO;
+import cn.ccccltd.webservice.design.marketinfo.SjscxxVO;
+import cn.ccccltd.webservice.design.projectbaseinfo.SjscgzjzbVO;
+import cn.ccccltd.webservice.other.projectbaseinfo.QtlxmVO;
+
+import com.ajie.wechat.dao.JTContractDao;
+import com.ajie.wechat.dao.JtOtherCompanyBidDao;
+import com.ajie.wechat.dao.JtProjectInsuranceDao;
+import com.ajie.wechat.model.JTContract;
+import com.ajie.wechat.model.JtOtherCompanyBid;
+import com.ajie.wechat.model.JtProjectInsurance;
+import com.ajie.wechat.util.DateUtil;
+
+@Service
+@Transactional
+public class JTContractService {
+	
+	@Autowired
+    private JTContractDao jtcontractdao;
+	@Autowired
+    private JtOtherCompanyBidDao jtOtherCompanyBidDao;
+	@Autowired
+    private JtProjectInsuranceDao jtProjectInsuranceDao;
+	
+	/**
+	 * 合同信息录入并返回主键值
+	 * @param jtcontract
+	 * @return
+	 */
+	public String add(JTContract jtcontract){
+		//jtcontract基本信息保存
+		JTContract resultjt = jtcontractdao.save(jtcontract);
+		//关联其它投标表信息保存
+		otherBidsAdd(jtcontract.getJtothercompanybids());
+		//关联保险信息表保存
+		projectinSuranceAdd(jtcontract.getProjectinsurances());
+		//返回主键
+        return resultjt.getJtcontractid().toString();
+    }
+	
+	/**
+	 * 其它投标表信息录入
+	 * @param otherbids
+	 * @return
+	 */
+	public List<JtOtherCompanyBid> otherBidsAdd(List<JtOtherCompanyBid> otherbids){
+		otherbids = jtOtherCompanyBidDao.save(otherbids);
+		return otherbids;
+	}
+	
+	/**
+	 * 保险信息表录入
+	 * @param projectinsurances
+	 * @return
+	 */
+	public List<JtProjectInsurance> projectinSuranceAdd(List<JtProjectInsurance> projectinsurances){
+		projectinsurances = jtProjectInsuranceDao.save(projectinsurances);
+		return projectinsurances;
+	}
+	
+	DateUtil date = new DateUtil();
+	//public static String srcformat = "yyyy-MM月-dd.hh.mm. ss. SSSS 上午";
+	public static String srcformat = "yyyy-MM-dd.hh.mm. ss. SSSS";
+	public static String goalforamt = "yyyy-MM-dd HH:mm:ss.SSS";
+	
+	//施工基本信息
+	public void sgBaseToJtContract(List<VoSupport> resultList,JTContract jt){
+		jt.setGroupcontracttype(2);
+		if(resultList != null && resultList.size()>0){
+			GhscgzjzbVO gh = (GhscgzjzbVO)resultList.get(0);
+			//项目标段
+			jt.setProjectbid(gh.getBdmc());
+			jt.setNationeconomyindustrytype((gh.getGjhylb()));
+			jt.setTotalinvestamountcurrency(gh.getHtedw());
+			jt.setIsensureproject(gh.getSfcfwt());
+			jt.setIsplanproject(gh.getSfwjhnxmGh());
+			jt.setDesigncompanyid(gh.getSjdw());
+			jt.setDesigncompanyname(gh.getSjdwqt());
+			jt.setBusinesstype(gh.getSsyw());
+			jt.setCommerceministryprojecttype(gh.getSwbxmlx());
+			jt.setSpecialstatuscomments(gh.getTsztyysm());
+			jt.setInvesttype(gh.getTzly());
+			jt.setProjectcooperationtype(gh.getXmhzfs());
+			jt.setProjecttype(gh.getXmlx());
+			jt.setEnglishprojectname(gh.getXmmcyw());
+			jt.setProjectlocation(gh.getXmszd());
+			jt.setProjectstatus(gh.getXmtszt());
+			//有疑问
+			jt.setCustomerid(gh.getYzdw());
+			jt.setOthercustomername(gh.getYzdwqt());
+			
+			jt.setGroupindustrytype(gh.getZjhyflx());
+			jt.setProjectfundssource(gh.getZjlydx());
+			jt.setBaserecid(gh.getRecid());
+			jt.setTrackrecid(gh.getRecid());
+			//预计合同额币种
+			jt.setForcastcurrency(gh.getHtedw());
+			//是否国际产能
+			jt.setIsnatoincooperproject(gh.getSfgjcnhzxmHw());
+			//中国成分比例
+			jt.setChinarange(gh.getZgcfblHw());
+			//带动出口情况
+			jt.setDriveexportcondition(gh.getDdckqkHw());
+			//设计单位其它
+			jt.setOtherdesigncompany(gh.getSjdwqt());
+		}
+	}
+	//施工市场信息
+	public void sgMarketToJtContract(List<cn.ccccltd.webservice.construction.marketinfo.VoSupport> resultList
+			,JTContract jt,int bidcompanyid){
+		if(resultList != null && resultList.size()>0){
+			cn.ccccltd.webservice.construction.marketinfo.GhscxxVO gh = 
+					(cn.ccccltd.webservice.construction.marketinfo.GhscxxVO)resultList.get(0);
+			jt.setStarttrackingtime(date.dateStringToOtherString(gh.getKsgzsj(),srcformat,goalforamt));
+			jt.setPlancontractbrank(gh.getNyqypp());
+			jt.setPlancontractbrankname(gh.getNyqyzzmc());
+			jt.setPlanimplementcompanyname(gh.getNssdwmc());
+			jt.setForcastcontractamount(gh.getYjhte()/10000);
+			jt.setForcastcontractduration(gh.getYjhtgq());
+			
+			//jt.setCurrentexchangerate(gh); 无对应字段
+		
+			jt.setContractsigntype(gh.getHtqdfs());
+			jt.setIskeytrackingproject(gh.getSfzdgzxm());
+			jt.setTrackinginfo(gh.getScjzqk());
+			jt.setQualificatecheckdate(date.dateStringToOtherString(gh.getZsrq(),srcformat,goalforamt));
+			jt.setQualificatecheckresult(gh.getZsjg());
+			jt.setTenderdate(date.dateStringToOtherString(gh.getZbrqi(),srcformat,goalforamt));
+			jt.setTenderenddate(date.dateStringToOtherString(gh.getZbjzrq(),srcformat,goalforamt));
+			jt.setTendercompanycontactname(gh.getZbdllxr());
+			jt.setTendercompanycontactphone(gh.getZbdllxdh());
+			//投标组织方式
+			jt.setBidorginazationmode(gh.getZztbfs());
+			//招标单位名称
+			jt.setTendercompanyname(gh.getZbdlmc());
+			
+			jt.setBidcompanyname(gh.getQtdwmc());
+			jt.setBidofferdate(date.dateStringToOtherString(gh.getTbrq(),srcformat,goalforamt));
+			jt.setIsbidcomments(gh.getZbsm());
+			jt.setIsbid(gh.getSfzb());
+			jt.setBidofferamount(gh.getTbbjb()/10000);
+			jt.setBidamount(gh.getZbe()/10000);
+			jt.setBiddate(date.dateStringToOtherString(gh.getZbrq(),srcformat,goalforamt));
+			jt.setBidareahq(gh.getQtqyzb());
+			jt.setBidbusinessunit(gh.getQtsyb());
+			//投标额币种
+			jt.setBidofferamountcurrency(gh.getTbbjdw());
+			//中标额币种
+			jt.setBidamountcurrency(gh.getJedwb());
+			
+			//设置其它投标关联信息
+			setOtherBids(gh.getOtherBidList(),jt,bidcompanyid);
+		}
+	}
+	//施工合同信息
+	public void sgContractToJtContract(List<cn.ccccltd.webservice.construction.contract.VoSupport> resultList
+			,JTContract jt,int contractinsuraceid){
+		if(resultList != null && resultList.size()>0){
+			cn.ccccltd.webservice.construction.contract.GhxmjhtVO gh = 
+					(cn.ccccltd.webservice.construction.contract.GhxmjhtVO)resultList.get(0);
+			jt.setContractrecid(gh.getRecid());
+			jt.setTotalinvestamountcurrency(gh.getJldwlxr());
+			jt.setProjectactualstartdate(date.dateStringToOtherString(gh.getSjkgrq(),srcformat,goalforamt));
+			jt.setIsralationinvestproject(gh.getSfgltzxm());
+			jt.setRelationinvestprojectcompany(gh.getGltzxmgs());
+			jt.setInvestprojecttype(gh.getTzxmlx());
+			jt.setProjectscale(gh.getXmgkjgm());
+			jt.setProjecthignlights(gh.getXmld());
+			jt.setProjectmainstructure(gh.getZtgcjg());
+			jt.setSteelproducts(gh.getGc());
+			jt.setCement(gh.getSn());
+			jt.setWood(gh.getMc());
+			jt.setConcrete(gh.getHntl());
+			jt.setEarthwork(gh.getTfl());
+			jt.setRock(gh.getSfl());
+			jt.setOther(gh.getQt());
+			jt.setContractsigntype(gh.getHtqdfs());
+			jt.setContractduration(gh.getHtgq());
+			jt.setContractstartdate(date.dateStringToOtherString(gh.getHtkgrq(),srcformat,goalforamt));
+			jt.setContractenddate(date.dateStringToOtherString(gh.getHtjgrq(),srcformat,goalforamt));
+			jt.setIsinnersubcontract(gh.getSffb());
+			jt.setContractbrank(gh.getDwqypp());
+			jt.setContractbrankname(gh.getJtpp());
+			jt.setImplementcompanyname(gh.getSsdwmc());
+			jt.setAdvancepaymentratio(gh.getYsyfkbl());
+			jt.setCollectedamountratio(gh.getYsjdkzfbl());
+			jt.setQualityassuranceratio(gh.getYszbjbl());
+			jt.setQualityassurancetime(gh.getYszbjqx());
+			jt.setPerformancetype(gh.getYslybzfs());
+			jt.setPerformanceamount(gh.getYslybzje()/10000);
+			//?
+			jt.setPm(gh.getXmjl());
+			
+			jt.setPmcontactphone(gh.getXmjldh());
+			jt.setChiefengineer(gh.getZg());
+			jt.setChiefengineercontactphone(gh.getZglxdh());
+			jt.setZipcode(gh.getYzbm());
+			jt.setOfficephone(gh.getBgsdh());
+			jt.setProjectaddress(gh.getXmxxtxdz());
+			jt.setProjectgps(gh.getGpszb());
+			jt.setDisignstandard(gh.getSjgf());
+			jt.setProjectcontractlanguage(gh.getXmhtyy());
+			jt.setProjectcommunicatelanguage(gh.getXmjlyy());
+//			jt.setProjectadvancepaymentamount();
+			jt.setContractrecid(gh.getRecid());
+			jt.setSgstandard(gh.getSggf());
+			//监理单位
+			jt.setSupervisorcompanyname(gh.getJldw());
+			jt.setSupervisorcompanycontactname(gh.getJldwlxr());
+			jt.setSupervisorcompanycontactphone(gh.getJldwlxdh());
+			//项目预付款比例
+			jt.setForeignadvancepaymentratio(gh.getYfkbl());
+			//履约保证金币种
+			jt.setPerformancecurrency(gh.getHetdw());
+			//是否未签约已实施
+			jt.setIsstartnosigned(gh.getWqyyss());
+			//设置合同统计年、月
+			DateFormat formatgoal= new SimpleDateFormat(srcformat);
+			try {
+				Date tjgsyf = formatgoal.parse(gh.getTjgsyf());
+				Calendar calendar=Calendar.getInstance(); 
+				calendar.setTime(tjgsyf);
+				jt.setJtstatisticsyear(calendar.get(Calendar.YEAR)+"");
+				jt.setJtstatisticsmonth((calendar.get(Calendar.MONTH)+1)+"");
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+			
+			//设置jtcontract保险信息
+			setProjectInsurances(gh.getBxList(),jt,contractinsuraceid);
+		}
+	}
+	
+	//设计基本信息
+	public void sjBaseToJtContract(List<cn.ccccltd.webservice.design.projectbaseinfo.VoSupport> resultList,JTContract jt){
+		jt.setGroupcontracttype(1);
+		if(resultList != null && resultList.size()>0){
+			SjscgzjzbVO sj = (SjscgzjzbVO)resultList.get(0);
+			jt.setGroupcontracttype(1);
+			jt.setBaserecid(sj.getRecid());  
+			jt.setTrackrecid(sj.getRecid());
+			jt.setEnglishprojectname(sj.getXmmcyw());   
+			jt.setBusinesstype(sj.getSsyw());   
+			jt.setProjectbid(sj.getXmbd());   
+			jt.setGroupindustrytype(sj.getZjhyflx());  
+			jt.setProjecttype(sj.getXmlx()); 
+			jt.setProjectcooperationtype(sj.getXmhzfs());  
+			jt.setInvesttype(sj.getTzly()); 
+			jt.setNationeconomyindustrytype(sj.getGjhylb());  
+			jt.setCommerceministryprojecttype(sj.getSwbxmlx()); 
+			jt.setProjectlocation(sj.getXmszd());
+		    jt.setProjectfundssource(sj.getZjlydx());
+			jt.setProjectstatus(sj.getXmtszt());   
+			jt.setSpecialstatuscomments(sj.getTsztyysm());  
+			jt.setCustomerid(sj.getYzdw());  
+			jt.setOthercustomername(sj.getYzdwqt());  
+			jt.setIsensureproject(sj.getSfcfwt()); 
+			jt.setIsplanproject(sj.getSfwjhnxmGh());
+			//预计合同额币种
+			jt.setForcastcurrency(sj.getYjhtebz());
+			//是否国际产能
+			jt.setIsnatoincooperproject(sj.getSfgjcnhzxmHw());
+			//中国成分比例
+			jt.setChinarange(sj.getZgcfblHw());
+			//带动出口情况
+			jt.setDriveexportcondition(sj.getDdckqkHw());
+			
+		}
+	}
+	
+	//设计市场信息
+	public void sjMarketToJtContract(List<cn.ccccltd.webservice.design.marketinfo.VoSupport> resultList
+			,JTContract jt,int bidcompanyid){
+		if(resultList != null && resultList.size()>0){
+			SjscxxVO sj = (SjscxxVO)resultList.get(0);
+//			if(sj.getCscgzid() != null && !sj.getCscgzid().equals("")){
+//				jt.setJtcontractid(Long.parseLong(sj.getCscgzid()));
+//			}
+			jt.setStarttrackingtime(date.dateStringToOtherString(sj.getKsgzsj(),srcformat,goalforamt));
+			jt.setPlancontractbrank(sj.getNyqypp());
+			jt.setPlancontractbrankname(sj.getNyqyzzmc());
+			jt.setPlanimplementcompanyname(sj.getNssdwmc());
+			jt.setForcastcontractamount(sj.getYjhte()/10000);
+			jt.setForcastcontractduration(sj.getYjhtgq());
+			jt.setIskeytrackingproject(sj.getSfzdgzxm());
+			jt.setTrackinginfo(sj.getGzjzqk());
+			jt.setBidorginazationmode(sj.getZztbfs());
+			jt.setBidcompanyname(sj.getQtdwmc());
+			jt.setBidofferdate(date.dateStringToOtherString(sj.getTbrq(),srcformat,goalforamt));
+			jt.setBidofferamount(sj.getTbbj()/10000);
+			jt.setIsbid(sj.getSfzb());
+			jt.setBidamount(sj.getZbe()/10000);
+			jt.setIsbidcomments(sj.getZbsm());
+			jt.setBidareahq(sj.getQtqyzb());
+			jt.setBidbusinessunit(sj.getQtsyb());
+			//投标额币种
+			jt.setBidofferamountcurrency(sj.getTbbjbz());
+			//中标额币种
+			jt.setBidamountcurrency(sj.getZbebz());
+			
+			//jtcontract设置其它投标信息
+			setSjOtherBids(sj.getSjscgzjzbzbvos(), jt, bidcompanyid);
+		}
+	}
+	
+	//设计合同信息
+	public void sjContractToJtContract(List<cn.ccccltd.webservice.design.contract.VoSupport> resultList
+			,JTContract jt,int contractinsuraceid){
+		if(resultList != null && resultList.size()>0){
+			SjxmjhtVO sj = (SjxmjhtVO)resultList.get(0);
+		    jt.setProjectactualstartdate(date.dateStringToOtherString(sj.getSjkgrq(),srcformat,goalforamt));
+			jt.setProjectacutalenddate(date.dateStringToOtherString(sj.getSjwgrq(),srcformat,goalforamt));
+			jt.setIsralationinvestproject(sj.getSfgltzxm());
+			jt.setRelationinvestprojectcompany(sj.getGltzxmgs());
+			jt.setInvestprojecttype(sj.getTzxmlx());
+			jt.setProjectscale(sj.getZyxmnr());
+			jt.setProjecthignlights(sj.getXmld());
+			jt.setIsstartnosigned(sj.getWqyyss());
+			jt.setContractrecid(sj.getRecid());
+//			jt.setContractid(Integer.parseInt(sj.getScsjxmjht().getChtid()));
+			jt.setContractsigntype(sj.getHtqdfs());
+			jt.setContractduration(sj.getHtgq());
+			jt.setContractstartdate(date.dateStringToOtherString(sj.getHtkgrq(),srcformat,goalforamt));
+			jt.setContractenddate(date.dateStringToOtherString(sj.getHtwgrq(),srcformat,goalforamt));
+			jt.setIsinnersubcontract(sj.getSffb());
+			jt.setContractbrank(sj.getDwqypp());
+			jt.setContractbrankname(sj.getJtpp());
+			jt.setImplementcompanyname(sj.getSsdwmc());
+			jt.setAdvancepaymentratio(sj.getYsyfkbl());
+			jt.setCollectedamountratio(sj.getYsjdkzfbl());
+			jt.setQualityassuranceratio(sj.getYszbjbl());
+			jt.setQualityassurancetime(sj.getYszbjqx());
+			jt.setPerformancetype(sj.getYslybzfs());
+			jt.setPerformanceamount(sj.getYslybzje()/10000);
+			jt.setProjectgps(sj.getGpszb());
+			jt.setDisignstandard(sj.getSjgf());
+			jt.setProjectcontractlanguage(sj.getXmhtyy());
+			jt.setProjectadvancepaymentamount(sj.getXmyfk()/10000);
+			jt.setForeignadvancepaymentratio(sj.getXmyfkbl());
+			jt.setProjectcommunicatelanguage(sj.getXmjlyy());
+			//履约保证金币种
+			jt.setPerformancecurrency(sj.getHetbz());
+			//设置合同统计年、月
+			DateFormat formatgoal= new SimpleDateFormat(srcformat);
+			try {
+				Date tjgsyf = formatgoal.parse(sj.getTjgsyf());
+				Calendar calendar=Calendar.getInstance(); 
+				calendar.setTime(tjgsyf);
+				jt.setJtstatisticsyear(calendar.get(Calendar.YEAR)+"");
+				jt.setJtstatisticsmonth((calendar.get(Calendar.MONTH)+1)+"");
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+			
+			//jtcontract设置保险信息
+			setSjProjectInsurances(sj.getBxList(), jt, contractinsuraceid);
+		}
+	}
+	
+	//其他
+	public void qtBaseToJtContract(List<cn.ccccltd.webservice.other.projectbaseinfo.VoSupport> resultList,JTContract jt){
+		jt.setGroupcontracttype(4);
+		if(resultList != null && resultList.size()>0){
+			QtlxmVO qt = (QtlxmVO)resultList.get(0);
+			jt.setBaserecid(qt.getRecid());
+			jt.setContractrecid(qt.getRecid());
+			jt.setEnglishprojectname(qt.getXmmcyw());
+			jt.setBusinesstype(qt.getSsyw());
+			jt.setProjectbid(qt.getXmbd());
+			jt.setGroupindustrytype(qt.getZjhyfl());
+			jt.setProjecttype(qt.getXmlx());
+			jt.setNationeconomyindustrytype(qt.getGjhylb());
+			jt.setProjectcooperationtype(qt.getXmhzfs());
+			jt.setInvesttype(qt.getTzly());
+//			jt.setContractid(Integer.parseInt(qt.getCxmid()));
+			jt.setProjectlocation(qt.getXmszd());
+			jt.setProjectfundssource(qt.getYzzjly());		
+			jt.setIsstartnosigned(qt.getSfwqyyss());
+			jt.setIsadjustproject(qt.getSftzxm());
+			jt.setIsinnersubcontract(qt.getSffb());
+			jt.setActualstartdate(date.dateStringToOtherString(qt.getSjkgrq(),srcformat,goalforamt));
+			jt.setContractsigntype(qt.getHtqdfs());
+			jt.setContractduration(qt.getHtgq());
+			jt.setContractstartdate(date.dateStringToOtherString(qt.getHtkgrq(),srcformat,goalforamt));
+			jt.setContractenddate(date.dateStringToOtherString(qt.getHtwgrq(),srcformat,goalforamt));
+			jt.setActualenddate(date.dateStringToOtherString(qt.getSjwgrq(),srcformat,goalforamt));
+			jt.setContractbrankname(qt.getQyzzmc());
+			//对外签约品牌
+			jt.setContractbrank(qt.getDwqypp());
+			jt.setOthercustomername(qt.getYzdw());
+			//设置合同统计年、月
+			DateFormat formatgoal= new SimpleDateFormat(srcformat);
+			try {
+				Date tjgsyf = formatgoal.parse(qt.getTjgsyf());
+				Calendar calendar=Calendar.getInstance(); 
+				calendar.setTime(tjgsyf);
+				jt.setJtstatisticsyear(calendar.get(Calendar.YEAR)+"");
+				jt.setJtstatisticsmonth((calendar.get(Calendar.MONTH)+1)+"");
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	/**
+	 * 施工项目其它单位投标关联信息设值
+	 * @param otherbids
+	 * @return
+	 */
+	public List<JtOtherCompanyBid> setOtherBids(List<Ghscgzjzbzb> otherbids,JTContract jt
+			,int lastotherbidid){
+		List<JtOtherCompanyBid> jtothercompanybids = new ArrayList<JtOtherCompanyBid>();
+		if(otherbids != null && otherbids.size()>0){
+			for(Ghscgzjzbzb ghscgzjzbzb:otherbids){
+				JtOtherCompanyBid otherbid = new JtOtherCompanyBid();
+				//主键自增1
+				++lastotherbidid;
+				otherbid.setOtherbidid(lastotherbidid);
+				
+				//服务端其它单位投标主键
+				otherbid.setRecid(ghscgzjzbzb.getRecid());
+				//服务端项目信息ID
+				otherbid.setMrecid(jt.getBaserecid());
+				//客户端其他单位投标情况主键
+				otherbid.setCqttbid(ghscgzjzbzb.getCqttbid());
+				//客户端项目信息主键
+				otherbid.setCxmid(jt.getJtcontractid().toString());
+				
+				//其它投标单位code
+				otherbid.setTbdw(ghscgzjzbzb.getTbdw());
+				//其它投标单位全称
+				otherbid.setDwmc(ghscgzjzbzb.getDwmc());
+				//其它单位投标报价
+				otherbid.setTbbj(new BigDecimal(ghscgzjzbzb.getTbbj()).divide(new BigDecimal("10000")));
+				//其它单位是否中标
+				otherbid.setSfzb(ghscgzjzbzb.getSfzb());
+				//其它单位中标额
+				otherbid.setZbe(new BigDecimal(ghscgzjzbzb.getZbe()).divide(new BigDecimal("10000")));
+				//其它单位中标额币种
+				otherbid.setJedw(ghscgzjzbzb.getJedw());
+				//同步状态初始化为“已同步”
+				otherbid.setSynstatus("3");
+				//客户端经营合同主键(contractid)
+				otherbid.setPimsid(jt.getContractid()+"");
+				
+				jtothercompanybids.add(otherbid);
+			}
+			//设置其它投标表到jtcontract
+			jt.setJtothercompanybids(jtothercompanybids);
+		}
+		return jtothercompanybids;
+	}
+	
+	/**
+	 * 设计项目其它单位投标关联信息设值
+	 * @param otherbids
+	 * @return
+	 */
+	public List<JtOtherCompanyBid> setSjOtherBids(List<SjscgzjzbzbVO> otherbids,JTContract jt,int lastotherbidid){
+		List<JtOtherCompanyBid> jtothercompanybids = new ArrayList<JtOtherCompanyBid>();
+		if(otherbids != null && otherbids.size()>0){
+			for(SjscgzjzbzbVO ghscgzjzbzb:otherbids){
+				JtOtherCompanyBid otherbid = new JtOtherCompanyBid();
+				//主键自增1
+				++lastotherbidid;
+				otherbid.setOtherbidid(lastotherbidid);
+				
+				//服务端其它单位投标主键
+				otherbid.setRecid(ghscgzjzbzb.getRecid());
+				//服务端项目信息ID
+				otherbid.setMrecid(jt.getBaserecid());
+				//客户端其他单位投标情况主键
+				otherbid.setCqttbid(ghscgzjzbzb.getCqttbid());
+				//客户端项目信息主键
+				otherbid.setCxmid(jt.getJtcontractid().toString());
+				
+				//其它投标单位code
+				otherbid.setTbdw(ghscgzjzbzb.getTbdw());
+				//其它投标单位全称
+				otherbid.setDwmc(ghscgzjzbzb.getDwmc());
+				//其它单位投标报价
+				otherbid.setTbbj(new BigDecimal(ghscgzjzbzb.getTbbj()).divide(new BigDecimal("10000")));
+				//其它单位是否中标
+				otherbid.setSfzb(ghscgzjzbzb.getSfzb());
+				//其它单位中标额
+				otherbid.setZbe(new BigDecimal(ghscgzjzbzb.getZbe()).divide(new BigDecimal("10000")));
+				//其它单位中标额币种
+				otherbid.setJedw(ghscgzjzbzb.getJedw());
+				//同步状态初始化为“已同步”
+				otherbid.setSynstatus("3");
+				//客户端经营合同主键(contractid)
+				otherbid.setPimsid(jt.getContractid()+"");
+				
+				jtothercompanybids.add(otherbid);
+			}
+			//设置其它投标表到jtcontract
+			jt.setJtothercompanybids(jtothercompanybids);
+		}
+		return jtothercompanybids;
+	}
+	
+	/**
+	 * 施工项目设置关联保险信息
+	 * @param bxlist
+	 * @param jt
+	 * @return
+	 */
+	public List<JtProjectInsurance> setProjectInsurances(List<HwxmbxVO> bxlist,JTContract jt
+			,int lastinserance){
+		List<JtProjectInsurance> projectinsurances = new ArrayList<JtProjectInsurance>();
+		if(bxlist != null && bxlist.size()>0){
+			for(HwxmbxVO hwxmbx:bxlist){
+				JtProjectInsurance projectinsurance = new JtProjectInsurance();
+				//主键自增1
+				++lastinserance;
+				projectinsurance.setInsuranceid(lastinserance);
+				
+				//项目保险种类
+				projectinsurance.setXmbxzl(hwxmbx.getXmbxzl());
+				//保险费率
+				projectinsurance.setBxfl(new BigDecimal(hwxmbx.getBxfl()));
+				//保险金额
+				projectinsurance.setBxje(new BigDecimal(hwxmbx.getBxje()).divide(new BigDecimal("10000")));
+				//备注
+				projectinsurance.setBz(hwxmbx.getBz());
+				//同步状态初始化为“已同步”
+				projectinsurance.setSynstatus("3");
+				//服务端项目信息主键
+				projectinsurance.setRecid(hwxmbx.getRecid());
+				//服务端合同主键
+				projectinsurance.setMrecid(jt.getContractrecid());
+				//客户端项目保险主键
+				projectinsurance.setCbxid(hwxmbx.getCbxid());
+				//客户端合同主键
+				projectinsurance.setChtid(jt.getJtcontractid().toString());
+				//客户端经营合同主键(contractid)
+				projectinsurance.setPimsid(jt.getContractid()+"");
+				
+				projectinsurances.add(projectinsurance);
+			}
+			//设置其它投标表到jtcontract
+			jt.setProjectinsurances(projectinsurances);
+		}
+		
+		return projectinsurances;
+	}
+	
+	/**
+	 * 设计项目设置关联保险信息
+	 * @param bxlist
+	 * @param jt
+	 * @return
+	 */
+	public List<JtProjectInsurance> setSjProjectInsurances(List<HwxmbcxxVO> bxlist,JTContract jt,int lastinserance){
+		List<JtProjectInsurance> projectinsurances = new ArrayList<JtProjectInsurance>();
+		if(bxlist != null && bxlist.size()>0){
+			for(HwxmbcxxVO hwxmbx:bxlist){
+				JtProjectInsurance projectinsurance = new JtProjectInsurance();
+				//主键自增1
+				++lastinserance;
+				projectinsurance.setInsuranceid(lastinserance);
+				
+				//项目保险种类
+				projectinsurance.setXmbxzl(hwxmbx.getXmbxzl());
+				//保险费率
+				projectinsurance.setBxfl(new BigDecimal(hwxmbx.getBxfl()));
+				//保险金额
+				projectinsurance.setBxje(new BigDecimal(hwxmbx.getBxje()).divide(new BigDecimal("10000")));
+				//备注
+				projectinsurance.setBz(hwxmbx.getBz());
+				//同步状态初始化为“已同步”
+				projectinsurance.setSynstatus("3");
+				//服务端项目信息主键
+				projectinsurance.setRecid(hwxmbx.getRecid());
+				//服务端合同主键
+				projectinsurance.setMrecid(jt.getContractrecid());
+				//客户端项目保险主键
+				projectinsurance.setCbxid(hwxmbx.getCbxid());
+				//客户端合同主键
+				projectinsurance.setChtid(jt.getJtcontractid().toString());
+				//客户端经营合同主键(contractid)
+				projectinsurance.setPimsid(jt.getContractid()+"");
+				
+				projectinsurances.add(projectinsurance);
+			}
+			//设置其它投标表到jtcontract
+			jt.setProjectinsurances(projectinsurances);
+		}
+		return projectinsurances;
+	}
+}

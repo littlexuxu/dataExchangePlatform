@@ -1,0 +1,40 @@
+package com.ajie.wechat.util;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+public class DateUtil {
+	
+	public static void main(String[] args) {
+		String str = dateStringToOtherString("2005-6-1.0.0. 0. 0","yyyy-MM-dd.hh.mm. ss. SSSS","yyyy-MM-dd");
+		System.out.println(str);
+	}
+	
+	/**
+	 * 两种字符串格式的日期转换
+	 * @param datepar	日期（字符串类型）
+	 * @param srcformat	源日期格式
+	 * @param goalformat	需要转换的日期格式
+	 * @return
+	 */
+	public static String dateStringToOtherString(String datepar,String srcformat,String goalformat){
+		String goaldatestr = null;
+		if(datepar == null && "".equals(datepar)){
+			return goaldatestr;
+		}
+		//2005-6-1.0.0. 0. 0
+		DateFormat formatgoal= new SimpleDateFormat(goalformat);
+    	DateFormat formatsrc= new SimpleDateFormat(srcformat);
+    	try {
+			Date srcdate = formatsrc.parse(datepar);
+			goaldatestr=formatgoal.format(srcdate);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+    	
+		return goaldatestr;
+	}
+	
+}

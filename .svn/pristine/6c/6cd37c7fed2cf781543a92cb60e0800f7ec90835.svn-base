@@ -1,0 +1,44 @@
+#sg job path
+sgsyncjobpath_add=D:\\kettle\\scjy_data_syc\\syncContract_add\\sg\\sg_dataintegrate.kjb
+#sj job path
+sjsyncjobpath_add=D:\\kettle\\scjy_data_syc\\syncContract_add\\sj\\sj_dataintegrate.kjb
+#qt job path
+qtsyncjobpath_add=D:\\kettle\\scjy_data_syc\\syncContract_add\\qt\\qtdataintegrate.kjb
+#sg job path
+sgsyncjobpath_update=D:\\kettle\\scjy_data_syc\\syncContract_update\\sg\\sg_dataintegrate.kjb
+#sj job path
+sjsyncjobpath_update=D:\\kettle\\scjy_data_syc\\syncContract_update\\sj\\sj_dataintegrate.kjb
+#qt job path
+qtsyncjobpath_update=D:\\kettle\\scjy_data_syc\\syncContract_update\\qt\\qtdataintegrate.kjb
+#sg monthreport job path
+sgsyncmonthreportjobpath_add=D:\\kettle\\scjy_data_syc\\syncContract_add\\sg_monthreport\\sgmonthreport.kjb
+#sj monthreport job path
+sjsyncmonthreportjobpath_add=D:\\kettle\\scjy_data_syc\\syncContract_add\\sj_monthreport\\sj_monthreport.kjb
+#qt monthreport job path
+qtsyncmonthreportjobpath_add=D:\\kettle\\scjy_data_syc\\syncContract_add\\qt_monthreport\\qt_monthreport.kjb
+#sg monthreport job path
+sgsyncmonthreportjobpath_update=D:\\kettle\\scjy_data_syc\\syncContract_update\\sg_monthreport\\sgmonthreport.kjb
+#sj monthreport job path
+sjsyncmonthreportjobpath_update=D:\\kettle\\scjy_data_syc\\syncContract_update\\sj_monthreport\\sj_monthreport.kjb
+#qt monthreport job path
+qtsyncmonthreportjobpath_update=D:\\kettle\\scjy_data_syc\\syncContract_update\\qt_monthreport\\qt_monthreport.kjb
+#contractquery job path
+contractqueryjobpath=D:\\kettle\\scjy_data_syc\\syncContract_add\\contract_query\\jt_contract.ktr
+#sg contractchange job path
+sgcontractchangejobpath=D:\\kettle\\scjy_data_syc\\syncContract_add\\sg_change\\sgchangedataintegrate.kjb
+#sj contractchange job path
+sjcontractchangejobpath=D:\\kettle\\scjy_data_syc\\syncContract_add\\sj_change\\sjchangedataintegrate.kjb
+#qt contractchange job path
+qtcontractchangejobpath=D:\\kettle\\scjy_data_syc\\syncContract_add\\qt_change\\qtchangedataintegrate.kjb
+#sg contractupdate job path
+sgcontractupdatejobpath=D:\\kettle\\scjy_data_syc\\syncContract_update\\sg\\sg_dataintegrate.kjb
+#sj contractchange job path
+sjcontractupdatejobpath=D:\\kettle\\scjy_data_syc\\syncContract_update\\sj\\sj_dataintegrate.kjb
+#qt contractchange job path
+qtcontractupdatejobpath=D:\\kettle\\scjy_data_syc\\syncContract_update\\qt\\qtdataintegrate.kjb
+#dict job path
+dictjobpath=D:\\kettle\\scjy_data_syc\\syncContract_add\\dict_query\\dict_webservice.ktr
+#org job path
+orgjobpath=D:\\kettle\\scjy_data_syc\\syncContract_add\\org_query\\org.ktr
+#month report query
+monthreportquery=D:\\kettle\\scjy_data_syc\\syncContract_add\\monthreport_query\\contractrevenue_query.ktr

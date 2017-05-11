@@ -1,0 +1,267 @@
+<beans xmlns="http://www.springframework.org/schema/beans"  
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+    xmlns:jaxws="http://cxf.apache.org/jaxws"  
+    xsi:schemaLocation="  
+    http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd  
+    http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">  
+    
+    <!-- 施工基本信息接口客户端配置 --> 
+    <bean id="sgbaseclient" class="cn.ccccltd.webservice.construction.projectbaseinfo.GhscgzjzbWs"   
+         factory-bean="sgbaseclientFactory" factory-method="create">  
+    </bean>
+    <bean id="sgbaseclientFactory" class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean">  
+         <property name="serviceClass" value="cn.ccccltd.webservice.construction.projectbaseinfo.GhscgzjzbWs" />  
+         <property name="address" value="${host.url}/invest_productBaseInfo" />  
+         <property name="outInterceptors">  
+            <list>  
+                <bean class="org.apache.cxf.binding.soap.saaj.SAAJOutInterceptor" />  
+                <ref bean="wss4jOutConfiguration" />  
+            </list>  
+         </property>
+           
+    </bean>   
+    <!-- 施工市场信息接口客户端配置 -->
+    <bean id="sgmarketclient" class="cn.ccccltd.webservice.construction.marketinfo.GhscxxWs"   
+         factory-bean="sgmarketclientFactory" factory-method="create">  
+    </bean>
+    <bean id="sgmarketclientFactory" class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean">  
+         <property name="serviceClass" value="cn.ccccltd.webservice.construction.marketinfo.GhscxxWs" />  
+         <property name="address" value="${host.url}/invest_productMarektInfo?wsdl" />  
+         <property name="outInterceptors">  
+            <list>  
+                <bean class="org.apache.cxf.binding.soap.saaj.SAAJOutInterceptor" />  
+                <ref bean="wss4jOutConfiguration" />  
+            </list>  
+         </property>
+    </bean>
+    <!-- 施工合同信息接口客户端配置 -->
+    <bean id="sgcontractclient" class="cn.ccccltd.webservice.construction.contract.GhxmjhtWs"   
+         factory-bean="sgcontractclientFactory" factory-method="create">  
+    </bean>
+    <bean id="sgcontractclientFactory" class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean">  
+         <property name="serviceClass" value="cn.ccccltd.webservice.construction.contract.GhxmjhtWs" />  
+         <property name="address" value="${host.url}/invest_contractInfo?wsdl" />  
+         <property name="outInterceptors">  
+            <list>  
+                <bean class="org.apache.cxf.binding.soap.saaj.SAAJOutInterceptor" />  
+                <ref bean="wss4jOutConfiguration" />  
+            </list>  
+         </property>
+    </bean>
+    <!-- 施工合同变更信息接口客户端配置 -->
+    <bean id="sgcontractchangeclient" class="cn.ccccltd.webservice.construction.contractchange.SgbghtWs"   
+         factory-bean="sgcontractchangeclientFactory" factory-method="create">  
+    </bean>
+    <bean id="sgcontractchangeclientFactory" class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean">  
+         <property name="serviceClass" value="cn.ccccltd.webservice.construction.contractchange.SgbghtWs" />  
+         <property name="address" value="${host.url}/invest_contractChange?wsdl" />  
+         <property name="outInterceptors">  
+            <list>  
+                <bean class="org.apache.cxf.binding.soap.saaj.SAAJOutInterceptor" />  
+                <ref bean="wss4jOutConfiguration" />  
+            </list>  
+         </property>
+    </bean>
+    <!-- 施工月报信息接口客户端配置 -->
+    <bean id="sgmonthreportclient" class="cn.ccccltd.webservice.construction.monthreport.GhxmzxfdWs"   
+         factory-bean="sgmonthreportclientFactory" factory-method="create">  
+    </bean>
+    <bean id="sgmonthreportclientFactory" class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean">  
+         <property name="serviceClass" value="cn.ccccltd.webservice.construction.monthreport.GhxmzxfdWs" />  
+         <property name="address" value="${host.url}/construction_monthReport?wsdl" />  
+         <property name="outInterceptors">  
+            <list>  
+                <bean class="org.apache.cxf.binding.soap.saaj.SAAJOutInterceptor" />  
+                <ref bean="wss4jOutConfiguration" />  
+            </list>  
+         </property>
+    </bean>
+    
+    <!-- 设计基本信息接口客户端配置 -->
+    <bean id="sjbaseclient" class="cn.ccccltd.webservice.design.projectbaseinfo.SjscgzjzbWs"   
+         factory-bean="sjbaseclientFactory" factory-method="create">  
+    </bean>
+    <bean id="sjbaseclientFactory" class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean">  
+         <property name="serviceClass" value="cn.ccccltd.webservice.design.projectbaseinfo.SjscgzjzbWs" />  
+         <property name="address" value="${host.url}/design_productBaseInfo?wsdl" />  
+         <property name="outInterceptors">  
+            <list>  
+                <bean class="org.apache.cxf.binding.soap.saaj.SAAJOutInterceptor" />  
+                <ref bean="wss4jOutConfiguration" />  
+            </list>  
+         </property>
+    </bean>
+    <!-- 设计市场信息接口客户端配置 -->
+    <bean id="sjmarketclient" class="cn.ccccltd.webservice.design.marketinfo.SjscxxWs"   
+         factory-bean="sjmarketclientFactory" factory-method="create">  
+    </bean>
+    <bean id="sjmarketclientFactory" class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean">  
+         <property name="serviceClass" value="cn.ccccltd.webservice.design.marketinfo.SjscxxWs" />  
+         <property name="address" value="${host.url}/design_productMarektInfo?wsdl" />  
+         <property name="outInterceptors">  
+            <list>  
+                <bean class="org.apache.cxf.binding.soap.saaj.SAAJOutInterceptor" />  
+                <ref bean="wss4jOutConfiguration" />  
+            </list>  
+         </property>
+    </bean>
+    <!-- 设计合同信息接口客户端配置 -->
+    <bean id="sjcontractclient" class="cn.ccccltd.webservice.design.contract.SjxmjhtWs"   
+         factory-bean="sjcontractclientFactory" factory-method="create">  
+    </bean>
+    <bean id="sjcontractclientFactory" class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean">  
+         <property name="serviceClass" value="cn.ccccltd.webservice.design.contract.SjxmjhtWs" />  
+         <property name="address" value="${host.url}/design_contractInfo?wsdl" />  
+         <property name="outInterceptors">  
+            <list>  
+                <bean class="org.apache.cxf.binding.soap.saaj.SAAJOutInterceptor" />  
+                <ref bean="wss4jOutConfiguration" />  
+            </list>  
+         </property>
+    </bean>
+    <!-- 设计合同变更信息接口客户端配置 -->
+    <bean id="sjcontractchangeclient" class="cn.ccccltd.webservice.design.contractchange.SjbghtWs"   
+         factory-bean="sjcontractchangeclientFactory" factory-method="create">  
+    </bean>
+    <bean id="sjcontractchangeclientFactory" class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean">  
+         <property name="serviceClass" value="cn.ccccltd.webservice.design.contractchange.SjbghtWs" />  
+         <property name="address" value="${host.url}/design_contractChange?wsdl" />  
+         <property name="outInterceptors">  
+            <list>  
+                <bean class="org.apache.cxf.binding.soap.saaj.SAAJOutInterceptor" />  
+                <ref bean="wss4jOutConfiguration" />  
+            </list>  
+         </property>
+    </bean>
+    <!-- 设计月报信息接口客户端配置 -->
+    <bean id="sjmonthreportclient" class="cn.ccccltd.webservice.design.monthreport.SjxmzxfdWs"   
+         factory-bean="sjmonthreportclientFactory" factory-method="create">  
+    </bean>
+    <bean id="sjmonthreportclientFactory" class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean">  
+         <property name="serviceClass" value="cn.ccccltd.webservice.design.monthreport.SjxmzxfdWs" />  
+         <property name="address" value="${host.url}/design_monthReport?wsdl" />  
+         <property name="outInterceptors">  
+            <list>  
+                <bean class="org.apache.cxf.binding.soap.saaj.SAAJOutInterceptor" />  
+                <ref bean="wss4jOutConfiguration" />  
+            </list>  
+         </property>
+    </bean>
+    
+    <!-- 其它基本信息及合同信息接口客户端配置 -->
+    <bean id="qtbasecontractclient" class="cn.ccccltd.webservice.other.projectbaseinfo.QtlxmWs"   
+         factory-bean="qtbasecontractclientFactory" factory-method="create">  
+    </bean>
+    <bean id="qtbasecontractclientFactory" class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean">  
+         <property name="serviceClass" value="cn.ccccltd.webservice.other.projectbaseinfo.QtlxmWs" />  
+         <property name="address" value="${host.url}/other_productBaseInfo?wsdl" />  
+         <property name="outInterceptors">  
+            <list>  
+                <bean class="org.apache.cxf.binding.soap.saaj.SAAJOutInterceptor" />  
+                <ref bean="wss4jOutConfiguration" />  
+            </list>  
+         </property>
+    </bean>
+    <!-- 其它合同变更信息接口客户端配置 -->
+    <bean id="qtcontractchangeclient" class="cn.ccccltd.webservice.other.contractchange.QtbghtWs"   
+         factory-bean="qtcontractchangeclientFactory" factory-method="create">  
+    </bean>
+    <bean id="qtcontractchangeclientFactory" class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean">  
+         <property name="serviceClass" value="cn.ccccltd.webservice.other.contractchange.QtbghtWs" />  
+         <property name="address" value="${host.url}/other_contractChange?wsdl" />  
+         <property name="outInterceptors">  
+            <list>  
+                <bean class="org.apache.cxf.binding.soap.saaj.SAAJOutInterceptor" />  
+                <ref bean="wss4jOutConfiguration" />  
+            </list>  
+         </property>
+    </bean>
+    <!-- 其它月报信息接口客户端配置 -->
+    <bean id="qtmonthreportclient" class="cn.ccccltd.webservice.other.monthreport.QtxmzxWs"   
+         factory-bean="qtmonthreportclientFactory" factory-method="create">  
+    </bean>
+    <bean id="qtmonthreportclientFactory" class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean">  
+         <property name="serviceClass" value="cn.ccccltd.webservice.other.monthreport.QtxmzxWs" />  
+         <property name="address" value="${host.url}/other_monthReport?wsdl" />  
+         <property name="outInterceptors">  
+            <list>  
+                <bean class="org.apache.cxf.binding.soap.saaj.SAAJOutInterceptor" />  
+                <ref bean="wss4jOutConfiguration" />  
+            </list>  
+         </property>
+    </bean>
+    
+    <!-- 数据字典接口客户端配置 -->
+    <bean id="dictclient" class="cn.ccccltd.webservice.dict.ViewDictonaryWs"   
+         factory-bean="dictclientFactory" factory-method="create">  
+    </bean>
+    <bean id="dictclientFactory" class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean">  
+         <property name="serviceClass" value="cn.ccccltd.webservice.dict.ViewDictonaryWs" />  
+         <property name="address" value="${host.url}/dict?wsdl" />  
+         <property name="outInterceptors">  
+            <list>  
+                <bean class="org.apache.cxf.binding.soap.saaj.SAAJOutInterceptor" />  
+                <ref bean="wss4jOutConfiguration" />  
+            </list>  
+         </property>
+    </bean>
+    <!-- 组织机构接口客户端配置 -->
+    <bean id="orgclient" class="cn.ccccltd.webservice.org.MdorgWs"   
+         factory-bean="orgclientFactory" factory-method="create">  
+    </bean>
+    <bean id="orgclientFactory" class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean">  
+         <property name="serviceClass" value="cn.ccccltd.webservice.org.MdorgWs" />  
+         <property name="address" value="${host.url}/org?wsdl" />  
+         <property name="outInterceptors">  
+            <list>  
+                <bean class="org.apache.cxf.binding.soap.saaj.SAAJOutInterceptor" />  
+                <ref bean="wss4jOutConfiguration" />  
+            </list>  
+         </property>
+    </bean>
+    
+    <bean id="wss4jOutConfiguration" class="org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor">  
+        <property name="properties">  
+            <map>  
+                <entry key="action" value="UsernameToken Encrypt" />  
+                <entry key="user" value="serverpublickey" />
+                <entry key="passwordType" value="PasswordText" />  
+                <entry key="encryptionPropFile" value="Client_Encrypt.properties" />  
+                <entry>  
+                    <key>  
+                        <value>passwordCallbackRef</value>  
+                    </key>  
+                    <ref bean="passwordCallback" />  
+                </entry>  
+            </map>  
+        </property>  
+    </bean>  
+      
+    <bean id="wss4jInConfiguration" class="org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor">  
+        <property name="properties">  
+            <map>  
+                <entry key="action" value="Timestamp Encrypt Signature" />  
+                <entry key="user" value="apmclient" />  
+                <entry key="decryptionPropFile" value="insecurity_enc.properties" />  
+                <entry key="enableSignatureConfirmation" value="true" />  
+                <entry key="signaturePropFile" value="outsecurity_sign.properties" />  
+                <entry key="signatureKeyIdentifier" value="IssuerSerial" />  
+                <entry>  
+                    <key>  
+                        <value>passwordCallbackRef</value>  
+                    </key>  
+                    <ref bean="passwordCallback" />  
+                </entry>  
+            </map>  
+        </property>  
+    </bean>     
+    <bean id="passwordCallback" class="com.db.webservice.security.PasswordHandler"/> 
+    
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">  
+        <property name="locations">  
+            <list>  
+                <value>classpath:serverhost.properties</value>  
+            </list>  
+        </property>  
+    </bean>   
+</beans>    
