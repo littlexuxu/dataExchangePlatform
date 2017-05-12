@@ -130,7 +130,7 @@
 							panelHeight:'auto'" ></td>
 							<th colspan="1">中交行业分类(*)</th>
 						<td colspan="2"><input name="sgbase.zjhyflx" data-options="prompt:'请输入中交行业分类',required:true,
-								url:'<%=request.getContextPath() %>/select/queryDictTree?dictTypeId=ZJHYFL'"
+								url:'<%=path %>/select/queryDictTree?dictTypeId=ZJHYFL'"
 							class="easyui-combotree" style="width: 100%" /></td>
 					</tr>
 					<tr>
@@ -145,7 +145,7 @@
 							class="easyui-combobox" style="width: 100%"></td>
 							<th colspan="1">项目类型(*)</th>
 						<td colspan="2"><input name="sgbase.xmlx" data-options="prompt:'请输入项目类型',required:true,
-							url:'<%=request.getContextPath() %>/select/queryDictTree?dictTypeId=XMLX'"
+							url:'<%=path %>/select/queryDictTree?dictTypeId=XMLX'"
 							class="easyui-combotree" style="width: 100%"></td>
 					</tr>
 					
@@ -153,37 +153,41 @@
 						<th colspan="1">项目合作方式(*)</th>
 						<td  colspan="2"><input name="sgbase.xmhzfs" class="easyui-combobox" 
 						data-options="prompt:'请输入项目合作方式',required:true,
-								url:'<%=request.getContextPath() %>/select/queryDictTree?dictTypeId=XMHZFS'"
+	                        url:'<%=path %>/select/queryDict?dictTypeId=XMHZFS',
+							method:'get',
+							valueField:'dictid',
+							textField:'dictname',
+							panelHeight:'auto'"
 							style="width: 100%"></td>
 							<th colspan="1">投资来源(*)</th>
-						<td colspan="2"><input name="sgbase.tzly" 
+						<td colspan="2"><input name="sgbase.tzly" class="easyui-combotree"
 						data-options="prompt:'请输入投资来源',required:true,
-							url:'<%=request.getContextPath() %>/select/queryDictTree?dictTypeId=TZLY'"
-							style="width: 100%" class="easyui-combobox" ></td>
+							url:'<%=path  %>/select/queryDictTree?dictTypeId=TZLY',"
+							style="width: 100%"></td>
 					</tr>
 					<tr>
 						
 						<th colspan="1">国家行业分类(*)</th>
-						<td colspan="2"><input name="sgbase.tzly" class="easyui-combobox"
+						<td colspan="2"><input name="sgbase.tzly" class="easyui-combotree"
 						data-options="prompt:'请输入行业分类',required:true,
-							url:'<%=request.getContextPath() %>/select/queryDictTree?dictTypeId=GCLB'"
+							url:'<%=path %>/select/queryDictTree?dictTypeId=GCLB',"
 							style="width: 100%" /></td>
 						<th colspan="1">商务部项目类型(*)</th>
 						<td colspan="2"><input name="sgbase.tzly"
 							data-options="prompt:'请输入行业分类',required:true,
-							url:'<%=request.getContextPath() %>/select/queryDictTree?dictTypeId=SWBXMLX'"
+							url:'<%=path %>/select/queryDictTree?dictTypeId=SWBXMLX'"
 							class="easyui-combotree" style="width: 100%"></td>
 					</tr>
 					<tr>
 						<th colspan="1">项目所在地(*)</th>
 						<td colspan="2"><input name="sgbase.xmszd"
 							data-options="prompt:'请输入项目所在地',required:true,
-							url:'<%=request.getContextPath() %>/select/queryDictTree?dictTypeId=XMDY'"
+							url:'<%=path %>/select/queryDictTree?dictTypeId=XMDY'"
 							class="easyui-combotree" style="width: 100%"></td>
 						<th colspan="1">项目资金来源(*)</th>
 						<td colspan="2"><input name="sgbase.zjlydx"
 							data-options="prompt:'请输入资金来源',required:true,
-							url:'<%=request.getContextPath() %>/select/queryDictTree?dictTypeId=HWZJLY'"
+							url:'<%=path %>/select/queryDictTree?dictTypeId=HWZJLY'"
 							class="easyui-combotree" style="width: 100%"></td>
 					</tr>
 					<tr>
@@ -211,7 +215,7 @@
 							valueField:'dictid',
 							textField:'dictname',
 							panelHeight:'auto'"
-							class="easyui-combotree" style="width: 100%"></td>
+							class="easyui-combobox" style="width: 100%"></td>
 							<th style="width: 10%;color:darkgrey" >是否海外重点监控项目</th>
 						<td colspan="2"><input name="sgbase.sfzdjkxm"
 							class="easyui-textbox" style="width: 100%"></td>
@@ -222,7 +226,7 @@
 							class="easyui-textbox" style="height: 80px; width: 100%" multiline="true"/></td>
 					</tr>
 					<tr>
-						<th colspan="1">业主单位(*)</th>
+						<th colspan="1">业主单位(*)</th><!-- 留待更新，需要添加分页方法 -->
 						<td readonly="true" colspan="4"><input name="sgbase.yzdw"
 						data-options="prompt:'请输入业主单位',required:true,
 	                        url:'<%=path %>/select/queryDict?dictTypeId=GHYZ',
@@ -334,7 +338,7 @@
 						<th colspan="1">合同签订方式</th>
 						<td colspan="2"><input name="sgtrack.htqdfs" vtype="float" class="easyui-combotree" 
 						data-options="prompt:'请输入合同签订方式',required:true,
-							url:'<%=request.getContextPath() %>/select/queryDictTree?dictTypeId=HTQDFS'"
+							url:'<%=path %>/select/queryDictTree?dictTypeId=HTQDFS'"
 						 style="width: 100%" data-options="min:0,precision:4" /></td>
 			<th colspan="1">是否为重点跟踪项目</th>
 			<td colspan="2"><input name="sgtrack.sfzdgzxm" vtype="float"  class="easyui-combobox"

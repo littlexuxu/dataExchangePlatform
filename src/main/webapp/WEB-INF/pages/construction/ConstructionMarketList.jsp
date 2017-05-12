@@ -63,6 +63,7 @@
 			else
 				return value;
 		} catch (e) {
+			console.log(e);
 			return value;
 		}
 	}
@@ -104,6 +105,15 @@
 	*/
 	
 	
+	/**
+	 * 
+	 * 
+	 * dict.getDictText('dictTypeId',value)通过Ajax请求查询查询数据字典
+	 * @param {any} value  当前值
+	 * @param {any} row 当前行
+	 * @param {any} index 当前行索引
+	 * @returns 
+	 */
 	function formatterDict(value, row, index) {
 	    var dictText = "";
 	    if (this.field == "ssyw") {
@@ -128,34 +138,6 @@
 
 	
 	(function($){  
-		/* $.ajax({
-			type:"GET",
-			url : "${pageContext.request.contextPath}/select/queryDict?dictTypeId=XMTSZT",
-			success : function(result){
-				dept= result;
-			}
-		});
-		
-		$.ajax({
-			type:"GET",
-			url : "${pageContext.request.contextPath}/select/queryDict?dictTypeId=SYB",
-			success : function(result){
-				SYB= result;
-			}
-		});
-		
-		$.ajax({
-			type:"GET",
-			url : "${pageContext.request.contextPath}/select/queryDict?dictTypeId=SF",
-			success : function(result){
-				SF= result;
-			}
-		}); */
-		
-		
-		
-		
-		
 		
         $.fn.serializeJson=function(){  
             var serializeObj={};  
