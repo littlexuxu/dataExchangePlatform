@@ -68,10 +68,12 @@
     function saveSgProject() {
     	console.log($("#sgbase").serializeJson());
     	console.log($("#sgtrack").serializeJson());
+    	var sgBase = $("#sgbase").serializeJson()
+    	var sgtrack = $("#sgtrack").serializeJson()
     	$.ajax({
-    		url:"${pageContext.request.contextPath}/select/queryDict",
+    		url:'<%=path %>/construction/saveConstructionBaseAndTrack',
     		type:'POST',
-    		data:{'sgbase':$("#sgbase").serializeJson(),'sgtrack':$("#sgtrack").serializeJson()},
+    		data:{'sgbase':JSON.stringify(sgBase),'sgtrack':JSON.stringify(sgtrack)},
   			success:function(result){
   				console.log(result);
   			}
@@ -191,8 +193,8 @@
 							class="easyui-combotree" style="width: 100%"></td>
 					</tr>
 					<tr>
-						<th colspan="1" style="color:darkgrey">所属区域(*)</th>
-						<td readonly="true" colspan="2"><input name="sgbase.ssqy"
+						<th colspan="1" style="color:darkgrey">所属区域(*)</th><!-- 地雷 -->
+						<td readonly="true" colspan="2"><input name="ssqy" 
 							class="easyui-textbox" style="width: 100%"></td>
 							<th colspan="1" style="color:darkgrey">区域中心(*)</th>
 						<td colspan="2"><input name="sgbase.qyzx"

@@ -5,12 +5,25 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>施工项目列表</title>
+	<title>项目基本信息</title>
 	<%@include file="/resources/common_lib.jsp"%>
 </head>
 <body>
 	<script>
 	
+	function joinformatter(value,row,index){
+		
+		console.log("========"+value);
+		console.log(row);
+		console.log(index);
+		/* if (row.user){
+			return row.user.name;
+		} else {
+			return value;
+		} */
+	}
+
+
 	(function($){  
         $.fn.serializeJson=function(){  
             var serializeObj={};  
@@ -21,11 +34,11 @@
         };  
     })(jQuery);
 	
-	var sgBaseDataGrid;
+	var qtContractDataGrid;
 	
 	$(function() {
-		sgBaseDataGrid = $('#sgContractDataGrid').datagrid({
-            url : '<%=path %>/construction/queryConstructionBaseProjectList',
+		qtContractDataGrid = $('#qtContractDataGrid').datagrid({
+            url : '<%=path %>/other/queryOtherBaseProjectList',
             striped : true,
             rownumbers : false,
             pagination : true,
@@ -36,39 +49,196 @@
                 width : '210',
                 title : '项目名称',
                 field : 'stdname',
-            }, {
+            },{
                 width : '220',
-                title : '暂停/中止原因说明',
-                field : 'tsztyysm',
+                title : '合同编号',
+                field : 'htbh',
             },{
                 width : '330',
-                title : '其他业主单位全称',
-                field : 'yzdwqt',
+                title : '所属单位',
+                field : 'ssdw',
+            },{
+                width : '220',
+                title : '项目类型',
+                field : 'xmlx',
+                formatter:joinformatter
+            },{
+                width : '220',
+                title : '国家行业类别',
+                field : 'gjhylb',
+            },{
+                width : '220',
+                title : '中交行业分类',
+                field : 'zjhyfl',
+            },{
+                width : '220',
+                title : '项目所在地',
+                field : 'xmszd',
+            },{
+                width : '220',
+                title : '所属区域',
+                field : 'ssqy',
+            },{
+                width : '220',
+                title : '业主单位',
+                field : 'yzdw',
+            },{
+                width : '220',
+                title : '合同签订日期',
+                field : 'htqdrq',
+            },{
+                width : '220',
+                title : '合同额',
+                field : 'hte',
+            },{
+                width : '220',
+                title : '变更后总合同额',
+                field : 'bghzhte',
+            },{
+                width : '220',
+                title : '自主承担合同额',
+                field : 'zzcdhte',
+            },{
+                width : '220',
+                title : '变更后自主承担合同额',
+                field : 'bghzzcdhte',
+            },{
+                width : '220',
+                title : '是否未签约已实施',
+                field : 'sfwqyyss',
+            },{
+                width : '220',
+                title : '项目名称（英文）',
+                field : 'xmmcyw',
+            },{
+                width : '220',
+                title : '项目标段',
+                field : 'xmbd',
+            },{
+                width : '220',
+                title : '是否海外',
+                field : 'sfhw',
+            },{
+                width : '220',
+                title : '业主资金来源',
+                field : 'yzzjly',
+            },{
+                width : '220',
+                title : '是否调整项目',
+                field : 'sftzxm',
+            },{
+                width : '220',
+                title : '是否分包给集团子公司',
+                field : 'sffb',
+            },{
+                width : '220',
+                title : '金额单位',
+                field : 'jedw',
+            },{
+                width : '220',
+                title : '统计归属月份',
+                field : 'tjgsyf',
+            },{
+                width : '220',
+                title : '合同名称',
+                field : 'htmc',
+            },{
+                width : '220',
+                title : '对外签约品牌',
+                field : 'dwqypp',
+            },{
+                width : '220',
+                title : '合同签订方式',
+                field : 'htqdfs',
+            },{
+                width : '220',
+                title : '合同甲方',
+                field : 'htjf',
+            },{
+                width : '220',
+                title : '合同甲方内部',
+                field : 'htjfnb',
+            },{
+                width : '220',
+                title : '合同乙方',
+                field : 'htyfid',
+            },{
+                width : '220',
+                title : '签约资质名称',
+                field : 'qyzzmc',
+            },{
+                width : '220',
+                title : '变更后合同工期',
+                field : 'bghhtgq',
+            },{
+                width : '220',
+                title : '合同工期',
+                field : 'htgq',
+            },{
+                width : '220',
+                title : '合同开工日期',
+                field : 'htkgrq',
+            },{
+                width : '220',
+                title : '合同完工日期',
+                field : 'htwgrq',
+            },{
+                width : '220',
+                title : '实际开工日期',
+                field : 'sjkgrq',
+            },{
+                width : '220',
+                title : '实际完工日期',
+                field : 'sjwgrq',
+            },{
+                width : '220',
+                title : '项目合作方式',
+                field : 'xmhzfs',
+            },{
+                width : '220',
+                title : '投资来源',
+                field : 'tzly',
+            },{
+                width : '220',
+                title : '创建人',
+                field : 'cjr',
+            },{
+                width : '220',
+                title : '创建时间',
+                field : 'cjsj',
+            },{
+                width : '220',
+                title : '修改人',
+                field : 'xgr',
+            },{
+                width : '220',
+                title : '修改时间',
+                field : 'xgsj',
             }] ],
             toolbar : '#tb'
         });		
 	});
 	
 	function doSearch() {
-		var data = {'params' : JSON.stringify($("#searchSgBaseForm").serializeJson())};
+		var data = {'params' : JSON.stringify($("#searchQtBaseForm").serializeJson())};
 		console.log(data);
-		sgBaseDataGrid.datagrid('load', data);
+		qtContractDataGrid.datagrid('load', data);
 	}
 	
 	function doUpdate() {
-		window.location.href = "<%=request.getContextPath() %>/construction/updateConstructionBaseProject";
+		window.location.href = "<%=request.getContextPath() %>/other/updateOtherBaseProject";
 	}
 	
-	var sgBase_dialog;
+	var qtBase_dialog;
 	//显示弹出窗口 新增：row为空 编辑:row有值
 	function doUpdate(row) {
-		var _url = "<%=request.getContextPath() %>/construction/updateConstructionBaseProject";
+		var _url = "<%=request.getContextPath() %>/other/updateOtherBaseProject";
 		if (row != undefined && row.id) {
 			//_url = ctx+"/userAction/toUpdate/"+row.id;
 		}
 	    //弹出对话窗口
-	    sgBase_dialog = $('<div/>').dialog({
-	    	title : "项目及市场经营信息",
+	    qtBase_dialog = $('<div/>').dialog({
+	    	title : "其他类项目基本信息",
 			top: 0,
 			width : 1000,
 			height : '100%',
@@ -78,7 +248,7 @@
 	        href: _url,
 	        onLoad: function () {
 	            if (row) {
-	            	$('#sgProjectBaseForm').form('load', row);
+	            	$('#qtProjectBaseForm').form('load', row);
 	            } else {
 	            	
 	            }
@@ -89,41 +259,41 @@
 	                text: '保存',
 	                iconCls: 'icon-save',
 	                handler: function () {
-	                	$('#sgProjectBaseForm').submit();
+	                	$('#qtProjectBaseForm').submit();
 	                }
 	            },
 	            {
 	                text: '关闭',
 	                iconCls: 'icon-cancel',
 	                handler: function () {
-	                	sgBase_dialog.dialog('destroy');
+	                	qtBase_dialog.dialog('destroy');
 	                }
 	            }
 	        ],
 	        onClose: function () {
-	        	sgBase_dialog.dialog('destroy');
+	        	qtBase_dialog.dialog('destroy');
 	        }
 	    });
 	}
 	
 	</script>
 	<div id="tb" style="padding:3px">
-		<form id="searchSgBaseForm">
+		<form id="searchQtBaseForm">
 			<a href="javascript:void(0);" class="easyui-linkbutton" onclick="doUpdate();">新增</a>
 			<a href="javascript:void(0);" class="easyui-linkbutton" onclick="doUpdate();">修改</a>
 			<a href="javascript:void(0);" class="easyui-linkbutton" onclick="doUpdate();">删除</a>
 			<a href="javascript:void(0);" class="easyui-linkbutton" onclick="doUpdate();">导出</a>
 			<br>
 			<span>项目ID</span>
-			<input name="sgProjectBase.sgbaseid_=" class="easyui-textbox">
+			<input name="qtProjectBase.qtbaseid_=" class="easyui-textbox">
 			<span>项目名称</span>
-			<input name="sgProjectBase.stdname_like" class="easyui-textbox">
+			<input name="qtProjectBase.stdname_like" class="easyui-textbox">
 			<span>其他业主单位全称</span>
-			<input name="sgProjectBase.yzdwqt_like" class="easyui-textbox">
+			<input name="qtProjectBase.yzdwqt_like" class="easyui-textbox">
 			<a href="javascript:void(0);" class="easyui-linkbutton" onclick="doSearch();">查询</a>
 		</form>
 	</div>	
-	<table id="sgBaseDataGrid" class="easyui-datagrid" style="width:95%;height:610px"
+	<table id="qtContractDataGrid" class="easyui-datagrid" style="width:95%;height:610px"
 			rownumbers="true" pagination="true">
 	</table>
 </body>

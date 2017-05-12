@@ -5,12 +5,11 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>施工项目列表</title>
+	<title>合同变更信息</title>
 	<%@include file="/resources/common_lib.jsp"%>
 </head>
 <body>
 	<script>
-	
 	
 	(function($){  
         $.fn.serializeJson=function(){  
@@ -22,14 +21,11 @@
         };  
     })(jQuery);
 	
-	var sgBaseDataGrid;
+	var qtBaseDataGrid;
 	
 	$(function() {
-		
-		
-		
-		sgBaseDataGrid = $('#sgBaseDataGrid').datagrid({
-            url : '<%=path %>/construction/queryConstructionBaseProjectList',
+		qtBaseDataGrid = $('#qtBaseDataGrid').datagrid({
+            url : '<%=path %>/other/queryOtherBaseProjectList',
             striped : true,
             rownumbers : false,
             pagination : true,
@@ -40,60 +36,77 @@
             columns : [ [ {
                 width : '210',
                 title : '项目名称',
-                field : 'stdname',
-            }, {
+                field : 'xmmc',
+            },{
                 width : '220',
-                title : '中交行业分类',
-                field : 'zjhyflx',
+                title : '合同变更名称',
+                field : 'bghtmc',
             },{
                 width : '330',
                 title : '所属单位',
-                field : 'orgunit',
+                field : 'ssdw',
             },{
-                width : '330',
-                title : '项目状态',
-                field : 'xmtszt',
+                width : '220',
+                title : '是否纳入新签',
+                field : 'sfnrxq',
+                formatter:joinformatter,
             },{
-                width : '330',
-                title : '所属业务',
-                field : 'ssyw',
+                width : '220',
+                title : '纳入系统管理时间',
+                field : 'nrxtglsj',
             },{
-                width : '330',
-                title : '开始跟踪时间',
-                field : 'ksgzsj',
+                width : '220',
+                title : '变更日期',
+                field : 'bgrq',
             },{
-                width : '330',
-                title : '其它业主单位',
-                field : 'yzdwqt',
+                width : '220',
+                title : '变更增减合同额',
+                field : 'bgzjhte',
             },{
-                width : '330',
-                title : '是否委托项目',
-                field : 'sfcfwt',
+                width : '220',
+                title : '变更增减自主承担合同额',
+                field : 'bgzjzzcdhte',
+            },{
+                width : '220',
+                title : '变更后合同工期',
+                field : 'bghhtgq',
+            },{
+                width : '220',
+                title : '主要变更条款',
+                field : 'zybgtk',
+            },{
+                width : '220',
+                title : '变更原因',
+                field : 'bgyy',
+            },{
+                width : '220',
+                title : '备注',
+                field : 'htbz',
             }] ],
             toolbar : '#tb'
         });		
 	});
 	
 	function doSearch() {
-		var data = {'params' : JSON.stringify($("#searchSgBaseForm").serializeJson())};
+		var data = {'params' : JSON.stringify($("#searchQtBaseForm").serializeJson())};
 		console.log(data);
-		sgBaseDataGrid.datagrid('load', data);
+		qtBaseDataGrid.datagrid('load', data);
 	}
 	
 	function doUpdate() {
-		window.location.href = "<%=request.getContextPath() %>/construction/updateConstructionBaseProject";
+		window.location.href = "<%=request.getContextPath() %>/other/updateOtherContract";
 	}
 	
-	var sgBase_dialog;
+	var qtBase_dialog;
 	//显示弹出窗口 新增：row为空 编辑:row有值
 	function doUpdate(row) {
-		var _url = "<%=request.getContextPath() %>/construction/updateConstructionBaseProject";
+		var _url = "<%=request.getContextPath() %>/other/updateOtherContract";
 		if (row != undefined && row.id) {
 			//_url = ctx+"/userAction/toUpdate/"+row.id;
 		}
 	    //弹出对话窗口
-	    sgBase_dialog = $('<div/>').dialog({
-	    	title : "项目及市场经营信息",
+	    qtBase_dialog = $('<div/>').dialog({
+	    	title : "其他变更合同单据",
 			top: 0,
 			width : 1000,
 			height : '100%',
@@ -103,7 +116,7 @@
 	        href: _url,
 	        onLoad: function () {
 	            if (row) {
-	            	$('#sgProjectBaseForm').form('load', row);
+	            	$('#qtProjectBaseForm').form('load', row);
 	            } else {
 	            	
 	            }
@@ -114,41 +127,41 @@
 	                text: '保存',
 	                iconCls: 'icon-save',
 	                handler: function () {
-	                	saveSgProject();
+	                	saveQtProject();
 	                }
 	            },
 	            {
 	                text: '关闭',
 	                iconCls: 'icon-cancel',
 	                handler: function () {
-	                	sgBase_dialog.dialog('destroy');
+	                	qtBase_dialog.dialog('destroy');
 	                }
 	            }
 	        ],
 	        onClose: function () {
-	        	sgBase_dialog.dialog('destroy');
+	        	qtBase_dialog.dialog('destroy');
 	        }
 	    });
 	}
 	
 	</script>
 	<div id="tb" style="padding:3px">
-		<form id="searchSgBaseForm">
+		<form id="searchQtBaseForm">
 			<a href="javascript:void(0);" class="easyui-linkbutton" onclick="doUpdate();">新增</a>
 			<a href="javascript:void(0);" class="easyui-linkbutton" onclick="doUpdate();">修改</a>
 			<a href="javascript:void(0);" class="easyui-linkbutton" onclick="doUpdate();">删除</a>
 			<a href="javascript:void(0);" class="easyui-linkbutton" onclick="doUpdate();">导出</a>
 			<br>
 			<span>组织机构</span>
-			<input name="sgProjectBase.orgunit_=" class="easyui-textbox">
+			<input name="qtProjectBase.orgunit_=" class="easyui-textbox">
 			<span>中交行业分类</span>
-			<input name="sgProjectBase.zjhyflx_=" class="easyui-textbox">
+			<input name="qtProjectBase.zjhyflx_=" class="easyui-textbox">
 			<span>项目名称</span>
-			<input name="sgProjectBase.stdname_like" class="easyui-textbox">
+			<input name="qtProjectBase.stdname_like" class="easyui-textbox">
 			<a href="javascript:void(0);" class="easyui-linkbutton" onclick="doSearch();">查询</a>
 		</form>
 	</div>	
-	<table id="sgBaseDataGrid" class="easyui-datagrid" style="width:95%;height:610px"
+	<table id="qtBaseDataGrid" class="easyui-datagrid" style="width:95%;height:610px"
 			rownumbers="true" pagination="true">
 	</table>
 </body>

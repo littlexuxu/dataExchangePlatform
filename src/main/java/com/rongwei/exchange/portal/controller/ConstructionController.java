@@ -73,12 +73,16 @@ public class ConstructionController {
 		return map;
 	}
 	
-	@RequestMapping(value = "/saveConstructionBaseProject", method = RequestMethod.POST)
-	public @ResponseBody Map<String, Object> saveConstructionBaseAndTrack(HttpServletRequest request) {
+	/**
+	 * 
+	 * @param sgbase
+	 * @param sgtrack
+	 * @return
+	 */
+	@RequestMapping(value = "/saveConstructionBaseAndTrack", method = RequestMethod.POST)
+	public @ResponseBody Map<String, Object> saveConstructionBaseAndTrack(String sgbase,String sgtrack) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		ObjectMapper mapper = new ObjectMapper();
-		String sgbase = request.getParameter("sgbase");
-		String sgtrack = request.getParameter("sgtrack");
 		try {
 			SgProjectBase sgProjectBase = mapper.readValue(sgbase, SgProjectBase.class);
 			SgProjectTrack sgProjectTrack = mapper.readValue(sgtrack, SgProjectTrack.class);
