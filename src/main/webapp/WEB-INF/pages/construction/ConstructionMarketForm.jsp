@@ -69,11 +69,11 @@
     	console.log($("#sgbase").serializeJson());
     	console.log($("#sgtrack").serializeJson());
     	$.ajax({
-    		url:"${pageContext.request.contextPath}/select/queryDict",
+    		//url:"${pageContext.request.contextPath}/select/queryDict",
     		type:'POST',
     		data:{'sgbase':$("#sgbase").serializeJson(),'sgtrack':$("#sgtrack").serializeJson()},
   			success:function(result){
-  				
+  				console.log(result);
   			}
     	});
     }
