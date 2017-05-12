@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ajie.wechat.util.JtConstant;
 import com.ajie.wechat.util.PageQuery;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rongwei.exchange.portal.model.SgProjectBase;
+import com.rongwei.exchange.portal.model.SgProjectTrack;
 import com.rongwei.exchange.portal.service.ConstructionService;
 
 @Controller
@@ -63,6 +65,25 @@ public class ConstructionController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		try {
 			constructionService.saveSgProjectBase(sgProjectBase);
+			map.put("returnMsg", JtConstant.SUCCESS);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			map.put("returnMsg", JtConstant.FAILURE);
+		}
+		return map;
+	}
+	
+	@RequestMapping(value = "/saveConstructionBaseProject", method = RequestMethod.POST)
+	public @ResponseBody Map<String, Object> saveConstructionBaseAndTrack(HttpServletRequest request) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		ObjectMapper mapper = new ObjectMapper();
+		String sgbase = request.getParameter("sgbase");
+		String sgtrack = request.getParameter("sgtrack");
+		try {
+			SgProjectBase sgProjectBase = mapper.readValue(sgbase, SgProjectBase.class);
+			SgProjectTrack sgProjectTrack = mapper.readValue(sgtrack, SgProjectTrack.class);
+			constructionService.saveSgProjectBase(sgProjectBase);
+			constructionService.saveSgProjectTrack(sgProjectTrack);
 			map.put("returnMsg", JtConstant.SUCCESS);
 		} catch (Exception e) {
 			logger.error(e.getMessage());

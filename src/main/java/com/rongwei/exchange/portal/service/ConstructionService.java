@@ -7,7 +7,9 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ajie.wechat.util.PageQuery;
 import com.rongwei.exchange.portal.dao.BaseDao;
 import com.rongwei.exchange.portal.dao.ConstructionDao;
+import com.rongwei.exchange.portal.dao.SgProjectTrackDao;
 import com.rongwei.exchange.portal.model.SgProjectBase;
+import com.rongwei.exchange.portal.model.SgProjectTrack;
 import com.rongwei.exchange.portal.utils.QueryUtils;
 
 @Service
@@ -16,6 +18,9 @@ public class ConstructionService {
 
 	@Autowired
 	private ConstructionDao constructionDao;
+	
+	@Autowired
+	private SgProjectTrackDao projectTrackDao;
 	
 	@Autowired
 	private BaseDao baseDao;
@@ -55,6 +60,14 @@ public class ConstructionService {
 	 */
 	public void saveSgProjectBase(SgProjectBase sgProjectBase) {
 		constructionDao.save(sgProjectBase);
+	}
+	
+	/**
+	 * 保存项目市场信息
+	 * @param sgProjectTrack
+	 */
+	public void saveSgProjectTrack(SgProjectTrack sgProjectTrack) {
+		projectTrackDao.save(sgProjectTrack);
 	}
 	
 }

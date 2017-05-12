@@ -69,7 +69,7 @@
     	console.log($("#sgbase").serializeJson());
     	console.log($("#sgtrack").serializeJson());
     	$.ajax({
-    		//url:"${pageContext.request.contextPath}/select/queryDict",
+    		url:"${pageContext.request.contextPath}/select/queryDict",
     		type:'POST',
     		data:{'sgbase':$("#sgbase").serializeJson(),'sgtrack':$("#sgtrack").serializeJson()},
   			success:function(result){
@@ -290,7 +290,7 @@
 						<tr style="background-color:#DDDDFF"><td align="center" colspan="6"><font style="font-weight:bold;" face="黑体" size="3">跟踪阶段信息</font></td></tr>
 						<tr>
 							<th colspan="1">开始跟踪时间</th>
-							<td colspan="2"><input  class="easyui-datetimebox"
+							<td colspan="2"><input  class="easyui-datebox"
 							data-options="required:true,showSeconds:false"  value="" style="width: 100%"
 							name="sgtrack.ksgzsj" /></td>
 							<th colspan="1">拟用签约品牌</th>
@@ -358,7 +358,7 @@
 			<tr align="center" style="background-color:	#DDDDFF"><td  colspan="6"><font style="font-weight:bold;" face="黑体" size="3">投标阶段信息</font></td></tr>
 			<tr>
 						<th colspan="1">资审日期</th>
-						<td colspan="2"><input class="easyui-datetimebox"
+						<td colspan="2"><input class="easyui-datebox"
 							required="true" name="sgtrack.zsrq" style="width: 100%"
 							data-options="required:true,showSeconds:false" value="" /></td>
 						<th colspan="1">资审结果</th>
@@ -373,11 +373,11 @@
 			</tr>
 			<tr>	
 						<th colspan="1">招标日期</th>
-						<td colspan="2"><input class="easyui-datetimebox"
+						<td colspan="2"><input class="easyui-datebox"
 							name="sgtrack.zbrqi" style="width: 100%"
 							data-options="required:true,showSeconds:false" value="" /></td>
 						<th colspan="1">招标截止日期</th>
-						<td colspan="2"><input class="easyui-datetimebox"
+						<td colspan="2"><input class="easyui-datebox"
 							name="sgtrack.zbjzrq" style="width: 100%"
 							data-options="required:true,showSeconds:false" value="" /></td>
 					
@@ -407,7 +407,7 @@
 			</tr>
 			<tr>
 				<th colspan="1">投标日期(*)</th>
-						<td colspan="2"><input class="easyui-datetimebox" required="true"
+						<td colspan="2"><input class="easyui-datebox" required="true"
 							name="sgtrack.tbrq" style="width: 100%"
 							data-options="required:true,showSeconds:false" value="" /></td>
 						<th colspan="1">投标报价及币种(*)</th>
@@ -562,7 +562,7 @@
 							<td style="width: 10%"><input name="sgtrack.zbedw" value="元"
 							class="easyui-textbox" style="width: 100%"></td>
 							<th>中标日期(*)</th>
-						<td colspan="2"><input class="easyui-datetimebox" required="true"
+						<td colspan="2"><input class="easyui-datebox" required="true"
 							name="sgtrack.zbrq" style="width: 100%"
 							data-options="required:true,showSeconds:false" value="" /></td>
 
