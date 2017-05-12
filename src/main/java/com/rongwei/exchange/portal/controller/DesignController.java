@@ -16,8 +16,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ajie.wechat.util.JtConstant;
 import com.ajie.wechat.util.PageQuery;
+import com.rongwei.exchange.portal.model.JtSjProjectBase;
 import com.rongwei.exchange.portal.model.SgProjectBase;
 import com.rongwei.exchange.portal.service.ConstructionService;
+import com.rongwei.exchange.portal.service.DesignService;
 
 @Controller
 @RequestMapping(value = "/design")
@@ -26,30 +28,30 @@ public class DesignController {
 	private final Log logger = LogFactory.getLog(ConstructionController.class);
 
 	@Autowired
-	private ConstructionService constructionService;
+	private DesignService designService;
 
 	/** 跳转至施工项目列表页 */
-	@RequestMapping(value = "/listConstructionBaseProject", method = RequestMethod.GET)
+	@RequestMapping(value = "/listDesignBaseProject", method = RequestMethod.GET)
 	public String ConstructionMarketIndexPage(Model model) {
-		return "construction/ConstructionMarketList";
+		return "design/DesignFormMain";
 	}
 
 	/** 跳转至施工项目维护页 */
-	@RequestMapping(value = "/updateConstructionBaseProject", method = RequestMethod.GET)
+	@RequestMapping(value = "/updateDesignBaseProject", method = RequestMethod.GET)
 	public String ConstructionMarketFormPage(Model model) {
-		return "construction/ConstructionMarketForm";
+		return "design/DesignMarketForm"; 
 	}
 
 	/** 跳转至施工合同列表页 */
-	@RequestMapping(value = "/listConstructionContract", method = RequestMethod.GET)
+	@RequestMapping(value = "/listDesignMarListMain", method = RequestMethod.GET)
 	public String ConstructionContractIndexPage(Model model) {
-		return "construction/ConstructionContractList";
+		return "design/DesignMarListMain";
 	}
 
 	/** 跳转至施工合同维护页 */
-	@RequestMapping(value = "/updateConstructionContract", method = RequestMethod.GET)
+	@RequestMapping(value = "/updateDesignContract", method = RequestMethod.GET)
 	public String ConstructionContractFormPage(Model model) {
-		return "construction/ConstructionContractForm";
+		return "design/DesignContractForm";
 	}
 
 	/**
@@ -58,11 +60,11 @@ public class DesignController {
 	 * @param sgProjectBase
 	 * @return
 	 */
-	@RequestMapping(value = "/saveConstructionBaseProject", method = RequestMethod.POST)
-	public @ResponseBody Map<String, Object> saveConstructionBaseProject(SgProjectBase sgProjectBase) {
+	@RequestMapping(value = "/saveDesignBaseProject", method = RequestMethod.POST)
+	public @ResponseBody Map<String, Object> saveDesignBaseProject(JtSjProjectBase sjProjectBase) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		try {
-			constructionService.saveSgProjectBase(sgProjectBase);
+			designService.saveJtSjProjectBase(sjProjectBase);
 			map.put("returnMsg", JtConstant.SUCCESS);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
@@ -77,8 +79,8 @@ public class DesignController {
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping(value = "/queryConstructionBaseProjectList")
-	public @ResponseBody String getConstructionBaseProjectList(HttpServletRequest request) {
+	@RequestMapping(value = "/queryDesignBaseProjectList") 
+	public @ResponseBody String getDesignBaseProjectList(HttpServletRequest request) {
 		StringBuffer sb = new StringBuffer("{\"total\":");
 		try {
 			String queryParam = request.getParameter("params");
@@ -86,9 +88,9 @@ public class DesignController {
 			PageQuery pagequery = new PageQuery();
 			pagequery.setPageIndex(Integer.valueOf(request.getParameter("page")));
 			pagequery.setPageSize(Integer.valueOf(request.getParameter("rows")));
-			String SgProjectBases = constructionService.getSgProjectBaseList(queryParam, pagequery);
-			Long total = constructionService.getSgProjectBaseCount(queryParam);
-			sb.append(total).append(",\"rows\":").append(SgProjectBases).append("}");
+			String SjProjectBases = designService.getSjProjectBaseList(queryParam, pagequery);
+			Long total = designService.getSjProjectBaseCount(queryParam);
+			sb.append(total).append(",\"rows\":").append(SjProjectBases).append("}");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
