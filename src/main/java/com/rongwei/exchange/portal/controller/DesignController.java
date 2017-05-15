@@ -17,8 +17,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.ajie.wechat.util.JtConstant;
 import com.ajie.wechat.util.PageQuery;
 import com.rongwei.exchange.portal.model.JtSjProjectBase;
-import com.rongwei.exchange.portal.model.SgProjectBase;
-import com.rongwei.exchange.portal.service.ConstructionService;
 import com.rongwei.exchange.portal.service.DesignService;
 
 @Controller

@@ -60,7 +60,7 @@ function joinformatter(value,row,index){
                 field : 'stdname',
             },{
                 width : '220',
-                title : '中交行业分类',
+                title : '中交行业分2类',
                 field : 'zjhyflx',
                 formatter:joinformatter,
             },{
