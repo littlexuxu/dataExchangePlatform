@@ -73,6 +73,7 @@ public class ConstructionController {
 		return map;
 	}
 	
+<<<<<<< Updated upstream
 	/**
 	 * 
 	 * @param sgbase
@@ -93,6 +94,21 @@ public class ConstructionController {
 			logger.error(e.getMessage());
 			map.put("returnMsg", JtConstant.FAILURE);
 		}
+=======
+	@RequestMapping(value="/saveConstructionBaseProjectTrack",method=RequestMethod.POST)
+	public @ResponseBody Map<String,Object> saveConstructionBaseProject(String sgProjectBase,String sgProjectTrack){
+		Map<String, Object> map = new HashMap<String,Object>();
+		ObjectMapper mapper = new ObjectMapper(); 
+		try {
+			SgProjectBase sgProjectBase1 = mapper.readValue(sgProjectBase,SgProjectBase.class);
+			constructionService.saveSgProjectBase(sgProjectBase1);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		
+		
+>>>>>>> Stashed changes
 		return map;
 	}
 

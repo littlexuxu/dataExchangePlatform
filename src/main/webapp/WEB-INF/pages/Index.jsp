@@ -43,7 +43,7 @@
 			{ id:2, pId:0, name:"设计数据管理"},
 			{ id:21, pId:2, name:"项目及市场信息",path:"/design/listDesignBaseProject"},
 			{ id:22, pId:2, name:"项目及合同信息",path:"/design/listDesignMarListMain"},
-			{ id:23, pId:2, name:"合同变更信息",path:"/design/listDesignContractChange"},
+			{ id:23, pId:2, name:"合同变更信息", path:"/design/listDesignContractChange"},
 			{ id:24, pId:2, name:"执行月报"},
 			{ id:3, pId:0, name:"其它数据管理"},
 			{ id:31, pId:3, name:"项目及合同信息", path:"/other/listotherBaseProject"},
