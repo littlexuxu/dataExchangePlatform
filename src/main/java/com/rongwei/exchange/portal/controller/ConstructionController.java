@@ -25,10 +25,14 @@ import com.rongwei.exchange.portal.service.ConstructionService;
 @RequestMapping(value = "/construction")
 public class ConstructionController {
 
+
+	
 	private final Log logger = LogFactory.getLog(ConstructionController.class);
 
 	@Autowired
 	private ConstructionService constructionService;
+
+	
 
 	/** 跳转至施工项目列表页 */
 	@RequestMapping(value = "/listConstructionBaseProject", method = RequestMethod.GET)
@@ -54,10 +58,11 @@ public class ConstructionController {
 		return "construction/ConstructionContractForm";
 	}
 
+
 	/**
 	 * 施工项目保存
 	 * 
-	 * @param sgProjectBase
+	 * @param sgProjectBase	
 	 * @return
 	 */
 	@RequestMapping(value = "/saveConstructionBaseProject", method = RequestMethod.POST)
@@ -72,13 +77,12 @@ public class ConstructionController {
 		}
 		return map;
 	}
-	
 
 	/**
-	 * 
+	 * 保存施工项目基本信息、市场信息
 	 * @param sgbase
 	 * @param sgtrack
-	 * @return
+	 * @return returnMsg:Success/Failure
 	 */
 	@RequestMapping(value = "/saveConstructionBaseAndTrack", method = RequestMethod.POST)
 	public @ResponseBody Map<String, Object> saveConstructionBaseAndTrack(String sgbase,String sgtrack) {
@@ -93,19 +97,6 @@ public class ConstructionController {
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			map.put("returnMsg", JtConstant.FAILURE);
-		}
-		return map;
-	}
-
-	@RequestMapping(value="/saveConstructionBaseProjectTrack",method=RequestMethod.POST)
-	public @ResponseBody Map<String,Object> saveConstructionBaseProject(String sgProjectBase,String sgProjectTrack){
-		Map<String, Object> map = new HashMap<String,Object>();
-		ObjectMapper mapper = new ObjectMapper(); 
-		try {
-			SgProjectBase sgProjectBase1 = mapper.readValue(sgProjectBase,SgProjectBase.class);
-			constructionService.saveSgProjectBase(sgProjectBase1);
-		} catch (Exception e) {
-			// TODO: handle exception
 		}
 		return map;
 	}
@@ -134,18 +125,28 @@ public class ConstructionController {
 		return sb.toString();
 	}
 
-	public @ResponseBody Map<String, Object> getConstructionContractList(HttpServletRequest request) {
-		Map<String, Object> map = new HashMap<String, Object>();
+
+	/**
+	 * 查询施工项目合同列表
+	 * @param request
+	 * @return
+	 */
+	 @RequestMapping(value = "/queryConstructionContrackProjectList")
+	public @ResponseBody String getConstructionContractList(HttpServletRequest request) {
+		StringBuffer sb = new StringBuffer("{\"total\":");
 		try {
 			String queryParam = request.getParameter("params");
 			System.out.println("参数：" + queryParam);
 			PageQuery pagequery = new PageQuery();
 			pagequery.setPageIndex(Integer.valueOf(request.getParameter("page")));
 			pagequery.setPageSize(Integer.valueOf(request.getParameter("rows")));
+			String SgProjectBases = constructionService.getSgProjectContractList(queryParam, pagequery);
+			Long total = constructionService.getSgProjectContractCount(queryParam);
+			sb.append(total).append(",\"rows\":").append(SgProjectBases).append("}");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return map;
+		return sb.toString();
 	}
 
 }

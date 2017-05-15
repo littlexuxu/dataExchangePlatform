@@ -32,7 +32,7 @@
     $(function() {
 
         $('#qtProjectBaseForm').form({
-            url : '<%=path %>/construction/saveOtherBaseProject',
+            url : '<%=path %>/other/saveOtherBaseProject',
             onSubmit : function() {
                 var isValid = $(this).form('validate');
                 if (!isValid) {

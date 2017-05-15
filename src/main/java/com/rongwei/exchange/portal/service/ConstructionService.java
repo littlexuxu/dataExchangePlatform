@@ -53,6 +53,39 @@ public class ConstructionService {
 		String sql = QueryUtils.getSqlByQueryParam(queryParam, baseSql);
 		return baseDao.getCountBySql(sql);
 	}
+
+
+	/**
+	 * 根据list页面查询条件获取施工项目合同信息列表
+	 * @param queryParam
+	 * @param pagequery
+	 * @return json格式Rows字符串
+	 * @throws Exception
+	 */
+	
+	public String getSgProjectContractList(String queryParam,PageQuery pagequery) throws Exception{
+		StringBuffer sql = new StringBuffer("SELECT t.* FROM (SELECT pb.stdname, pb.zjhyflx, pb.orgunit, pb.yzdwqt, pb.xmtszt "
+				+ ", pb.ssyw, pb.sfcfwt,dict.dict_name as zjhyflxdtname ,org.jt_org_name as orgunitdtname "
+				+ " FROM jt_sg_project_base pb LEFT JOIN jt_sg_project_contract pt ON pb.recid = pt.recid JOIN jt_dict dict ON pb.zjhyflx = dict.dict_id "
+				+ " LEFT JOIN jt_org_mapping org ON pb.orgunit = org.jt_org_code "
+				+ " where dict.dict_type_id = 'ZJHYFL' ) t WHERE 1 = 1 ");
+		String hSql = QueryUtils.getSqlByQueryParam(queryParam,sql);
+		String sgProjectContracts = baseDao.queryListJsonBySql(hSql,pagequery);
+
+		return sgProjectContracts;
+	}
+
+
+	/**
+	 * 根据list页面查询条件获取施工项目合同信息总数
+	 * @param queryParam
+	 * @return 记录条数
+	 */
+	public Long getSgProjectContractCount(String queryParam) throws Exception{
+		StringBuffer baseSql = new StringBuffer("SELECT count(1) FROM jt_sg_project_contract t WHERE 1 = 1 ");
+		String sql = QueryUtils.getSqlByQueryParam(queryParam, baseSql);
+		return baseDao.getCountBySql(sql);
+	}
 	
 	/**
 	 * 保存项目基础信息

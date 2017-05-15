@@ -46,7 +46,7 @@ function joinformatter(value,row,index){
 
     $(function() {
     	sjBaseDataGrid = $('#sjBaseDataGrid').datagrid({
-            url : '/dataExchangePlatform/design/queryDesignBaseProjectList',
+            url : '<%=path%>/design/queryDesignBaseProjectList',
             striped : true,
             rownumbers : false,
             pagination : true,

@@ -32,7 +32,7 @@
 
     $(function() {
     	sjxmhtDataGrid = $('#sjxmhtDataGrid').datagrid({
-            url : '/dataExchangePlatform/construction/queryConstructionBaseProjectList',
+            url : '<%=path%>/design/queryConstructionBaseProjectList',
             striped : true,
             rownumbers : false,
             pagination : true,

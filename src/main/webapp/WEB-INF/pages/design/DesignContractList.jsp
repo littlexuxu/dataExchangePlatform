@@ -25,7 +25,7 @@
 	
 	$(function() {
 		sgBaseDataGrid = $('#sgContractDataGrid').datagrid({
-            url : '<%=path %>/construction/queryConstructionBaseProjectList',
+            url : '<%=path %>/design/queryConstructionBaseProjectList',
             striped : true,
             rownumbers : false,
             pagination : true,

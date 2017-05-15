@@ -32,7 +32,7 @@
     $(function() {
 
         $('#sgProjectBaseForm').form({
-            url : '<%=path %>/construction/saveConstructionBaseProject',
+            url : '<%=path %>/other/saveConstructionBaseProject',
             onSubmit : function() {
                 var isValid = $(this).form('validate');
                 if (!isValid) {

@@ -42,7 +42,7 @@
         }
 
         $('#sgProjectBaseForm').form({
-            url : '<%=path %>/construction/saveConstructionBaseProject',
+            url : '<%=path %>/design/saveConstructionBaseProject',
             onSubmit : function() {
                 var isValid = $(this).form('validate');
                 if (!isValid) {
