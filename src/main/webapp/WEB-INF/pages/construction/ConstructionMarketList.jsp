@@ -213,6 +213,9 @@
 		window.location.href = "<%=request.getContextPath()%>/construction/updateConstructionBaseProject";
 	}
 	
+	
+
+	
 	var sgBase_dialog;
 	//显示弹出窗口 新增：row为空 编辑:row有值
 	function doUpdate(row) {

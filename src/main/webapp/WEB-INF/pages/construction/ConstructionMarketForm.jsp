@@ -65,6 +65,63 @@
 		});        
     });
     
+    
+	// datagrid行点击事件
+    function onClickRow(index, row) {
+        if (editIndex != index) {
+            if (endEditing()) {
+                $("#dg").datagrid("selectRow", index).datagrid("beginEdit", index);
+                editIndex = index;
+            } else {
+                $("#dg").datagrid("selectRow", editIndex);
+            }
+        }
+    }
+	
+	// 添加一行
+    function addRow() {
+		
+		debugger;
+		var dg = $("#dg").datagrid();
+        if (endEditing()) {
+            //$("#dg").datagrid("appendRow");
+            $("#dg").datagrid("appendRow", {
+            	productid: "",
+            	listprice: "",
+            	unitcost: ""	
+            });
+            editIndex = $("#dg").datagrid("getRows").length - 1;
+            $("#dg").datagrid("selectRow", editIndex).datagrid("beginEdit", editIndex);
+        }
+    }
+	
+ // 删除一行
+    function delRow() {
+        if (editIndex == null) { return }
+        $('#dg').datagrid('cancelEdit', editIndex).datagrid('deleteRow', editIndex);
+        editIndex = null;
+    }
+    // 撤销修改
+    function rejectRow() {
+        $('#dg').datagrid('rejectChanges');
+        editIndex = null;
+    }
+	
+	
+	// 判断时候存在编辑中的行
+    var editIndex = null;
+    function endEditing() {
+        if (editIndex == null) { return true }
+        if ($('#dg').datagrid('validateRow', editIndex)) {
+            $('#dg').datagrid('endEdit', editIndex);
+            editIndex = null;
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    
     function saveSgProject() {
     	console.log($("#sgbase").serializeJson());
     	console.log($("#sgtrack").serializeJson());
@@ -192,22 +249,24 @@
 							url:'<%=path %>/select/queryDictTree?dictTypeId=HWZJLY'"
 							class="easyui-combotree" style="width: 100%"></td>
 					</tr>
-					<tr>
-						<th colspan="1" style="color:darkgrey">所属区域(*)</th><!-- 地雷 -->
-						<td readonly="true" colspan="2"><input name="ssqy" 
+					<!-- 地雷 sgbase.ssqy -->
+					<!-- <tr>
+						<th colspan="1" style="color:darkgrey">所属区域(*)</th>
+						<td readonly="true" colspan="2"><input name="" 
 							class="easyui-textbox" style="width: 100%"></td>
 							<th colspan="1" style="color:darkgrey">区域中心(*)</th>
-						<td colspan="2"><input name="sgbase.qyzx"
+						<td colspan="2"><input name=""
 							class="easyui-textbox" style="width: 100%"></td>
-					</tr>
-					<tr>
+					</tr> -->
+					<!-- 地雷 sgbase.xmjd -->
+					<!-- <tr>
 						<th colspan="1" style="color:darkgrey">项目阶段(*)</th>
-						<td readonly="true" colspan="2"><input name="sgbase.xmjd"
+						<td readonly="true" colspan="2"><input name=" "
 							class="easyui-combotree" style="width: 100%"></td>
 							<th colspan="1"></th>
-						<!--<td style="width: 10%"  colspan="2"><input name="sgbase."
-							class="easyui-combotree" style="width: 100%"></td>-->
-					</tr>
+						<td style="width: 10%"  colspan="2"><input name=""
+							class="easyui-combotree" style="width: 100%"></td>
+					</tr> -->
 					<tr>
 						<th colspan="1">项目状态</th>
 						<td readonly="true" colspan="2"><input name="sgbase.xmtszt"
@@ -280,9 +339,9 @@
 							textField:'dictname',
 							panelHeight:'auto'"
 							value="0" style="width: 100%"/></td>
-						<th colspan="1">是否计划内项目</th>
+						<!-- <th colspan="1">是否计划内项目</th> //地雷
 						<td colspan="2"><input class="easyui-textbox" name="sgbase.sfwjhnxm_gh"
-							value="0" style="width: 100%"/></td>
+							value="0" style="width: 100%"/></td> -->
 						
 					</tr>
 					</table>
@@ -331,8 +390,9 @@
 							style="width: 100%" data-options="min:0,precision:2" /></td>
 					</tr>
 					<tr>
-						<th colspan="1">当期汇率</th>
-						<td colspan="2"><input name="sgtrack." vtype="float" value="6.640600" class="easyui-numberbox" style="width: 100%" data-options="min:0,precision:4" /></td>
+						
+						<!-- <th colspan="1">当期汇率</th> 地雷
+						<td colspan="2"><input name="sgtrack." vtype="float" value="6.640600" class="easyui-numberbox" style="width: 100%" data-options="min:0,precision:4" /></td> -->
 			<th style="color:darkgrey">预计合同额(人民币)</th>
 			<td colspan="2"><input name="sgtrack.htermb" vtype="float"  class="easyui-numberbox" style="width: 100%" data-options="min:0,precision:4" /></td>
 					</tr>
@@ -455,27 +515,27 @@
 						<td colspan="5"><input name="sgtrack.zbsm"
 							class="easyui-textbox" style="height: 80px; width: 100%" multiline="true" /></td>
 			</tr>
-			<tr>
+			<!-- <tr> 地雷
 				<th colspan="1">资审文件</th>
 						<td colspan="5"><input class="easyui-textbox"
 							name="sgtrack.zswj" style="width: 100%"
 							data-options="required:true,showSeconds:false" value="" /></td>
-			</tr>
-			<tr>
+			</tr> -->
+			<!-- <tr>地雷
 				<th colspan="1">招标文件</th>
 						<td colspan="5"><input class="easyui-textbox"
 							name="sgtrack.zbwj" style="width: 100%"
 							data-options="required:true,showSeconds:false" value="" /></td>
-			</tr>
-			<tr>
+			</tr> -->
+			<!-- <tr>地雷
 				<th colspan="1">投标文件</th>
 						<td colspan="5"><input class="easyui-textbox"
 							name="sgtrack.tbwj" style="width: 100%"
 							data-options="required:true,showSeconds:false" value="" /></td>
-			</tr>
+			</tr> -->
 			
 			
-			<tr>
+			<!-- <tr>
 				<th style="color:darkgrey"><center>投标单位</center></th><th style="color:darkgrey"><center>投标资质单位(填全称)</center></th><th><center>投标报价</center></th><th><center>是否中标</center></th><th><center>中标额</center></th><th><center>金额单位</center></th>
 			</tr>
 			<tr>
@@ -485,29 +545,33 @@
 				<td><input class="easyui-combobox"  name="sgtrack.sfzb" style="width:100%;text-align:center"></td>
 				<td ><input class="easyui-textbox" name="sgtrack.zbeb" style="width:100%;text-align:center"></td>
 				<td ><input class="easyui-combobox" name="sgtrack.jedwb" style="width:100%;text-align:center"></td>
-			</tr>
+			</tr> -->
 			<tr align="center" style="background-color:	#DDDDFF"><td  colspan="6"><font style="font-weight:bold;" face="黑体" size="3">其他单位投标情况</font></td></tr>
-			
+			<tr><td  colspan="6"><div id="toolbar" style="height:auto">
+              <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="addRow()">新增行</a>
+         </div></td></tr>
 			<tr>
 				<td colspan="6">
-				<table id="dg" title="Cell Editing in DataGrid" style="width:100%;height:auto"
+				<table id="dg" title="" style="width:100%;height:auto"
 						data-options="
 							iconCls: 'icon-edit',
 							singleSelect: true,
 							method:'get',
-							rownumbers:true
+							rownumbers:true,
+							fitColumns:true,
+							toolbar:'#toolbar'
 						">
 					<thead>
 						<tr>
-							<th data-options="field:'itemid',width:80">序号</th>
-							<th data-options="field:'productid',width:100,editor:'text'">投标单位</th>
-							<th data-options="field:'listprice',width:80,align:'right',editor:{type:'numberbox',options:{precision:1}}">投标资质单位(填全称)</th>
-							<th data-options="field:'unitcost',width:80,align:'right',editor:'numberbox'">投标报价</th>
-							<th data-options="field:'attr1',width:250,editor:'text'">是否中标</th>
-							<th data-options="field:'status',width:60,align:'center',editor:{type:'checkbox',options:{on:'P',off:''}}">中标额</th>
+							<th data-options="field:'sgtrack.dwmcb',width:'45px',editor:'textbox'">投标单位</th>
+							<th data-options="field:'sgtrack.tbbjb',width:'45px',align:'right',editor:'textbox'">投标资质单位(填全称)</th>
+							<th data-options="field:'sgtrack.tbbjb',width:'45px',align:'right',editor:'textbox'">投标报价</th>
+							<th data-options="field:'sgtrack.sfzb',width:'45px',editor:'textbox'">是否中标</th>
+							<th data-options="field:'sgtrack.zbeb',width:'45px',align:'center',editor:'textbox'">中标额</th>
+							<th data-options="field:'sgtrack.jedwb',width:'45px',align:'center',editor:'textbox'">金额单位</th>
 						</tr>
 					</thead>
-				</table>	
+				</table>		
 					<%-- <table align="center" border="collapse" bordercolor="#a0c6e5" cellspacing="0" style="width:100%;table-layout:fixed;">
 					<th><center>序号</center></th><th><center>投标单位</center></th><th><center>投标资质单位(填全称)</center></th><th><center>投标报价</center></th><th><center>是否中标</center></th><th><center>中标额</center></th><th><center>金额单位</center></th>
 					<tr>
@@ -569,20 +633,22 @@
 							data-options="required:true,showSeconds:false" value="" /></td>
 
 			</tr>
-			<tr>
-				<th colspan="1" style="color:darkgrey">中标纳入系统管理时间</th>
+			<%--<tr>
+				<th colspan="1" style="color:darkgrey">中标纳入系统管理时间</th><!--sgtrack.nrxtgljsj_zb 地雷-->
 						<td colspan="2"><input class="easyui-textbox" required="true"
-							name="sgtrack.nrxtgljsj_zb" style="width: 100%"
+							name="" style="width: 100%"
 							data-options="required:true,showSeconds:false" value="" /></td>
 				<th></th>
 						<td colspan="2"><input class="easyui-textbox" required="true"
 							name="sgtrack." style="width: 100%"
 							data-options="required:true,showSeconds:false" value="" /></td>
-			</tr>
+			</tr>--%>
 					</table>
 				</form>
 			</div>	
 		</fieldset>
+        
+         
         
     </div>
 </div>
