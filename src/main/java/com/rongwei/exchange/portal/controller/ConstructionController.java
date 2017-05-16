@@ -7,8 +7,10 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.hibernate.criterion.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -85,14 +87,31 @@ public class ConstructionController {
 	 * @param sgtrack
 	 * @return returnMsg:Success/Failure
 	 */
-	@RequestMapping(value = "/saveConstructionBaseAndTrack", method = RequestMethod.POST)
+	//@Transactional(value="transactionManager", rollbackFor = Exception.class)
+	@RequestMapping(value = "/deleteConstructionProjectBase", method = RequestMethod.POST)
+	public @ResponseBody Map<String, Object> deleteConstructionProjectBase(HttpServletRequest request) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		ObjectMapper mapper = new ObjectMapper();
+		String sgId = request.getParameter("id");
+		try {
+			constructionService.deleteSgProjectBase(sgId);
+			map.put("returnMsg", JtConstant.SUCCESS);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			map.put("returnMsg", JtConstant.FAILURE);
+		}
+		return map;
+	}
+	
+	
 	public @ResponseBody Map<String, Object> saveConstructionBaseAndTrack(String sgbase,String sgtrack) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		ObjectMapper mapper = new ObjectMapper();
 		try {
 			SgProjectBase sgProjectBase = mapper.readValue(sgbase, SgProjectBase.class);
 			SgProjectTrack sgProjectTrack = mapper.readValue(sgtrack, SgProjectTrack.class);
-			constructionService.saveSgProjectBase(sgProjectBase);
+			SgProjectBase sgProjectBase1 = constructionService.saveSgProjectBase(sgProjectBase);
+			sgProjectTrack.setBaserecid(sgProjectBase1.getSgbaseid());
 			constructionService.saveSgProjectTrack(sgProjectTrack);
 			map.put("returnMsg", JtConstant.SUCCESS);
 		} catch (Exception e) {
@@ -101,6 +120,7 @@ public class ConstructionController {
 		}
 		return map;
 	}
+	
 
 	/**
 	 * 查询施工项目列表
@@ -117,7 +137,8 @@ public class ConstructionController {
 			PageQuery pagequery = new PageQuery();
 			pagequery.setPageIndex(Integer.valueOf(request.getParameter("page")));
 			pagequery.setPageSize(Integer.valueOf(request.getParameter("rows")));
-			String SgProjectBases = constructionService.getSgProjectBaseList(queryParam, pagequery);
+			
+			String SgProjectBases = constructionService.getSgProjectBaseList(queryParam,pagequery);
 			Long total = constructionService.getSgProjectBaseCount(queryParam);
 			sb.append(total).append(",\"rows\":").append(SgProjectBases).append("}");
 		} catch (Exception e) {
