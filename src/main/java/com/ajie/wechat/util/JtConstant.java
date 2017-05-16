@@ -26,6 +26,8 @@ public class JtConstant {
     
     public static final String SUCCESS = "Success";
     
-    public static final String FAILURE = "Failure";    
+    public static final String FAILURE = "Failure";   
+    
+    public static final String CURRENT_USER = "user";
     
 }

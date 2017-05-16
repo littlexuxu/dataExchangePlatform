@@ -37,24 +37,25 @@
 		var zNodes =[
 			{ id:1, pId:0, name:"施工数据管理"},
 			{ id:11, pId:1, name:"项目及市场信息", path:"/construction/listConstructionBaseProject"},
-			{ id:12, pId:1, name:"项目及合同信息",path:"/construction/listConstructionContract"},
+			{ id:12, pId:1, name:"项目及合同信息"},
 			{ id:13, pId:1, name:"合同变更信息"},
 			{ id:14, pId:1, name:"执行月报"},
 			{ id:2, pId:0, name:"设计数据管理"},
-			{ id:21, pId:2, name:"项目及市场信息",path:"/design/listDesignBaseProject"},
-			{ id:22, pId:2, name:"项目及合同信息",path:"/design/listDesignMarListMain"},
-			{ id:23, pId:2, name:"合同变更信息", path:"/design/listDesignContractChange"},
+			{ id:21, pId:2, name:"项目及市场信息"},
+			{ id:22, pId:2, name:"项目及合同信息"},
+			{ id:23, pId:2, name:"合同变更信息"},
 			{ id:24, pId:2, name:"执行月报"},
 			{ id:3, pId:0, name:"其它数据管理"},
-			{ id:31, pId:3, name:"项目及合同信息", path:"/other/listotherBaseProject"},
-			{ id:32, pId:3, name:"合同变更信息", path:"/other/listOtherContract"},
+			{ id:31, pId:3, name:"项目及合同信息"},
+			{ id:32, pId:3, name:"合同变更信息"},
 			{ id:33, pId:3, name:"执行月报"},
 			{ id:4, pId:0, name:"公共数据管理"},
 			{ id:41, pId:4, name:"组织机构管理"},
 			{ id:42, pId:4, name:"数据字典管理"},
 			{ id:5, pId:0, name:"系统管理"},
-			{ id:51, pId:5, name:"组织机构配置"},
-			{ id:52, pId:5, name:"角色配置"}
+			{ id:51, pId:5, name:"菜单配置"},
+			{ id:52, pId:5, name:"角色配置"},
+			{ id:53, pId:5, name:"用户管理", path:"/user/view"}
 		];
 
 		function addDiyDom(treeId, treeNode) {

@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE HTML>
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -23,12 +23,13 @@
 	<div class="header">
 	</div>
 	<h1 class="form-signin-heading">中交数据填报平台</h1>
-	<form id="loginForm" class="form-signin" action="<%=path %>/index/portal" method="post">
+	<form id="loginForm" class="form-signin" action="<%=path %>/user/login" method="post">
 		<label class="input-label" for="username">登录名</label>
-		<input type="text" id="username" name="username" class="input-block-level">
+		<input type="text" id="username" name="username" class="input-block-level"/>
 		<label class="input-label" for="password">密码</label>
-		<input type="password" id="password" name="password" class="input-block-level">
+		<input type="password" id="password" name="password" class="input-block-level"/>
 		<input class="btn btn-large btn-primary" type="submit" value="登 录"/>&nbsp;&nbsp;
+		<input type="hidden" name="rememberMe"/>
 	</form>
 	<div class="footer">
 		Copyright:2017 上海融为信息科技有限公司

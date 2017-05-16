@@ -1,2 +1,1 @@
-<%response.sendRedirect(request.getContextPath() + "/index/login"); %>
-//修改
+<%response.sendRedirect(request.getContextPath() + "/user/login"); %>

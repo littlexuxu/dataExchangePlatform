@@ -20,7 +20,7 @@
     </context:component-scan>
     
     <!-- 默认访问跳转到登录页面，即定义无Controller的path<->view直接映射 -->
-    <mvc:view-controller path="/" view-name="redirect:/Index_easyui"/> 
+    <mvc:view-controller path="/" view-name="redirect:/user/login"/> 
    
     
     <!-- 静态文件访问 -->

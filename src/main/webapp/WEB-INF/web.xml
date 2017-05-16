@@ -3,7 +3,7 @@
   <display-name>Archetype Created Web Application</display-name>
   <context-param>
     <param-name>contextConfigLocation</param-name>
-    <param-value>classpath*:applicationContext*.xml</param-value>
+    <param-value>classpath*:applicationContext*.xml,classpath*:spring-shiro.xml</param-value>
   </context-param>
   
   <!-- 配置加载log4j.xml文件路径 -->
@@ -22,8 +22,6 @@
         <param-name>loggingLevel</param-name>
         <param-value>INFO</param-value>
     </context-param>
-
-
 
     <listener>
         <listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
@@ -106,15 +104,35 @@
         </servlet-class>
     <init-param>
       <param-name>contextConfigLocation</param-name>
-      <param-value>classpath*:/spring-*.xml</param-value>
+      <param-value>classpath*:/spring-mvc.xml</param-value>
     </init-param>
     <load-on-startup>1</load-on-startup>
   </servlet>
+
+	<!--shiro过滤器 -->
+	<filter>
+		<filter-name>shiroFilter</filter-name>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+		<init-param>
+			<param-name>targetFilterLifecycle</param-name>
+			<param-value>true</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>shiroFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<filter-mapping>
+		<filter-name>shiroFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+		<dispatcher>REQUEST</dispatcher>
+	</filter-mapping>
   <servlet-mapping>
     <servlet-name>dispatcherServlet</servlet-name>
     <url-pattern>/</url-pattern>
   </servlet-mapping>
   <welcome-file-list>
-    <welcome-file>/index.jsp</welcome-file>
+    <welcome-file>/login.jsp</welcome-file>
   </welcome-file-list>
 </web-app>
