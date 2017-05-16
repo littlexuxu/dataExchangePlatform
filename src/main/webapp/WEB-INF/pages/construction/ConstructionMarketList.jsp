@@ -10,7 +10,6 @@
 </head>
 <body>
 	<script>
-	
 	 var dict = {	
 			 /*
 			 getDictName: function(f, d) {
@@ -53,7 +52,7 @@
 	 * @param {any} value  当前值
 	 * @param {any} row 当前行
 	 * @param {any} index 当前行索引
-	 * @returns 
+	 * @returns row[field+'dtname']
 	 */
 	function joinformatter(value, row, index) {
 		try {
@@ -83,26 +82,6 @@
 		        }
 		    }
 		} */
-
-		/* function formatterDict(value, row, index) {
-		    var dictText = "";
-		    if (this.field == "ssyw") {
-		        dictText = a.getDictText('SYB', row.ssyw);
-		    }
-		    if (this.field == "sfcfwt") {
-		        dictText = a.getDictText('SF', row.sfcfwt);
-		    }
-
-		    return dictText;
-		} 
-	
-	function formatter_XMTSZT(value,row,index){
-		var dictText = "";
-		dictText = getArray(XMTSZT,row.xmtszt);
-		return dcitText;
-	}
-	
-	*/
 	
 	
 	/**
@@ -112,7 +91,7 @@
 	 * @param {any} value  当前值
 	 * @param {any} row 当前行
 	 * @param {any} index 当前行索引
-	 * @returns 
+	 * @returns dictText
 	 */
 	function formatterDict(value, row, index) {
 	    var dictText = "";
@@ -128,13 +107,6 @@
 
 	    return dictText;
 	} 
-
-	
-	
-	
-	
-
-	
 
 	
 	(function($){  
@@ -154,14 +126,20 @@
 		sgBaseDataGrid = $('#sgBaseDataGrid').datagrid({
             url : '<%=path%>/construction/queryConstructionBaseProjectList',
             striped : true,
-            rownumbers : false,
+            rownumbers : true,
             pagination : true,
             singleSelect : true,
+            sortName :"sgbaseid",
+            sortOrder:'asc',
             width:'auto',
-            idField : 'sjbaseid',
-            pageSize : 15,
-            pageList : [ 15, 30, 50, 100, 300, 500, 1000, 2000 ],
-            columns : [ [ {
+            idField : 'sgbaseid',
+            pageSize : 10,
+            pageList : [ 10,15, 30, 50, 100, 300, 500, 1000, 2000 ],
+            columns : [ [  {
+                width : '220',
+                title : 'sgbaseid',
+                field : 'sgbaseid',
+            },{
                 width : '210',
                 title : '项目名称',
                 field : 'stdname',
@@ -219,9 +197,10 @@
 	var sgBase_dialog;
 	//显示弹出窗口 新增：row为空 编辑:row有值
 	function doUpdate(row) {
+		console.log(row);
 		var _url = "<%=request.getContextPath()%>/construction/updateConstructionBaseProject";
-		if (row != undefined && row.id) {
-			//_url = ctx+"/userAction/toUpdate/"+row.id;
+		if (row != undefined && row.sgbaseid) {
+			_url = "<%=request.getContextPath()%>/construction/updateConstructionBaseProject"+row.sgbaseid;
 		}
 	    //弹出对话窗口
 	    sgBase_dialog = $('<div/>').dialog({
@@ -239,7 +218,6 @@
 	            } else {
 	            	
 	            }
-
 	        },
 	        buttons: [
 	            {
@@ -262,6 +240,24 @@
 	        }
 	    });
 	}
+	
+	function doDelete(){ 
+		debugger;
+		var row = $('#sgBaseDataGrid').datagrid('getSelected');
+		console.log(row.sgbaseid);
+		if(row){
+			$.post("<%=request.getContextPath()%>/construction/deleteConstructionProjectBase",{"id":row.sgbaseid},
+			  function(data){
+				console.log(data);
+				var obj = JSON.parse(data);
+				$.messager.alert("提示",obj.returnMsg);
+				sgBaseDataGrid.datagrid('reload');
+			  },
+			  "text");//这里返回的类型有：json,html,xml,text
+			}else{
+			$.messager.alert("提示","请选择要删除的记录");
+		}
+	}
 	//清空查询条件
     function clearfrom() {
         $('#searchSgBaseForm').form('clear');
@@ -277,7 +273,7 @@
 				class="easyui-linkbutton" onclick="doUpdate();">修改</a> <a
 				href="javascript:void(0);"
 				data-options="iconCls:'icon-remove',plain:true"
-				class="easyui-linkbutton" onclick="doUpdate();">删除</a> <a
+				class="easyui-linkbutton" onclick="doDelete();">删除</a> <a
 				href="javascript:void(0);"
 				data-options="iconCls:'icon-cut',plain:true"
 				class="easyui-linkbutton" onclick="doUpdate();">导出</a> <br> <span>组织机构</span>

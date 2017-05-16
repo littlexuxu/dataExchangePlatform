@@ -28,9 +28,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Transactional
 @Repository
 public class BaseDao {
-	
+
 	private final Log logger = LogFactory.getLog(BaseDao.class);
-	
+
 	@PersistenceContext
 	private EntityManager entityManager;
 
@@ -46,9 +46,10 @@ public class BaseDao {
 	 * @return
 	 */
 	public List<?> queryListEntity(String sql, Map<String, Object> params, Class<?> clazz) {
-//		EntityManagerFactory emf = Persistence.createEntityManagerFactory("entityManagerFactory");
-//		EntityManager em = emf.createEntityManager();
-		
+		// EntityManagerFactory emf =
+		// Persistence.createEntityManagerFactory("entityManagerFactory");
+		// EntityManager em = emf.createEntityManager();
+
 		Session session = entityManager.unwrap(org.hibernate.Session.class);
 		SQLQuery query = session.createSQLQuery(sql);
 		if (params != null) {
@@ -64,11 +65,12 @@ public class BaseDao {
 		}
 		return result;
 	}
-	
-	public List<?> queryListEntityPage(String sql, Map<String, Object> params, Class<?> clazz,PageQuery pagequery) {
-//		EntityManagerFactory emf = Persistence.createEntityManagerFactory("entityManagerFactory");
-//		EntityManager em = emf.createEntityManager();
-		
+
+	public List<?> queryListEntityPage(String sql, Map<String, Object> params, Class<?> clazz, PageQuery pagequery) {
+		// EntityManagerFactory emf =
+		// Persistence.createEntityManagerFactory("entityManagerFactory");
+		// EntityManager em = emf.createEntityManager();
+
 		Session session = entityManager.unwrap(org.hibernate.Session.class);
 		SQLQuery query = session.createSQLQuery(sql);
 		if (params != null) {
@@ -77,12 +79,12 @@ public class BaseDao {
 			}
 		}
 		query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
-		//分页设置
-		if(pagequery != null){
+		// 分页设置
+		if (pagequery != null) {
 			query.setFirstResult(pagequery.getPageSize() * pagequery.getPageIndex());
 			query.setMaxResults(pagequery.getPageSize()).list();
 		}
-		
+
 		List<Map<String, Object>> result = query.list();
 		if (clazz != null) {
 			List<Object> entityList = convert(clazz, result);
@@ -90,35 +92,34 @@ public class BaseDao {
 		}
 		return result;
 	}
-	
+
 	public List<Map<String, Object>> queryListBySql(String sql, PageQuery pagequery) {
-		
+
 		Session session = entityManager.unwrap(org.hibernate.Session.class);
 		SQLQuery query = session.createSQLQuery(sql);
 		query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
-		//分页设置
-		if(pagequery != null){
+		// 分页设置
+		if (pagequery != null) {
 			query.setFirstResult(pagequery.getPageIndex() - 1);
 			query.setMaxResults(pagequery.getPageSize());
 		}
-		
+
 		List<Map<String, Object>> result = query.list();
 		return result;
 	}
-	
-	
+
 	@SuppressWarnings("unchecked")
-	public String queryListJsonBySql(String sql, PageQuery pagequery) throws Exception  {
-		
+	public String queryListJsonBySql(String sql, PageQuery pagequery) throws Exception {
+
 		Session session = entityManager.unwrap(org.hibernate.Session.class);
 		SQLQuery query = session.createSQLQuery(sql);
 		query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
-		//分页设置
-		if(pagequery != null){
-			query.setFirstResult(pagequery.getPageIndex() - 1);
+		// 分页设置
+		if (pagequery != null) {
+			query.setFirstResult((pagequery.getPageIndex() - 1) * pagequery.getPageSize());
 			query.setMaxResults(pagequery.getPageSize());
 		}
-		
+
 		List<Map<String, Object>> result = query.list();
 		ObjectMapper objectMapper = new ObjectMapper();
 		String listStr = objectMapper.writeValueAsString(result);
@@ -133,25 +134,26 @@ public class BaseDao {
 	 * @return
 	 */
 	public Long getCountBySql(String sql) {
-		
+
 		Query query = entityManager.createNativeQuery(sql);
 		BigInteger bigInteger = (BigInteger) query.getSingleResult();
 		return bigInteger.longValue();
 	}
-	
+
 	/**
 	 * 执行sql语句
+	 * 
 	 * @param sql
 	 * @return
 	 */
-	public int excuteBySql(String sql){
+	public int excuteBySql(String sql) {
 		int result;
 		Session session = entityManager.unwrap(org.hibernate.Session.class);
 		SQLQuery query = session.createSQLQuery(sql);
 		result = query.executeUpdate();
 		return result;
 	}
-	
+
 	private List<Object> convert(Class<?> clazz, List<Map<String, Object>> list) {
 		List<Object> result;
 		if (CollectionUtils.isEmpty(list)) {
@@ -162,12 +164,12 @@ public class BaseDao {
 			PropertyDescriptor[] props = Introspector.getBeanInfo(clazz).getPropertyDescriptors();
 			for (Map<String, Object> map : list) {
 				Object obj = clazz.newInstance();
-				
+
 				for (String key : map.keySet()) {
 					String attrName = key.toLowerCase();
-					
+
 					for (PropertyDescriptor prop : props) {
-						
+
 						attrName = removeUnderLine(attrName);
 						if (!attrName.equals(prop.getName())) {
 							continue;
@@ -183,14 +185,14 @@ public class BaseDao {
 							logger.error(e.getMessage());
 						}
 					}
-					
+
 				}
-				
+
 				result.add(obj);
 			}
 		} catch (Exception e) {
 			logger.error(e.getMessage());
-//			e.printStackTrace();
+			// e.printStackTrace();
 		}
 		return result;
 	}
@@ -244,9 +246,9 @@ public class BaseDao {
 		}
 		return query.executeUpdate();
 	}
-	
+
 	public List<?> queryListPageByHsql(String sql, Map<String, Object> params, PageQuery pagequery) {
-		
+
 		Query query = entityManager.createQuery(sql);
 		if (params != null) {
 			int count = 1;
@@ -255,12 +257,12 @@ public class BaseDao {
 				count = count + 1;
 			}
 		}
-		//分页设置
-		if(pagequery != null){
+		// 分页设置
+		if (pagequery != null) {
 			query.setFirstResult(pagequery.getPageIndex() - 1);
 			query.setMaxResults(pagequery.getPageSize());
 		}
-		
+
 		List<?> result = query.getResultList();
 		return result;
 	}
@@ -273,7 +275,7 @@ public class BaseDao {
 	 * @return
 	 */
 	public Long getCountByHsql(String sql, Map<String, Object> params) {
-		
+
 		Query query = entityManager.createQuery(sql);
 		if (params != null) {
 			int count = 1;
@@ -282,9 +284,9 @@ public class BaseDao {
 				count = count + 1;
 			}
 		}
-		
-		Long bigInteger =  (Long) query.getSingleResult();
+
+		Long bigInteger = (Long) query.getSingleResult();
 		return bigInteger;
 	}
-	
+
 }

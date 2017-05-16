@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import javax.persistence.criteria.Order;
+
 import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 
@@ -55,6 +57,7 @@ public class QueryUtils {
 		}
 		return searchParams;
 	}
+	
 	
 	public static String getSqlByQueryParam(String queryParam, StringBuffer sql) {
 		try {

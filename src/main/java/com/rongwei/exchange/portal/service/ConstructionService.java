@@ -33,11 +33,11 @@ public class ConstructionService {
 	 * @throws Exception
 	 */
 	public String getSgProjectBaseList(String queryParam, PageQuery pagequery) throws Exception {
-		StringBuffer sql = new StringBuffer("SELECT t.* FROM (SELECT pb.stdname, pb.zjhyflx, pb.orgunit, pb.yzdwqt, pb.xmtszt "
+		StringBuffer sql = new StringBuffer("SELECT t.* FROM (SELECT pb.sgbaseid,pb.stdname, pb.zjhyflx, pb.orgunit, pb.yzdwqt, pb.xmtszt "
 				+ ", pb.ssyw, pb.sfcfwt, pt.ksgzsj ,dict.dict_name as zjhyflxdtname ,org.jt_org_name as orgunitdtname "
 				+ " FROM jt_sg_project_base pb LEFT JOIN jt_sg_project_track pt ON pb.recid = pt.recid JOIN jt_dict dict ON pb.zjhyflx = dict.dict_id "
 				+ " LEFT JOIN jt_org_mapping org ON pb.orgunit = org.jt_org_code "
-				+ " where dict.dict_type_id = 'ZJHYFL' ) t WHERE 1 = 1 ");
+				+ " where dict.dict_type_id = 'ZJHYFL' order by pb.sgbaseid desc) t WHERE 1 = 1 ");
 		String hSql = QueryUtils.getSqlByQueryParam(queryParam, sql);
 		String sgProjectBases = baseDao.queryListJsonBySql(hSql, pagequery);
 		return sgProjectBases;
@@ -64,11 +64,11 @@ public class ConstructionService {
 	 */
 	
 	public String getSgProjectContractList(String queryParam,PageQuery pagequery) throws Exception{
-		StringBuffer sql = new StringBuffer("SELECT t.* FROM (SELECT pb.stdname, pb.zjhyflx, pb.orgunit, pb.yzdwqt, pb.xmtszt "
+		StringBuffer sql = new StringBuffer("SELECT t.* FROM (SELECT pb.sgbaseid, pb.stdname, pb.zjhyflx, pb.orgunit, pb.yzdwqt, pb.xmtszt "
 				+ ", pb.ssyw, pb.sfcfwt,dict.dict_name as zjhyflxdtname ,org.jt_org_name as orgunitdtname "
 				+ " FROM jt_sg_project_base pb LEFT JOIN jt_sg_project_contract pt ON pb.recid = pt.recid JOIN jt_dict dict ON pb.zjhyflx = dict.dict_id "
 				+ " LEFT JOIN jt_org_mapping org ON pb.orgunit = org.jt_org_code "
-				+ " where dict.dict_type_id = 'ZJHYFL' ) t WHERE 1 = 1 ");
+				+ " where dict.dict_type_id = 'ZJHYFL' order by pb.sgbaseid desc) t WHERE 1 = 1 ");
 		String hSql = QueryUtils.getSqlByQueryParam(queryParam,sql);
 		String sgProjectContracts = baseDao.queryListJsonBySql(hSql,pagequery);
 
@@ -91,8 +91,9 @@ public class ConstructionService {
 	 * 保存项目基础信息
 	 * @param sgProjectBase
 	 */
-	public void saveSgProjectBase(SgProjectBase sgProjectBase) {
-		constructionDao.save(sgProjectBase);
+	public SgProjectBase saveSgProjectBase(SgProjectBase sgProjectBase) {
+		SgProjectBase sgProjectBase2 = constructionDao.saveAndFlush(sgProjectBase);
+		return sgProjectBase2;
 	}
 	
 	/**
@@ -101,6 +102,10 @@ public class ConstructionService {
 	 */
 	public void saveSgProjectTrack(SgProjectTrack sgProjectTrack) {
 		projectTrackDao.save(sgProjectTrack);
+	}
+	
+	public void deleteSgProjectBase(String id) {
+		constructionDao.delete(Integer.valueOf(id));
 	}
 	
 }
