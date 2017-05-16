@@ -11,6 +11,10 @@ import com.rongwei.exchange.portal.model.TreeObject;
 
 public class TreeUtils {
 
+	public static void main(String[] args) {
+		System.out.println("TreeUtils Class");
+	}
+	
 	public List<TreeObject> getDictSelectTree(List<JtDict> dictList) {
 		List<TreeObject> returnList = new ArrayList<TreeObject>();
 		
