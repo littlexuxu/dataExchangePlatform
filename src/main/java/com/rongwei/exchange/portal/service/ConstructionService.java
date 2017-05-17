@@ -49,7 +49,11 @@ public class ConstructionService {
 	 * @return
 	 */
 	public Long getSgProjectBaseCount(String queryParam) {
-		StringBuffer baseSql = new StringBuffer("SELECT count(1) FROM jt_sg_project_base t WHERE 1 = 1 ");
+		StringBuffer baseSql = new StringBuffer("SELECT count(t.sgbaseid) FROM (SELECT pb.sgbaseid,pb.stdname, pb.zjhyflx, pb.orgunit, pb.yzdwqt, pb.xmtszt "
+				+ ", pb.ssyw, pb.sfcfwt, pt.ksgzsj ,dict.dict_name as zjhyflxdtname ,org.jt_org_name as orgunitdtname "
+				+ " FROM jt_sg_project_base pb LEFT JOIN jt_sg_project_track pt ON pb.recid = pt.recid JOIN jt_dict dict ON pb.zjhyflx = dict.dict_id "
+				+ " LEFT JOIN jt_org_mapping org ON pb.orgunit = org.jt_org_code "
+				+ " where dict.dict_type_id = 'ZJHYFL' order by pb.sgbaseid desc) t WHERE 1 = 1 ");
 		String sql = QueryUtils.getSqlByQueryParam(queryParam, baseSql);
 		return baseDao.getCountBySql(sql);
 	}
@@ -68,7 +72,7 @@ public class ConstructionService {
 				+ ", pb.ssyw, pb.sfcfwt,dict.dict_name as zjhyflxdtname ,org.jt_org_name as orgunitdtname "
 				+ " FROM jt_sg_project_base pb LEFT JOIN jt_sg_project_contract pt ON pb.recid = pt.recid JOIN jt_dict dict ON pb.zjhyflx = dict.dict_id "
 				+ " LEFT JOIN jt_org_mapping org ON pb.orgunit = org.jt_org_code "
-				+ " where dict.dict_type_id = 'ZJHYFL' order by pb.sgbaseid desc) t WHERE 1 = 1 ");
+				+ " where dict.dict_type_id = 'ZJHYFL') t WHERE 1 = 1 ");
 		String hSql = QueryUtils.getSqlByQueryParam(queryParam,sql);
 		String sgProjectContracts = baseDao.queryListJsonBySql(hSql,pagequery);
 
