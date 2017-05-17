@@ -30,29 +30,6 @@
 <body>
 <script type="text/javascript">
     $(function() {
-    	
-    	
-
-        $('#sgProjectBaseForm').form({
-            url : '<%=path %>/construction/saveConstructionBaseProject',
-            onSubmit : function() {
-                var isValid = $(this).form('validate');
-                if (!isValid) {
-                    progressClose();
-                }
-                return isValid;
-            },
-            success : function(result) {
-                result = $.parseJSON(result);
-                if (result.returnMsg == "Success") {
-                	parent.doSearch();
-                	sgBase_dialog.dialog('destroy');
-                } else {
-                    parent.$.messager.alert('提示', result.msg, 'warning');
-                }
-            }
-        });
-        
 		$.each($("input[class='easyui-combotree']"), function(i,val){	
 			var combotree = $("input[name='"+val.name+"']");
 			combotree.combotree({
@@ -80,8 +57,6 @@
 	
 	// 添加一行
     function addRow() {
-		
-		debugger;
 		var dg = $("#dg").datagrid();
         if (endEditing()) {
             //$("#dg").datagrid("appendRow");
@@ -122,11 +97,23 @@
     }
     
     
+    function form2Json(id) {
+        var arr = $("#" + id).serializeArray()
+        var jsonStr = "";
+        jsonStr += '{';
+        for (var i = 0; i < arr.length; i++) {
+            jsonStr += '"' + arr[i].name + '":"' + arr[i].value + '",'
+        }
+        jsonStr = jsonStr.substring(0, (jsonStr.length - 1));
+        jsonStr += '}';
+
+        var json = JSON.parse(jsonStr)
+        return json;
+    }
+    
     function saveSgProject() {
-    	console.log($("#sgbase").serializeJson());
-    	console.log($("#sgtrack").serializeJson());
-    	var sgBase = $("#sgbase").serializeJson()
-    	var sgtrack = $("#sgtrack").serializeJson()
+    	var sgBase = $("#sgbase").serializeJson();
+    	var sgtrack = $("#sgtrack").serializeJson();
     	$.ajax({
     		url:'<%=path %>/construction/saveConstructionBaseAndTrack',
     		type:'POST',
@@ -159,7 +146,7 @@
 			<legend></legend>
 			<legend align="center" ></legend>
 			<form id="sgbase" method="post"  style="width:90%;margin:0 auto;">
-				
+				<input class="easyui-textbox" name="sgbase.sgbaseid" data-options="hidden:true" >
 				<table align="center" border="collapse" bordercolor="#a0c6e5" cellspacing="0"  style="width:100%;table-layout:fixed;">
 					<tr align="center"><td colspan="6"><font style="color: red;font-size:30px">注：本表金额单位为(元/折合美元)</font></td></tr>
 					<tr style="background-color:#DDDDFF"><td colspan="6" align="center"><font style="font-weight:bold;" face="黑体" size="3">基本项目信息</font></td></tr>
@@ -337,8 +324,7 @@
 							method:'get',
 							valueField:'dictid',
 							textField:'dictname',
-							panelHeight:'auto'"
-							value="0" style="width: 100%"/></td>
+							panelHeight:'auto'" style="width: 100%"/></td>
 						<!-- <th colspan="1">是否计划内项目</th> //地雷
 						<td colspan="2"><input class="easyui-textbox" name="sgbase.sfwjhnxm_gh"
 							value="0" style="width: 100%"/></td> -->

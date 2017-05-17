@@ -1,5 +1,8 @@
 package com.rongwei.exchange.portal.service;
 
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -92,6 +95,27 @@ public class ConstructionService {
 	}
 	
 	/**
+	 * 通过Id获取项目基本信息
+	 * @param id
+	 * @return
+	 */
+	public SgProjectBase getSgProjectBaseById(Integer id){
+		return constructionDao.findOne(id);
+	}
+	
+	/**
+	 * 通过Id获取项目基本信息
+	 * @param id
+	 * @return
+	 * @throws Exception 
+	 */
+	public SgProjectTrack getSgProjectTrackById(String id) throws Exception{
+		List<SgProjectTrack> sg = (List<SgProjectTrack>) projectTrackDao.findByBaserecid(Integer.valueOf(id));
+		
+		return sg.get(0);
+	}
+	
+	/**
 	 * 保存项目基础信息
 	 * @param sgProjectBase
 	 */
@@ -111,5 +135,7 @@ public class ConstructionService {
 	public void deleteSgProjectBase(String id) {
 		constructionDao.delete(Integer.valueOf(id));
 	}
+
+
 	
 }

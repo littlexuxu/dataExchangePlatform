@@ -62,7 +62,6 @@
 			else
 				return value;
 		} catch (e) {
-			console.log(e);
 			return value;
 		}
 	}
@@ -182,26 +181,39 @@
         });		
 	});
 	
+	
+	function allPrpos(obj,formId) { 
+		var returnMess = {};
+		for (var p in obj){ 
+			if(obj[p] != null || obj[p] != "null" || obj[p] != "" || obj[p] != undefined) {
+				returnMess[formId+'.' + p] = obj[p];
+			}
+		} 
+		return returnMess;
+	}
+	
+	function allPrpos1(obj,formId) { 
+		var obj = obj[0];
+		var returnMess = {};
+		for (var p in obj){ 
+			if(obj[p] != null || obj[p] != "null" || obj[p] != "" || obj[p] != undefined) {
+				returnMess[formId+'.' + p] = obj[p];
+			}
+		} 
+		return returnMess;
+	}
+	
+
 	function doSearch() {
 		var data = {'params' : JSON.stringify($("#searchSgBaseForm").serializeJson())};
 		sgBaseDataGrid.datagrid('load', data);
 	}
 	
-	function doUpdate() {
-		window.location.href = "<%=request.getContextPath()%>/construction/updateConstructionBaseProject";
-	}
-	
-	
-
-	
 	var sgBase_dialog;
 	//显示弹出窗口 新增：row为空 编辑:row有值
 	function doUpdate(row) {
-		console.log(row);
 		var _url = "<%=request.getContextPath()%>/construction/updateConstructionBaseProject";
-		if (row != undefined && row.sgbaseid) {
-			_url = "<%=request.getContextPath()%>/construction/updateConstructionBaseProject"+row.sgbaseid;
-		}
+		
 	    //弹出对话窗口
 	    sgBase_dialog = $('<div/>').dialog({
 	    	title : "项目及市场经营信息",
@@ -213,11 +225,39 @@
 	        maximizable: true,
 	        href: _url,
 	        onLoad: function () {
-	            if (row) {
-	            	$('#sgProjectBaseForm').form('load', row);
-	            } else {
-	            	
-	            }
+	        	if(row){
+	        		$.ajax({
+		        		url : "<%=request.getContextPath()%>/construction/getConstructionProjectBase/",
+		    			type:"POST",
+		    			data : {
+		    				'id':row.sgbaseid,
+		    			},
+		    			async:false,
+		    			success: function(h) {
+		    				var data = eval('(' + h + ')');
+		    				data = allPrpos(data,'sgbase');
+		    				console.log(data);
+		    				$("#sgbase").form('load',data);
+		    				//$("#sgbase").fill(data);
+		    			}
+		    		});
+	        		
+	        		$.ajax({
+		        		url : "<%=request.getContextPath()%>/construction/getConstructionProjectTrack/",
+		    			type:"POST",
+		    			data : {
+		    				'id':row.sgbaseid,
+		    			},
+		    			async:false,
+		    			success: function(h) {
+		    				var data = eval('(' + h + ')');
+		    				data = allPrpos(data,'sgtrack');
+		    				console.log(data);
+		    				$("#sgtrack").form('load',data);
+		    				//$("#sgbase").fill(data);
+		    			}
+		    		});
+	        	}
 	        },
 	        buttons: [
 	            {
@@ -240,20 +280,28 @@
 	        }
 	    });
 	}
+
+	//编辑
+	function doEdit() {
+		//选中的行（第一次选择的行）
+		var row = $('#sgBaseDataGrid').datagrid('getSelected');
+		if (row) {
+			doUpdate(row);
+		} else {
+			$.messager.alert("提示", "您未选择任何操作对象，请选择一行数据！");
+		}
+	}
 	
 	function doDelete(){ 
-		debugger;
 		var row = $('#sgBaseDataGrid').datagrid('getSelected');
-		console.log(row.sgbaseid);
 		if(row){
-			$.post("<%=request.getContextPath()%>/construction/deleteConstructionProjectBase",{"id":row.sgbaseid},
+			$.messager.confirm('提示', '确定要删除吗?',function(r){ if(r){$.post("<%=request.getContextPath()%>/construction/deleteConstructionProjectBase",{"id":row.sgbaseid},
 			  function(data){
-				console.log(data);
 				var obj = JSON.parse(data);
 				$.messager.alert("提示",obj.returnMsg);
 				sgBaseDataGrid.datagrid('reload');
 			  },
-			  "text");//这里返回的类型有：json,html,xml,text
+			  "text")}});//这里返回的类型有：json,html,xml,text
 			}else{
 			$.messager.alert("提示","请选择要删除的记录");
 		}
@@ -270,7 +318,7 @@
 				class="easyui-linkbutton" onclick="doUpdate();">新增</a> <a
 				href="javascript:void(0);"
 				data-options="iconCls:'icon-edit',plain:true"
-				class="easyui-linkbutton" onclick="doUpdate();">修改</a> <a
+				class="easyui-linkbutton" onclick="doEdit();">修改</a> <a
 				href="javascript:void(0);"
 				data-options="iconCls:'icon-remove',plain:true"
 				class="easyui-linkbutton" onclick="doDelete();">删除</a> <a

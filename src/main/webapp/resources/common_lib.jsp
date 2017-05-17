@@ -12,3 +12,4 @@
 <script type="text/javascript" src="<%=path %>/resources/easyui/Content/easyui/locale/easyui-lang-zh_CN.js"></script>
 <script type="text/javascript" src="<%=path %>/resources/easyui/common.js"></script>
 <script type="text/javascript" src="<%=path %>/resources/utils.js"></script>
+<script type="text/javascript" src="<%=path %>/resources/jquery.formFill.js"></script>
