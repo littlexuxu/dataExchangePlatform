@@ -4,5 +4,6 @@
 		<class>com.rongwei.exchange.portal.model.SgProjectBase</class>
 		<class>com.rongwei.exchange.portal.model.SgProjectContract</class>
 		<class>com.rongwei.exchange.portal.model.SgProjectTrack</class>
+		<class>model.JtOtherCompanyBid</class>
 	</persistence-unit>
 </persistence>

@@ -25,7 +25,7 @@
 	
 	$(function() {
 		qtBaseDataGrid = $('#qtBaseDataGrid').datagrid({
-            url : '<%=path %>/other/queryOtherBaseProjectList',
+            url : '<%=path %>/other/getOtherContractChangeList',
             striped : true,
             rownumbers : false,
             pagination : true,

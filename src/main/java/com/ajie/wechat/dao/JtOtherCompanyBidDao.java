@@ -5,6 +5,8 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import com.ajie.wechat.model.JtOtherCompanyBid;
 
+
+
 public interface JtOtherCompanyBidDao extends JpaRepository<JtOtherCompanyBid, Integer> , JpaSpecificationExecutor<JtOtherCompanyBid>{
 
 }

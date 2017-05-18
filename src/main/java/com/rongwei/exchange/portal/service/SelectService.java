@@ -10,8 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ajie.wechat.model.JtDict;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.rongwei.exchange.portal.dao.BaseDao;
 import com.rongwei.exchange.portal.utils.QueryUtils;
 
@@ -19,6 +17,7 @@ import com.rongwei.exchange.portal.utils.QueryUtils;
 @Transactional
 public class SelectService {
 	
+	@SuppressWarnings("unused")
 	private final Log logger = LogFactory.getLog(SelectService.class);
 	
 	@Autowired

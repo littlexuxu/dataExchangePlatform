@@ -29,7 +29,13 @@
 </head>
 <body>
 <script type="text/javascript">
+
+	
+
     $(function() {
+    	$("#divParent" ).css("display", "none");  
+    	$("#divParent1" ).css("display", "none");
+    	/* $("#ID").parent().css("display", "none"); */
 		$.each($("input[class='easyui-combotree']"), function(i,val){	
 			var combotree = $("input[name='"+val.name+"']");
 			combotree.combotree({
@@ -47,38 +53,42 @@
     function onClickRow(index, row) {
         if (editIndex != index) {
             if (endEditing()) {
-                $("#dg").datagrid("selectRow", index).datagrid("beginEdit", index);
+                $("#dgOtherBid").datagrid("selectRow", index).datagrid("beginEdit", index);
                 editIndex = index;
             } else {
-                $("#dg").datagrid("selectRow", editIndex);
+                $("#dgOtherBid").datagrid("selectRow", editIndex);
             }
         }
     }
 	
 	// 添加一行
     function addRow() {
-		var dg = $("#dg").datagrid();
+		var dg = $("#dgOtherBid").datagrid();
         if (endEditing()) {
             //$("#dg").datagrid("appendRow");
-            $("#dg").datagrid("appendRow", {
-            	productid: "",
-            	listprice: "",
-            	unitcost: ""	
+            $("#dgOtherBid").datagrid("appendRow", {
+            	otherbidid:"",
+            	dwmc:"",
+            	tbbj: "",
+            	//tbbjb: "",
+            	sfzb: "",
+            	zbe:"",
+            	jedw:""
             });
-            editIndex = $("#dg").datagrid("getRows").length - 1;
-            $("#dg").datagrid("selectRow", editIndex).datagrid("beginEdit", editIndex);
+            editIndex = $("#dgOtherBid").datagrid("getRows").length - 1;
+            $("#dgOtherBid").datagrid("selectRow", editIndex).datagrid("beginEdit", editIndex);
         }
     }
 	
  // 删除一行
     function delRow() {
         if (editIndex == null) { return }
-        $('#dg').datagrid('cancelEdit', editIndex).datagrid('deleteRow', editIndex);
+        $('#dgOtherBid').datagrid('cancelEdit', editIndex).datagrid('deleteRow', editIndex);
         editIndex = null;
     }
     // 撤销修改
     function rejectRow() {
-        $('#dg').datagrid('rejectChanges');
+        $('#dgOtherBid').datagrid('rejectChanges');
         editIndex = null;
     }
 	
@@ -87,8 +97,8 @@
     var editIndex = null;
     function endEditing() {
         if (editIndex == null) { return true }
-        if ($('#dg').datagrid('validateRow', editIndex)) {
-            $('#dg').datagrid('endEdit', editIndex);
+        if ($('#dgOtherBid').datagrid('validateRow', editIndex)) {
+            $('#dgOtherBid').datagrid('endEdit', editIndex);
             editIndex = null;
             return true;
         } else {
@@ -111,17 +121,34 @@
         return json;
     }
     
+    
     function saveSgProject() {
+    	var gridData = $('#dgOtherBid').datagrid('getChanges');
+    	$('#dgOtherBid').datagrid('acceptChanges');//提交改变行数据，否则通过getChanges获取新增、或者修改行拿不到最后一次编辑的row
+    	console.log(gridData)
+    	
     	var sgBase = $("#sgbase").serializeJson();
-    	var sgtrack = $("#sgtrack").serializeJson();
+        var sgtrack = $("#sgtrack").serializeJson();
     	$.ajax({
-    		url:'<%=path %>/construction/saveConstructionBaseAndTrack',
-    		type:'POST',
-    		data:{'sgbase':JSON.stringify(sgBase),'sgtrack':JSON.stringify(sgtrack)},
-  			success:function(result){
-  				console.log(result);
-  			}
-    	});
+        		url:'<%=path %>/construction/saveConstructionBaseAndTrack',
+        		type:'POST',
+        		data:{'sgbase':JSON.stringify(sgBase),'sgtrack':JSON.stringify(sgtrack),'otherbids':JSON.stringify(gridData)},
+      			success:function(result){
+      				console.log(result)
+      				if(result.returnMsg == 'Success'){
+      					sgBase_dialog.dialog('destroy');
+    	  				sgBaseDataGrid.datagrid('reload');
+      				}
+    	  			else{
+    	  				$.messager.alert(result.returnMsg);
+    	  			}
+      			}
+        	});
+    	
+    	if($('#sgbase').form('validate') && $('#sgtrack').form('validate')){
+    		
+    		
+    	}
     }
     
 </script>	
@@ -146,13 +173,15 @@
 			<legend></legend>
 			<legend align="center" ></legend>
 			<form id="sgbase" method="post"  style="width:90%;margin:0 auto;">
-				<input class="easyui-textbox" name="sgbase.sgbaseid" data-options="hidden:true" >
+				<div id="divParent"style="margin:10px 0;">  
+				<input id="sgbaseid" class="easyui-textbox" name="sgbase.sgbaseid" > </div> 
 				<table align="center" border="collapse" bordercolor="#a0c6e5" cellspacing="0"  style="width:100%;table-layout:fixed;">
 					<tr align="center"><td colspan="6"><font style="color: red;font-size:30px">注：本表金额单位为(元/折合美元)</font></td></tr>
 					<tr style="background-color:#DDDDFF"><td colspan="6" align="center"><font style="font-weight:bold;" face="黑体" size="3">基本项目信息</font></td></tr>
 					<tr >
 						<th colspan="1"><label for="name">项目名称(*)</label></th>
 						<td colspan="5" word-wrap:break-word;>
+						
 						<input class="easyui-textbox" 
 							name="sgbase.stdname" data-options="required:true" style="width: 100%";>
 					<tr>
@@ -333,6 +362,8 @@
 					</table>
 					</form>	
 			<form id="sgtrack"  method="post"  style="width:90%;margin:0 auto;">
+					<div id="divParent1"style="margin:10px 0;">  
+					<input name="sgtrack.sgtrackid" > </div> 
 					<table align="center" border="collapse" bordercolor="#a0c6e5" cellspacing="0"  style="width:100%;table-layout:fixed;">
 						<tr style="background-color:#DDDDFF"><td align="center" colspan="6"><font style="font-weight:bold;" face="黑体" size="3">跟踪阶段信息</font></td></tr>
 						<tr>
@@ -363,21 +394,22 @@
 						<tr>
 						<th colspan="1">预测合同额及币种(*)</th>
 						<td colspan="1"><input class="easyui-textbox" style="width:100%; "name="sgtrack.yjhte"></td>
-						<td colspan="1"><input name="sgtrack.htermb"
+						<!-- 地雷 -->
+						<%-- <td colspan="1"><input name="sgtrack.htermb"
 							data-options="prompt:'请输入币种',required:true,
 	                        url:'<%=path %>/select/queryDict?dictTypeId=JSJEDW',
 							method:'get',
 							valueField:'dictid',
 							textField:'dictname',
 							panelHeight:'auto'"
-							class="easyui-combobox" style="width: 100%"></td>
+							class="easyui-combobox" style="width: 100%"></td> --%>
 						<th colspan="1">预计合同工期（月）</th>
 						<td colspan="2"><input name="sgtrack.yjhtgq" vtype="float"  class="easyui-numberbox"
 							style="width: 100%" data-options="min:0,precision:2" /></td>
 					</tr>
 					<tr>
 						
-						<!-- <th colspan="1">当期汇率</th> 地雷
+						<!-- <th colspan="1">当期汇率</th> 地雷	
 						<td colspan="2"><input name="sgtrack." vtype="float" value="6.640600" class="easyui-numberbox" style="width: 100%" data-options="min:0,precision:4" /></td> -->
 			<th style="color:darkgrey">预计合同额(人民币)</th>
 			<td colspan="2"><input name="sgtrack.htermb" vtype="float"  class="easyui-numberbox" style="width: 100%" data-options="min:0,precision:4" /></td>
@@ -538,7 +570,7 @@
          </div></td></tr>
 			<tr>
 				<td colspan="6">
-				<table id="dg" title="" style="width:100%;height:auto"
+				<table id="dgOtherBid" title="" style="width:100%;height:auto"
 						data-options="
 							iconCls: 'icon-edit',
 							singleSelect: true,
@@ -549,12 +581,13 @@
 						">
 					<thead>
 						<tr>
-							<th data-options="field:'sgtrack.dwmcb',width:'45px',editor:'textbox'">投标单位</th>
-							<th data-options="field:'sgtrack.tbbjb',width:'45px',align:'right',editor:'textbox'">投标资质单位(填全称)</th>
-							<th data-options="field:'sgtrack.tbbjb',width:'45px',align:'right',editor:'textbox'">投标报价</th>
-							<th data-options="field:'sgtrack.sfzb',width:'45px',editor:'textbox'">是否中标</th>
-							<th data-options="field:'sgtrack.zbeb',width:'45px',align:'center',editor:'textbox'">中标额</th>
-							<th data-options="field:'sgtrack.jedwb',width:'45px',align:'center',editor:'textbox'">金额单位</th>
+							<th data-options="field:'otherbidid',width:'45px',hidden:true"></th>
+							<th data-options="field:'dwmc',width:'45px',editor:'textbox'">投标单位</th>
+							<th data-options="field:'tbbj',width:'45px',align:'right',editor:'textbox'">投标报价</th> 
+							<!-- <th data-options="field:'otherbid.tbbjb',width:'45px',align:'right',editor:'textbox'">//投标资质单位(填全称)</th> -->
+							<th data-options="field:'sfzb',width:'45px',editor:'textbox'">是否中标</th>
+							<th data-options="field:'zbe',width:'45px',align:'center',editor:'textbox'">中标额</th>
+							<th data-options="field:'jedw',width:'45px',align:'center',editor:'textbox'">金额单位</th>
 						</tr>
 					</thead>
 				</table>		
@@ -633,9 +666,6 @@
 				</form>
 			</div>	
 		</fieldset>
-        
-         
-        
     </div>
 </div>
 </body>

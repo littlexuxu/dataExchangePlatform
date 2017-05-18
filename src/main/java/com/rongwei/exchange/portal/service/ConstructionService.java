@@ -1,13 +1,12 @@
 package com.rongwei.exchange.portal.service;
 
-
-import java.util.List;
-
+import org.hibernate.annotations.ResultCheckStyle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ajie.wechat.util.PageQuery;
+import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 import com.rongwei.exchange.portal.dao.BaseDao;
 import com.rongwei.exchange.portal.dao.ConstructionDao;
 import com.rongwei.exchange.portal.dao.SgProjectTrackDao;
@@ -44,7 +43,7 @@ public class ConstructionService {
 		String hSql = QueryUtils.getSqlByQueryParam(queryParam, sql);
 		String sgProjectBases = baseDao.queryListJsonBySql(hSql, pagequery);
 		return sgProjectBases;
-	}
+	} 
 	
 	/**
 	 * 根据list页面查询条件获取施工项目基础信息总数
@@ -109,10 +108,30 @@ public class ConstructionService {
 	 * @return
 	 * @throws Exception 
 	 */
-	public SgProjectTrack getSgProjectTrackById(String id) throws Exception{
+	/*public SgProjectTrack getSgProjectTrackById(String id) throws Exception{
 		List<SgProjectTrack> sg = (List<SgProjectTrack>) projectTrackDao.findByBaserecid(Integer.valueOf(id));
 		
 		return sg.get(0);
+	}*/
+	
+	public String getSgProjectTrackById(String id) throws Exception{
+		String result = baseDao.queryListJsonBySql("select * from jt_sg_project_track where baserecid = "+id+" limit 0,1",null);
+		//List<SgProjectTrack> sg = (List<SgProjectTrack>) projectTrackDao.findByBaserecid(Integer.valueOf(id));
+		
+		return result;
+	}
+	
+	
+	/**
+	 * 查询其它公司投标信息
+	 * @param id
+	 * @return
+	 * @throws Exception 
+	 */
+	public String getJtOtherCompnayBidById(String baserecid) throws Exception{
+		String result = baseDao.queryListJsonBySql("SELECT * FROM jt_other_company_bid where baserecid = "+baserecid, null);
+		
+		return result;
 	}
 	
 	/**

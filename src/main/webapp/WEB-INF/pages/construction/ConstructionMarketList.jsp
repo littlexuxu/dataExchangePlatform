@@ -220,7 +220,7 @@
 			top: 0,
 			width : 1000,
 			height : '100%',
-	        modal: true,
+	        modal: true, 
 	        minimizable: true,
 	        maximizable: true,
 	        href: _url,
@@ -233,6 +233,7 @@
 		    				'id':row.sgbaseid,
 		    			},
 		    			async:false,
+		    			
 		    			success: function(h) {
 		    				var data = eval('(' + h + ')');
 		    				data = allPrpos(data,'sgbase');
@@ -241,7 +242,6 @@
 		    				//$("#sgbase").fill(data);
 		    			}
 		    		});
-	        		
 	        		$.ajax({
 		        		url : "<%=request.getContextPath()%>/construction/getConstructionProjectTrack/",
 		    			type:"POST",
@@ -251,9 +251,25 @@
 		    			async:false,
 		    			success: function(h) {
 		    				var data = eval('(' + h + ')');
-		    				data = allPrpos(data,'sgtrack');
+		    				data = allPrpos1(data,'sgtrack');
 		    				console.log(data);
 		    				$("#sgtrack").form('load',data);
+		    				//$("#sgbase").fill(data);
+		    			}
+		    		});
+	        		$.ajax({
+		        		url : "<%=request.getContextPath()%>/construction/getJtOtherCompnayBids/",
+		    			type:"POST",
+		    			data : {
+		    				'id':row.sgbaseid,
+		    			},
+		    			async:false,
+		    			success: function(h) {
+		    				var data = eval('(' + h + ')');
+		    				//data = allPrpos1(data,'sgtrack');
+		    				console.log(data);
+		    				//$("#dgOtherBid").datagrid('load',data);
+		    				$('#dgOtherBid').datagrid({ data: data });
 		    				//$("#sgbase").fill(data);
 		    			}
 		    		});
@@ -321,10 +337,10 @@
 				class="easyui-linkbutton" onclick="doEdit();">修改</a> <a
 				href="javascript:void(0);"
 				data-options="iconCls:'icon-remove',plain:true"
-				class="easyui-linkbutton" onclick="doDelete();">删除</a> <a
+				class="easyui-linkbutton" onclick="doDelete();">删除</a> <!-- <a
 				href="javascript:void(0);"
 				data-options="iconCls:'icon-cut',plain:true"
-				class="easyui-linkbutton" onclick="doUpdate();">导出</a> <br> <span>组织机构</span>
+				class="easyui-linkbutton" onclick="doUpdate();">导出</a>  --><br> <span>组织机构</span>
 			<input name="sgProjectBase.orgunit_=" class="easyui-textbox">
 			<span>中交行业分类</span> <input name="sgProjectBase.zjhyflx_="
 				data-options="prompt:'请输入中交行业分类',

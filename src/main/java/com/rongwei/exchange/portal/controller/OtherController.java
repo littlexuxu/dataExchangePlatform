@@ -5,6 +5,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.http.HttpRequest;
+import org.opensaml.xmlsec.encryption.Public;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -59,6 +61,25 @@ public class OtherController {
 			pagequery.setPageSize(Integer.valueOf(request.getParameter("rows")));
 			String QtProjectBases = otherService.getQtProjectBaseList(queryParam, pagequery);
 			Long total = otherService.getQtProjectBaseCount(queryParam);
+			sb.append(total).append(",\"rows\":").append(QtProjectBases).append("}");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return sb.toString();
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/getOtherContractChangeList")
+	public String getOtherContractChangeList(HttpServletRequest request){
+		StringBuffer sb = new StringBuffer("{\"total\":");
+		try {
+			String queryParam = request.getParameter("params");
+			System.out.println("参数：" + queryParam);
+			PageQuery pagequery = new PageQuery();
+			pagequery.setPageIndex(Integer.valueOf(request.getParameter("page")));
+			pagequery.setPageSize(Integer.valueOf(request.getParameter("rows")));
+			String QtProjectBases = otherService.getQtContractChangeList(queryParam, pagequery);
+			Long total = otherService.getQtContractChangeCount(queryParam);
 			sb.append(total).append(",\"rows\":").append(QtProjectBases).append("}");
 		} catch (Exception e) {
 			e.printStackTrace();
