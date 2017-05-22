@@ -69,8 +69,8 @@ public class ConstructionService {
 	
 	public String getSgProjectContractList(String queryParam,PageQuery pagequery) throws Exception{
 		StringBuffer sql = new StringBuffer("SELECT t.* FROM (SELECT contract.* ,dict.dict_name as zjhyflxdtname, org.jt_org_name as orgunitdtname"
-				+ ", base.stdname,base.orgunit,base.xmlx,base.zjhyflx,base.xmszd,base.bdmc,base.zjlydx,base.yzdw,base.sjdw "
-				+ " FROM jt_sg_project_contract contract LEFT JOIN jt_sg_project_base base  contract.baserecid = base.sgbaseid JOIN jt_dict dict ON base.zjhyflx = dict.dict_id "
+				+ ", base.stdname,base.orgunit as orgunitbase,base.xmlx,base.zjhyflx,base.xmszd,base.bdmc,base.zjlydx,base.yzdw,base.sjdw "
+				+ " FROM jt_sg_project_contract contract LEFT JOIN jt_sg_project_base base ON contract.baserecid = base.sgbaseid JOIN jt_dict dict ON base.zjhyflx = dict.dict_id "
 				+ " LEFT JOIN jt_org_mapping org ON base.orgunit = org.jt_org_code "
 				+ " where dict.dict_type_id = 'ZJHYFL') t WHERE 1 = 1 ");
 		String hSql = QueryUtils.getSqlByQueryParam(queryParam,sql);
