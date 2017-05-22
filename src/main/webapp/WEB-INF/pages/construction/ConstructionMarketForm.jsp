@@ -65,7 +65,6 @@
     function addRow() {
 		var dg = $("#dgOtherBid").datagrid();
         if (endEditing()) {
-            //$("#dg").datagrid("appendRow");
             $("#dgOtherBid").datagrid("appendRow", {
             	otherbidid:"",
             	dwmc:"",
@@ -123,13 +122,25 @@
     
     
     function saveSgProject() {
-    	var gridData = $('#dgOtherBid').datagrid('getChanges');
-    	$('#dgOtherBid').datagrid('acceptChanges');//提交改变行数据，否则通过getChanges获取新增、或者修改行拿不到最后一次编辑的row
+    	var gridData;
+    	try
+    	{
+    		gridData = $('#dgOtherBid').datagrid('getChanges');
+    		$('#dgOtherBid').datagrid('acceptChanges');
+    	}
+    	catch(e){
+    		console.log(e);
+    		gridData = "";
+    	}
+    	
+    	//提交改变行数据，否则通过getChanges获取新增、或者修改行拿不到最后一次编辑的row
     	console.log(gridData)
     	
     	var sgBase = $("#sgbase").serializeJson();
         var sgtrack = $("#sgtrack").serializeJson();
-    	$.ajax({
+        
+    	if($('#sgbase').form('validate') && $('#sgtrack').form('validate')){
+    		$.ajax({
         		url:'<%=path %>/construction/saveConstructionBaseAndTrack',
         		type:'POST',
         		data:{'sgbase':JSON.stringify(sgBase),'sgtrack':JSON.stringify(sgtrack),'otherbids':JSON.stringify(gridData)},
@@ -143,11 +154,7 @@
     	  				$.messager.alert(result.returnMsg);
     	  			}
       			}
-        	});
-    	
-    	if($('#sgbase').form('validate') && $('#sgtrack').form('validate')){
-    		
-    		
+        	});		
     	}
     }
     

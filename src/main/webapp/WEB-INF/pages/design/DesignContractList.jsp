@@ -107,7 +107,7 @@
 	}
 	
 	</script>
-	<div id="tb" style="padding:3px">
+	<!-- <div id="tb" style="padding:3px">
 		<form id="searchSgBaseForm">
 			<a href="javascript:void(0);" class="easyui-linkbutton" onclick="doUpdate();">新增</a>
 			<a href="javascript:void(0);" class="easyui-linkbutton" onclick="doUpdate();">修改</a>
@@ -122,7 +122,75 @@
 			<input name="sgProjectBase.yzdwqt_like" class="easyui-textbox">
 			<a href="javascript:void(0);" class="easyui-linkbutton" onclick="doSearch();">查询</a>
 		</form>
-	</div>	
+	</div>	 -->
+	
+	<div id="tb" style="padding: 3px">
+		<form id="<div id="tb" style="padding: 3px">
+		<form id="searchSgBaseForm">
+			<a href="javascript:void(0);"
+				data-options="iconCls:'icon-add',plain:true"
+				class="easyui-linkbutton" onclick="doUpdate();">新增</a> <a
+				href="javascript:void(0);"
+				data-options="iconCls:'icon-edit',plain:true"
+				class="easyui-linkbutton" onclick="doEdit();">修改</a> <a
+				href="javascript:void(0);"
+				data-options="iconCls:'icon-remove',plain:true"
+				class="easyui-linkbutton" onclick="doDelete();">删除</a> <!-- <a
+				href="javascript:void(0);"
+				data-options="iconCls:'icon-cut',plain:true"
+				class="easyui-linkbutton" onclick="doUpdate();">导出</a>  --><br> <span>组织机构</span>
+			<input name="sgProjectBase.orgunit_=" class="easyui-textbox">
+			<span>中交行业分类</span> <input name="sgProjectBase.zjhyflx_="
+				data-options="prompt:'请输入中交行业分类',
+								url:'<%=request.getContextPath()%>/select/queryDictTree?dictTypeId=ZJHYFL'"
+				class="easyui-combotree" /> <span>项目名称</span> <input
+				name="sgProjectBase.stdname_like" class="easyui-textbox"> 
+				<span>所属行业</span> <input name="sgbase.ssyw_=" class="easyui-combobox"  data-options="prompt:'请输入所属业务',
+	                        url:'<%=path %>/select/queryDict?dictTypeId=SYB',
+							method:'get',
+							valueField:'dictid',
+							textField:'dictname',
+							panelHeight:'auto'" ><a
+				href="javascript:void(0);"
+				data-options="iconCls:'icon-search',plain:true"
+				class="easyui-linkbutton" onclick="doSearch();">查询</a> <a
+				href="javascript:void(0);"
+				data-options="iconCls:'icon-undo',plain:true"
+				class="easyui-linkbutton" onclick="clearfrom();">清空</a>
+		</form>
+	</div>">
+			<a href="javascript:void(0);"
+				data-options="iconCls:'icon-add',plain:true"
+				class="easyui-linkbutton" onclick="doUpdate();">新增</a> <a
+				href="javascript:void(0);"
+				data-options="iconCls:'icon-edit',plain:true"
+				class="easyui-linkbutton" onclick="doEdit();">修改</a> <a
+				href="javascript:void(0);"
+				data-options="iconCls:'icon-remove',plain:true"
+				class="easyui-linkbutton" onclick="doDelete();">删除</a> <!-- <a
+				href="javascript:void(0);"
+				data-options="iconCls:'icon-cut',plain:true"
+				class="easyui-linkbutton" onclick="doUpdate();">导出</a>  --><br> <span>组织机构</span>
+			<input name="sgProjectBase.orgunit_=" class="easyui-textbox">
+			<span>中交行业分类</span> <input name="sgProjectBase.zjhyflx_="
+				data-options="prompt:'请输入中交行业分类',
+								url:'<%=request.getContextPath()%>/select/queryDictTree?dictTypeId=ZJHYFL'"
+				class="easyui-combotree" /> <span>项目名称</span> <input
+				name="sgProjectBase.stdname_like" class="easyui-textbox"> 
+				<span>所属行业</span> <input name="sgbase.ssyw_=" class="easyui-combobox"  data-options="prompt:'请输入所属业务',
+	                        url:'<%=path %>/select/queryDict?dictTypeId=SYB',
+							method:'get',
+							valueField:'dictid',
+							textField:'dictname',
+							panelHeight:'auto'" ><a
+				href="javascript:void(0);"
+				data-options="iconCls:'icon-search',plain:true"
+				class="easyui-linkbutton" onclick="doSearch();">查询</a> <a
+				href="javascript:void(0);"
+				data-options="iconCls:'icon-undo',plain:true"
+				class="easyui-linkbutton" onclick="clearfrom();">清空</a>
+		</form>
+	</div>
 	<table id="sgBaseDataGrid" class="easyui-datagrid" style="width:95%;height:610px"
 			rownumbers="true" pagination="true">
 	</table>

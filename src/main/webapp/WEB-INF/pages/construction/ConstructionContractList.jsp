@@ -30,6 +30,7 @@
             rownumbers : false,
             pagination : true,
             singleSelect : true,
+            width:'auto',
             pageSize : 15,
             pageList : [ 15, 30, 50, 100, 300, 500, 1000, 2000 ],
             columns : [ [ {
@@ -102,8 +103,8 @@
             	field:'yzdw'
             },{
             	width:'120',
-            	title:'sjdw',
-            	field:'设计单位'
+            	title:'设计单位',
+            	field:'sjdw'
             }] ],
             toolbar : '#tb'
         });		
@@ -121,36 +122,77 @@
 	
 	var sgBase_dialog;
 	//显示弹出窗口 新增：row为空 编辑:row有值
+	//显示弹出窗口 新增：row为空 编辑:row有值
 	function doUpdate(row) {
-		console.log(row);
-		var _url = "<%=request.getContextPath() %>/construction/updateConstructionBaseProject";
-		if (row != undefined && row.id) {
-			//_url = ctx+"/userAction/toUpdate/"+row.id;
-		}
+		var _url = "<%=request.getContextPath()%>/construction/updateConstructionBaseProject";
+		
 	    //弹出对话窗口
 	    sgBase_dialog = $('<div/>').dialog({
 	    	title : "项目及市场经营信息",
 			top: 0,
 			width : 1000,
 			height : '100%',
-	        modal: true,
+	        modal: true, 
 	        minimizable: true,
 	        maximizable: true,
 	        href: _url,
 	        onLoad: function () {
-	            if (row) {
-	            	$('#sgProjectBaseForm').form('load', row);
-	            } else {
-	            	
-	            }
-
+	        	if(row){
+	        		$.ajax({
+		        		url : "<%=request.getContextPath()%>/construction/getConstructionProjectBase/",
+		    			type:"POST",
+		    			data : {
+		    				'id':row.sgbaseid,
+		    			},
+		    			async:false,
+		    			
+		    			success: function(h) {
+		    				var data = eval('(' + h + ')');
+		    				data = allPrpos(data,'sgbase');
+		    				console.log(data);
+		    				$("#sgbase").form('load',data);
+		    				//$("#sgbase").fill(data);
+		    			}
+		    		});
+	        		$.ajax({
+		        		url : "<%=request.getContextPath()%>/construction/getConstructionProjectTrack/",
+		    			type:"POST",
+		    			data : {
+		    				'id':row.sgbaseid,
+		    			},
+		    			async:false,
+		    			success: function(h) {
+		    				var data = eval('(' + h + ')');
+		    				data = allPrpos1(data,'sgtrack');
+		    				console.log(data);
+		    				$("#sgtrack").form('load',data);
+		    				//$("#sgbase").fill(data);
+		    			}
+		    		});
+	        		$.ajax({
+		        		url : "<%=request.getContextPath()%>/construction/getJtOtherCompnayBids/",
+		    			type:"POST",
+		    			data : {
+		    				'id':row.sgbaseid,
+		    			},
+		    			async:false,
+		    			success: function(h) {
+		    				var data = eval('(' + h + ')');
+		    				//data = allPrpos1(data,'sgtrack');
+		    				console.log(data);
+		    				//$("#dgOtherBid").datagrid('load',data);
+		    				$('#dgOtherBid').datagrid({ data: data });
+		    				//$("#sgbase").fill(data);
+		    			}
+		    		});
+	        	}
 	        },
 	        buttons: [
 	            {
 	                text: '保存',
 	                iconCls: 'icon-save',
 	                handler: function () {
-	                	$('#sgProjectBaseForm').submit();
+	                	saveSgProject();
 	                }
 	            },
 	            {
@@ -166,7 +208,37 @@
 	        }
 	    });
 	}
+
+	//编辑
+	function doEdit() {
+		//选中的行（第一次选择的行）
+		var row = $('#sgBaseDataGrid').datagrid('getSelected');
+		if (row) {
+			doUpdate(row);
+		} else {
+			$.messager.alert("提示", "您未选择任何操作对象，请选择一行数据！");
+		}
+	}
 	
+	function doDelete(){ 
+		var row = $('#sgBaseDataGrid').datagrid('getSelected');
+		if(row){
+			$.messager.confirm('提示', '确定要删除吗?',function(r){ if(r){$.post("<%=request.getContextPath()%>/construction/deleteConstructionProjectBase",{"id":row.sgbaseid},
+			  function(data){
+				var obj = JSON.parse(data);
+				$.messager.alert("提示",obj.returnMsg);
+				sgBaseDataGrid.datagrid('reload');
+			  },
+			  "text")}});//这里返回的类型有：json,html,xml,text
+			}else{
+			$.messager.alert("提示","请选择要删除的记录");
+		}
+	}
+	//清空查询条件
+    function clearfrom() {
+        $('#searchSgBaseForm').form('clear');
+    }
+
 	</script>
 	<div id="tb" style="padding: 3px">
 		<form id="searchSgBaseForm">

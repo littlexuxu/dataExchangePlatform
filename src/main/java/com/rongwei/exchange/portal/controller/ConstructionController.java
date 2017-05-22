@@ -1,5 +1,6 @@
 package com.rongwei.exchange.portal.controller;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -133,16 +134,20 @@ public class ConstructionController {
 		try {
 			SgProjectBase sgProjectBase = mapper.readValue(sgbase, SgProjectBase.class);
 			SgProjectTrack sgProjectTrack = mapper.readValue(sgtrack, SgProjectTrack.class);
-			List<JtOtherCompanyBid> list = mapper.readValue(otherbids, new TypeReference<List<JtOtherCompanyBid>>() {
-			});
 			SgProjectBase sgProjectBase1 = constructionService.saveSgProjectBase(sgProjectBase);
 			sgProjectTrack.setBaserecid(sgProjectBase1.getSgbaseid());
 			
-			for (JtOtherCompanyBid jtOtherCompanyBid : list) {
-				jtOtherCompanyBid.setBaserecid(sgProjectBase1.getSgbaseid());
-			}
-			otherCompandyBidService.save(list);
 			constructionService.saveSgProjectTrack(sgProjectTrack);
+			if(!" ".equals(otherbids) && null != otherbids){
+				List<JtOtherCompanyBid> list = mapper.readValue(otherbids, new TypeReference<List<JtOtherCompanyBid>>() {
+				});
+				for (JtOtherCompanyBid jtOtherCompanyBid : list) {
+					jtOtherCompanyBid.setBaserecid(sgProjectBase1.getSgbaseid());
+				}
+				otherCompandyBidService.save(list);
+			}
+				
+			
 
 			map.put("returnMsg", JtConstant.SUCCESS);
 		} catch (Exception e) {
