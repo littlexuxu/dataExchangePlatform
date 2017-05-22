@@ -361,8 +361,8 @@
 				class="easyui-linkbutton" onclick="clearfrom();">清空</a>
 		</form>
 	</div>
-	<table id="sgBaseDataGrid" class="easyui-datagrid"
-		style="width: 95%; height: 610px" rownumbers="true" pagination="true">
+	<table id="sgBaseDataGrid" class="easyui-datagrid" style="width:95%;height:610px"
+			rownumbers="true" pagination="true">
 	</table>
 </body>
 </html>

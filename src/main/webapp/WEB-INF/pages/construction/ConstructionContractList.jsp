@@ -21,10 +21,10 @@
         };  
     })(jQuery);
 	
-	var sgBaseDataGrid;
+	var sgContractDataGrid;
 	
 	$(function() {
-		sgBaseDataGrid = $('#sgContractDataGrid').datagrid({
+		sgContractDataGrid = $('#sgContractDataGrid').datagrid({
             url : '<%=path %>/construction/queryConstructionContrackProjectList',
             striped : true,
             rownumbers : false,
@@ -38,16 +38,16 @@
                 field : 'stdname',
             }, {
                 width : '220',
-                title : '和同签订方式',
-                field : 'tsztyysm',
+                title : '合同签订方式',
+                field : 'htqdfs',
             },{
                 width : '330',
                 title : '所属单位',
-                field : 'yzdwqt',
+                field : 'orgunit',
             },{
                 width : '330',
                 title : '合同名称',
-                field : 'yzdwqt',
+                field : 'htmc',
             },{
                 width : '330',
                 title : '所属区域',
@@ -55,23 +55,55 @@
             },{
                 width : '330',
                 title : '项目类型',
-                field : 'yzdwqt',
+                field : 'xmlx',
             },{
                 width : '330',
                 title : '中交行业分类',
-                field : 'yzdwqt',
+                field : 'zjhyflx',
             },{
                 width : '330',
                 title : '项目所在地',
-                field : 'yzdwqt',
-            },{
-                width : '330',
-                title : '纳入系统管理时间',
-                field : 'yzdwqt',
+                field : 'xmszd',
             },{
                 width : '330',
                 title : '合同签订日期',
-                field : 'yzdwqt',
+                field : 'htqdrq',
+            },{
+            	width:'120',
+            	title:'对外签约品牌',
+            	field:'dwqypp'
+            },{
+            	width:'120',
+            	title:'合同额',
+            	field:'htewy'
+            },{
+            	width:'120',
+            	title:'监理单位',
+            	field:'jldw'
+            },{
+            	width:'120',
+            	title:'监理单位联系人',
+            	field:'jldwlxr'
+            },{
+            	width:'120',
+            	title:'监理单位联系电话',
+            	field:'jldwlxdh'
+            },{
+            	width:'120',
+            	title:'实际开工日期',
+            	field:'sjkgrq'
+            },{
+            	width:'120',
+            	title:'项目资金来源',
+            	field:'zjlydx'
+            },{
+            	width:'120',
+            	title:'业主单位',
+            	field:'yzdw'
+            },{
+            	width:'120',
+            	title:'sjdw',
+            	field:'设计单位'
             }] ],
             toolbar : '#tb'
         });		
@@ -80,7 +112,7 @@
 	function doSearch() {
 		var data = {'params' : JSON.stringify($("#searchSgBaseForm").serializeJson())};
 		console.log(data);
-		sgBaseDataGrid.datagrid('load', data);
+		sgContractDataGrid.datagrid('load', data);
 	}
 	
 	function doUpdate() {
@@ -170,6 +202,8 @@
 				class="easyui-linkbutton" onclick="clearfrom();">清空</a>
 		</form>
 	</div>
+	
+	
 	<table id="sgContractDataGrid" class="easyui-datagrid" style="width:95%;height:610px"
 			rownumbers="true" pagination="true">
 	</table>

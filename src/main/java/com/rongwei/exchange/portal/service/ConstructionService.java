@@ -1,12 +1,10 @@
 package com.rongwei.exchange.portal.service;
 
-import org.hibernate.annotations.ResultCheckStyle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ajie.wechat.util.PageQuery;
-import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 import com.rongwei.exchange.portal.dao.BaseDao;
 import com.rongwei.exchange.portal.dao.ConstructionDao;
 import com.rongwei.exchange.portal.dao.SgProjectTrackDao;
@@ -70,10 +68,10 @@ public class ConstructionService {
 	 */
 	
 	public String getSgProjectContractList(String queryParam,PageQuery pagequery) throws Exception{
-		StringBuffer sql = new StringBuffer("SELECT t.* FROM (SELECT pb.sgbaseid, pb.stdname, pb.zjhyflx, pb.orgunit, pb.yzdwqt, pb.xmtszt "
-				+ ", pb.ssyw, pb.sfcfwt,dict.dict_name as zjhyflxdtname ,org.jt_org_name as orgunitdtname "
-				+ " FROM jt_sg_project_base pb LEFT JOIN jt_sg_project_contract pt ON pb.recid = pt.recid JOIN jt_dict dict ON pb.zjhyflx = dict.dict_id "
-				+ " LEFT JOIN jt_org_mapping org ON pb.orgunit = org.jt_org_code "
+		StringBuffer sql = new StringBuffer("SELECT t.* FROM (SELECT contract.* ,dict.dict_name as zjhyflxdtname, org.jt_org_name as orgunitdtname"
+				+ ", base.stdname,base.orgunit,base.xmlx,base.zjhyflx,base.xmszd,base.bdmc,base.zjlydx,base.yzdw,base.sjdw "
+				+ " FROM jt_sg_project_contract contract LEFT JOIN jt_sg_project_base base  contract.baserecid = base.sgbaseid JOIN jt_dict dict ON base.zjhyflx = dict.dict_id "
+				+ " LEFT JOIN jt_org_mapping org ON base.orgunit = org.jt_org_code "
 				+ " where dict.dict_type_id = 'ZJHYFL') t WHERE 1 = 1 ");
 		String hSql = QueryUtils.getSqlByQueryParam(queryParam,sql);
 		String sgProjectContracts = baseDao.queryListJsonBySql(hSql,pagequery);

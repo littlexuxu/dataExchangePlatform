@@ -15,7 +15,7 @@ public class OtherService {
 		@Autowired
 		private BaseDao baseDao;
 		
-		//start 获取项目及合同信息列表
+		//start 获取项目及合同信息
 		/**
 		 * 
 		 * @param queryParam
@@ -44,7 +44,7 @@ public class OtherService {
 		}
 		//end
 		
-		//start 其它合同变更
+		//start 获取其它合同变更
 		
 		/**
 		 * 获取合同变更列表
