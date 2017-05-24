@@ -7,12 +7,39 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 
 import com.ajie.wechat.model.JtDict;
+import com.ajie.wechat.model.JtOrgMapping;
 import com.rongwei.exchange.portal.model.TreeObject;
 
 public class TreeUtils {
 
 	public static void main(String[] args) {
 		System.out.println("TreeUtils Class");
+	}
+	
+	public List<TreeObject> getOrgMappingTree(List<JtOrgMapping> dictList) {
+		List<TreeObject> returnList = new ArrayList<TreeObject>();
+		
+		List<TreeObject> treeList = new ArrayList<TreeObject>();
+		for (JtOrgMapping org : dictList) {
+			TreeObject tree = new TreeObject();
+			tree.setId(org.getJtorgcode());
+			tree.setText(org.getJtorgname());
+			tree.setPid(org.getJtparentorgcode());
+			tree.setPname(org.getJtparentorgname());
+			treeList.add(tree);
+		}
+		
+		for (Iterator<TreeObject> iterator = treeList.iterator(); iterator.hasNext();) {
+			TreeObject t = (TreeObject) iterator.next();
+			// 一、根据传入的某个父节点ID,遍历该父节点的所有子节点
+			if (StringUtils.isBlank(t.getPid())) {
+				recursionFn(treeList, t);
+				t.setState("closed");
+				returnList.add(t);
+			}
+		}
+		
+		return returnList;
 	}
 	
 	public List<TreeObject> getDictSelectTree(List<JtDict> dictList) {

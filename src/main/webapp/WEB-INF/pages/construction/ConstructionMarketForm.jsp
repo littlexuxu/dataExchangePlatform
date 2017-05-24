@@ -250,12 +250,12 @@
 					<tr>
 						
 						<th colspan="1">国家行业分类(*)</th>
-						<td colspan="2"><input name="sgbase.tzly" class="easyui-combotree"
+						<td colspan="2"><input name="sgbase.gjhylb" class="easyui-combotree"
 						data-options="prompt:'请输入行业分类',required:true,
 							url:'<%=path %>/select/queryDictTree?dictTypeId=GCLB',"
 							style="width: 100%" /></td>
 						<th colspan="1">商务部项目类型(*)</th>
-						<td colspan="2"><input name="sgbase.tzly"
+						<td colspan="2"><input name="sgbase.swbxmlx"
 							data-options="prompt:'请输入行业分类',required:true,
 							url:'<%=path %>/select/queryDictTree?dictTypeId=SWBXMLX'"
 							class="easyui-combotree" style="width: 100%"></td>
@@ -368,6 +368,7 @@
 					</tr>
 					</table>
 					</form>	
+			<!--分割线-->
 			<form id="sgtrack"  method="post"  style="width:90%;margin:0 auto;">
 					<div id="divParent1"style="margin:10px 0;">  
 					<input name="sgtrack.sgtrackid" > </div> 

@@ -1,6 +1,5 @@
 package com.rongwei.exchange.portal.controller;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,8 +21,8 @@ import com.ajie.wechat.util.JtConstant;
 import com.ajie.wechat.util.PageQuery;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.rongwei.exchange.portal.dao.BaseDao;
 import com.rongwei.exchange.portal.model.SgProjectBase;
+import com.rongwei.exchange.portal.model.SgProjectContract;
 import com.rongwei.exchange.portal.model.SgProjectTrack;
 import com.rongwei.exchange.portal.service.ConstructionService;
 
@@ -81,6 +80,29 @@ public class ConstructionController {
 			logger.error(e.getMessage());
 			map.put("returnMsg", JtConstant.FAILURE);
 		}
+		return map;
+	}
+	
+	/**
+	 * 保存项目合同信息(施工类)
+	 * @param sgProjectContract
+	 * @return map
+	 */
+	@RequestMapping(value = "/saveSgProjectContract")
+	@ResponseBody
+	public Map<String, Object> saveSgProjectContract(String sgcontract){
+		Map<String, Object> map = new HashMap<String,Object>();
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			SgProjectContract sgProjectContract = mapper.readValue(sgcontract, SgProjectContract.class);
+			constructionService.saveSgProjectContract(sgProjectContract);
+			map.put("returnMsg", JtConstant.SUCCESS);
+		} catch (Exception e) {
+			// TODO: handle exception
+			logger.error(e.getMessage());
+			map.put("returnMsg", JtConstant.FAILURE);
+		}
+		
 		return map;
 	}
 

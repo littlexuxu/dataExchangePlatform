@@ -111,24 +111,21 @@
 	});
 	
 	function doSearch() {
-		var data = {'params' : JSON.stringify($("#searchSgBaseForm").serializeJson())};
+		var data = {'params' : JSON.stringify($("#searchSgContractForm").serializeJson())};
 		console.log(data);
 		sgContractDataGrid.datagrid('load', data);
 	}
 	
-	function doUpdate() {
-		window.location.href = "<%=request.getContextPath() %>/construction/updateConstructionBaseProject";
-	}
 	
-	var sgBase_dialog;
+	var sgContract_dialog;
 	//显示弹出窗口 新增：row为空 编辑:row有值
 	//显示弹出窗口 新增：row为空 编辑:row有值
 	function doUpdate(row) {
-		var _url = "<%=request.getContextPath()%>/construction/updateConstructionBaseProject";
+		var _url = "<%=request.getContextPath()%>/construction/updateConstructionContract";
 		
 	    //弹出对话窗口
-	    sgBase_dialog = $('<div/>').dialog({
-	    	title : "项目及市场经营信息",
+	    sgContract_dialog = $('<div/>').dialog({
+	    	title : "项目及合同信息",
 			top: 0,
 			width : 1000,
 			height : '100%',
@@ -199,12 +196,12 @@
 	                text: '关闭',
 	                iconCls: 'icon-cancel',
 	                handler: function () {
-	                	sgBase_dialog.dialog('destroy');
+	                	sgContract_dialog.dialog('destroy');
 	                }
 	            }
 	        ],
 	        onClose: function () {
-	        	sgBase_dialog.dialog('destroy');
+	        	sgContract_dialog.dialog('destroy');
 	        }
 	    });
 	}
@@ -212,7 +209,7 @@
 	//编辑
 	function doEdit() {
 		//选中的行（第一次选择的行）
-		var row = $('#sgBaseDataGrid').datagrid('getSelected');
+		var row = $('#sgContractDataGrid').datagrid('getSelected');
 		if (row) {
 			doUpdate(row);
 		} else {
@@ -221,13 +218,13 @@
 	}
 	
 	function doDelete(){ 
-		var row = $('#sgBaseDataGrid').datagrid('getSelected');
+		var row = $('#sgContractDataGrid').datagrid('getSelected');
 		if(row){
 			$.messager.confirm('提示', '确定要删除吗?',function(r){ if(r){$.post("<%=request.getContextPath()%>/construction/deleteConstructionProjectBase",{"id":row.sgbaseid},
 			  function(data){
 				var obj = JSON.parse(data);
 				$.messager.alert("提示",obj.returnMsg);
-				sgBaseDataGrid.datagrid('reload');
+				sgContractDataGrid.datagrid('reload');
 			  },
 			  "text")}});//这里返回的类型有：json,html,xml,text
 			}else{
@@ -236,12 +233,12 @@
 	}
 	//清空查询条件
     function clearfrom() {
-        $('#searchSgBaseForm').form('clear');
+        $('#searchSgContractForm').form('clear');
     }
 
 	</script>
 	<div id="tb" style="padding: 3px">
-		<form id="searchSgBaseForm">
+		<form id="searchSgContractForm">
 			<a href="javascript:void(0);"
 				data-options="iconCls:'icon-add',plain:true"
 				class="easyui-linkbutton" onclick="doUpdate();">新增</a> <a
