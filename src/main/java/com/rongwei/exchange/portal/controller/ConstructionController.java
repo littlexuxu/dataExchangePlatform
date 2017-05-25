@@ -30,6 +30,12 @@ import com.rongwei.exchange.portal.service.ConstructionService;
 @RequestMapping(value = "/construction")
 public class ConstructionController {
 
+	public static void main(String[] args) {
+		String aString = "";
+		if(!"".equals(aString)){
+			System.out.println("为空");
+		}
+	}
 	private final Log logger = LogFactory.getLog(ConstructionController.class);
 
 	@Autowired
@@ -90,11 +96,12 @@ public class ConstructionController {
 	 */
 	@RequestMapping(value = "/saveSgProjectContract")
 	@ResponseBody
-	public Map<String, Object> saveSgProjectContract(String sgcontract){
+	public Map<String, Object> saveSgProjectContract(String sgcontract,String sgbaseid){
 		Map<String, Object> map = new HashMap<String,Object>();
 		ObjectMapper mapper = new ObjectMapper();
 		try {
 			SgProjectContract sgProjectContract = mapper.readValue(sgcontract, SgProjectContract.class);
+			sgProjectContract.setBaserecid(Integer.valueOf(sgbaseid));
 			constructionService.saveSgProjectContract(sgProjectContract);
 			map.put("returnMsg", JtConstant.SUCCESS);
 		} catch (Exception e) {
@@ -115,16 +122,45 @@ public class ConstructionController {
 		String jsonBase = objectMapper.writeValueAsString(sgProjectBase);
 		return jsonBase;
 	}
+	
+	
+	/**
+	 * 根据Id获取项目基本信息、合同信息(施工类)
+	 * @param request
+	 * @return json格式字符串
+	 */
+	@RequestMapping(value="/getSgScontractAndSgBaseInfo",produces = "text/html;charset=UTF-8", method = RequestMethod.POST)
+	@ResponseBody
+	public String getSgScontractAndSgBaseInfo(HttpServletRequest request){
+		String sgcontractId = request.getParameter("sgcontractId");
+		String sgbasereceid = request.getParameter("sgbasereceid");
+		ObjectMapper objectMapper = new ObjectMapper();
+		StringBuffer sb = new StringBuffer("{\"sgbase\":");
+		String jsonBase = "";
+		String jsonContract = "";
+		try{
+			SgProjectContract sgProjectContract = constructionService.getSgProjectContract(Integer.valueOf(sgcontractId));
+			SgProjectBase sgProjectBase = constructionService.getSgProjectBaseById(Integer.valueOf(sgbasereceid));
+			jsonBase = objectMapper.writeValueAsString(sgProjectBase);
+			jsonContract = objectMapper.writeValueAsString(sgProjectContract);
+			
+		}catch (Exception e) {
+			
+		}
+		sb.append(jsonBase).append(",\"sgcontract\":").append(jsonContract).append("}");
+		return sb.toString();
+	}
 
 	/**
-	 * 保存施工项目基本信息、市场信息
+	 * 
 	 * 
 	 * @param sgbase
 	 * @param sgtrack
 	 * @return returnMsg:Success/Failure
 	 */
 	@RequestMapping(value = "/deleteConstructionProjectBase", method = RequestMethod.POST)
-	public @ResponseBody Map<String, Object> deleteConstructionProjectBase(HttpServletRequest request) {
+	@ResponseBody
+	public Map<String, Object> deleteConstructionProjectBase(HttpServletRequest request) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		String sgId = request.getParameter("id");
 		try {
@@ -136,6 +172,22 @@ public class ConstructionController {
 		}
 		return map;
 	}
+	
+	@RequestMapping(value = "/deleteConstructionProjectContract", method = RequestMethod.POST)
+	public @ResponseBody Map<String, Object> deleteConstructionProjectContract(HttpServletRequest request) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		String sgcontractid = request.getParameter("sgcontractid");
+		try {
+			constructionService.deleteSgProjectContractById(sgcontractid);
+			map.put("returnMsg", JtConstant.SUCCESS);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			map.put("returnMsg", JtConstant.FAILURE);
+		}
+		return map;
+	}
+	
+	
 	
 	@RequestMapping(value = "/getConstructionProjectTrack", produces = "text/html;charset=UTF-8", method = RequestMethod.POST)
 	@ResponseBody
@@ -158,9 +210,9 @@ public class ConstructionController {
 			SgProjectTrack sgProjectTrack = mapper.readValue(sgtrack, SgProjectTrack.class);
 			SgProjectBase sgProjectBase1 = constructionService.saveSgProjectBase(sgProjectBase);
 			sgProjectTrack.setBaserecid(sgProjectBase1.getSgbaseid());
-			
+			otherbids = otherbids.trim();
 			constructionService.saveSgProjectTrack(sgProjectTrack);
-			if(!" ".equals(otherbids) && null != otherbids){
+			if(!"\"\"".equals(otherbids)){
 				List<JtOtherCompanyBid> list = mapper.readValue(otherbids, new TypeReference<List<JtOtherCompanyBid>>() {
 				});
 				for (JtOtherCompanyBid jtOtherCompanyBid : list) {
@@ -233,5 +285,7 @@ public class ConstructionController {
 		}
 		return sb.toString();
 	}
+	
+	
 
 }

@@ -78,7 +78,7 @@ public class ConstructionService {
 				+ " FROM jt_sg_project_contract contract LEFT JOIN jt_sg_project_base base ON contract.baserecid = base.sgbaseid JOIN jt_dict dict ON base.zjhyflx = dict.dict_id "
 				+ " LEFT JOIN jt_org_mapping org ON base.orgunit = org.jt_org_code "
 				+ " where dict.dict_type_id = 'ZJHYFL') t WHERE 1 = 1 ");
-		String hSql = QueryUtils.getSqlByQueryParam(queryParam,sql);
+		String hSql = QueryUtils.getSqlByQueryParam(queryParam,sql);	
 		String sgProjectContracts = baseDao.queryListJsonBySql(hSql,pagequery);
 
 		return sgProjectContracts;
@@ -146,6 +146,8 @@ public class ConstructionService {
 		return sgProjectBase2;
 	}
 	
+	
+	
 	/**
 	 * 保存项目市场信息
 	 * @param sgProjectTrack
@@ -157,12 +159,20 @@ public class ConstructionService {
 	public void deleteSgProjectBase(String id) {
 		constructionDao.delete(Integer.valueOf(id));
 	}
+	
+	public void deleteSgProjectContractById(String id){
+		projectContractDao.delete(Integer.valueOf(id));
+	}
 
 	public void saveSgProjectContract(SgProjectContract sgProjectContract) {
 		// TODO Auto-generated method stub
 		projectContractDao.save(sgProjectContract);
 	}
 
+	
+	public SgProjectContract getSgProjectContract(Integer id){
+		return projectContractDao.findOne(id);
+	}
 
 	
 }

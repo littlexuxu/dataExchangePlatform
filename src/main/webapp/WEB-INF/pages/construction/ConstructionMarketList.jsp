@@ -301,6 +301,7 @@
 	function doEdit() {
 		//选中的行（第一次选择的行）
 		var row = $('#sgBaseDataGrid').datagrid('getSelected');
+		console.log(row);
 		if (row) {
 			doUpdate(row);
 		} else {
@@ -308,20 +309,33 @@
 		}
 	}
 	
-	function doDelete(){ 
+
+	function doDelete(){
 		var row = $('#sgBaseDataGrid').datagrid('getSelected');
 		if(row){
-			$.messager.confirm('提示', '确定要删除吗?',function(r){ if(r){$.post("<%=request.getContextPath()%>/construction/deleteConstructionProjectBase",{"id":row.sgbaseid},
-			  function(data){
-				var obj = JSON.parse(data);
-				$.messager.alert("提示",obj.returnMsg);
-				sgBaseDataGrid.datagrid('reload');
-			  },
-			  "text")}});//这里返回的类型有：json,html,xml,text
-			}else{
+			$.messager.confirm('提示', '确定要删除吗?',function(r){
+				if(r){
+					$.ajax({
+					url : "<%=request.getContextPath()%>/construction/deleteConstructionProjectBase",
+	    			type:"POST",
+	    			data : {
+	    				'id':row.sgbaseid
+	    			},
+	    			async:false,
+	    			success: function(h) {
+	    				$.messager.alert("提示",h.returnMsg);
+	    				$("#sgBaseDataGrid").datagrid('reload');
+	    			}
+	    		});
+	    	}
+			});
+		}else{
 			$.messager.alert("提示","请选择要删除的记录");
 		}
 	}
+	
+	
+
 	//清空查询条件
     function clearfrom() {
         $('#searchSgBaseForm').form('clear');

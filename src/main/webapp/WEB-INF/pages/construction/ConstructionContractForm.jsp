@@ -36,11 +36,12 @@
 					}
 				}
 			});
-		});        
+		});
+    	
+
 		
 		//设置form表单为只读
-		readonlyForm("sgBaseProjectInfo",'disable');
-		
+		readonlyForm("sgBaseProjectInfo",true);
 		
 		
 		
@@ -83,50 +84,27 @@
 		return returnMess;
 	}
 	
-	function saveSgProject() {
-    	/* var gridData;
-    	try
-    	{
-    		gridData = $('#dgOtherBid').datagrid('getChanges');
-    		$('#dgOtherBid').datagrid('acceptChanges');
-    	}
-    	catch(e){
-    		console.log(e);
-    		gridData = "";
-    	}
+	function saveSgProjectContract() {
     	
-    	//提交改变行数据，否则通过getChanges获取新增、或者修改行拿不到最后一次编辑的row
-    	console.log(gridData) */
-    	
-        var sgcontract = $("#jtsgProjectandContract").serializeJson();
-    	$.ajax({
-    		url:'<%=path %>/construction/saveSgProjectContract',
-    		type:'POST',
-    		data:{'sgcontract':JSON.stringify(sgcontract)},
-  			success:function(result){
-  				console.log(result)
-  				if(result.returnMsg == 'Success'){
-  					sgContract_dialog.dialog('destroy');
-	  				sgBaseDataGrid.datagrid('reload');
-  				}
-	  			else{
-	  				$.messager.alert(result.returnMsg);
-	  			}
-  			}
-    	});		
-        
     	if($('#jtsgProjectandContract').form('validate')){
-    		
-    	}
+    		var sgcontract = $("#jtsgProjectandContract").serializeJson();
+    		$.ajax({
+        		url:'<%=path %>/construction/saveSgProjectContract',
+        		type:'POST',
+        		data:{'sgcontract':JSON.stringify(sgcontract),'sgbaseid':$("#sgbaseid").textbox("getValue")},
+      			success:function(result){
+      				console.log(result)
+      				if(result.returnMsg == 'Success'){
+      					sgContract_dialog.dialog('destroy');
+      					sgContractDataGrid.datagrid('reload');
+      				}
+    	  			else{
+    	  				$.messager.alert(result.returnMsg);
+    	  			}
+      			}
+        	});		
+    	} 
     }
-	
-	/*
- 	function doSearch() {
-		var data = {'params' : JSON.stringify($("#searchSgBaseForm").serializeJson())};
-		console.log(data);
-		sgBaseDataGrid.datagrid('load', data);
-	} 
-	*/
 	
 	var sgContract_dialog;
 	//显示弹出窗口 新增：row为空 编辑:row有值
@@ -198,9 +176,11 @@
 			<div>
 			<legend></legend>
 			<legend align="center" ></legend>
-				<form id="">
+			<form id="sgBaseProjectInfo">
+			  		<div id="divParent"style="margin:10px 0;">  
+							<input id="sgbaseid" class="easyui-textbox" name="sgBaseProjectInfo.sgbaseid" > </div> 
                      <table style="table-layout:fixed;width:100%" align="center" border="1" cellspacing="0" bordercolor="#a0c6e5" style="border-collapse:collapse;">
-                     <tr>
+                      <tr>
                             <td colspan="6"><font size="5" style="color:red">注：本表单金额为（元/折合美元）</font>
                             </td>
                         </tr>
@@ -215,10 +195,6 @@
                                 <%-- data-options="prompt:'请输入中标项目名称',required:true, url:'<%=path %>/select/queryProject/queryProjectNoContract?projectType=sg',panelHeight:'auto'"  /> --%> 
                             </td>
                         </tr>
-                     </table>
-                     </form>
-			  <form id="sgBaseProjectInfo">
-                     <table style="table-layout:fixed;width:100%" align="center" border="1" cellspacing="0" bordercolor="#a0c6e5" style="border-collapse:collapse;">
                      	<tr>
                             <td colspan="1" style="background-color:#ECECFF;color:darkgrey" align="right">项目名称</td>
                             <td colspan="5">
@@ -241,7 +217,7 @@
 							panelHeight:'auto'" ></td>
                             <td colspan="1" style="background-color:#ECECFF;color:darkgrey" align="right">中交行业分类</td>
                             <td colspan="2">
-                                <input name="sgBaseProjectInfo.zjhyflx" class="easyui-combotree" data-options="prompt:'请输入中交行业分类',required:true,
+                                <input name="sgBaseProjectInfo.zjhyflx" class="easyui-combotree" id="zjhyflx" data-options="prompt:'请输入中交行业分类',required:true, 
 								url:'<%=path %>/select/queryDictTree?dictTypeId=ZJHYFL'"
 							 style="width: 100%" />
                             </td>
@@ -249,14 +225,14 @@
                         <tr>
                             <td colspan="1" style="background-color:#ECECFF;color:darkgrey" align="right">项目类型</td>
                             <td colspan="2">
-                                <input name="sgBaseProjectInfo.xmlx" data-options="prompt:'请输入项目类型',required:true,
+                                <input name="sgBaseProjectInfo.xmlx" data-options="prompt:'请输入项目类型',required:true, 
 							url:'<%=path %>/select/queryDictTree?dictTypeId=XMLX'"
 							class="easyui-combotree" style="width: 100%">
                             </td>
                             <td colspan="1" style="background-color:#ECECFF;color:darkgrey" align="right">国家行业类别</td>
                             <td colspan="2">
                                 <input name="sgBaseProjectInfo.gjhylb" class="easyui-combotree"
-						data-options="prompt:'请输入行业分类',required:true,
+						data-options="prompt:'请输入行业分类',required:true, 
 							url:'<%=path %>/select/queryDictTree?dictTypeId=GCLB',"
 							style="width: 100%" />
                             </td>
@@ -265,14 +241,14 @@
                             <td colspan="1" style="background-color:#ECECFF;color:darkgrey" align="right">项目所在地</td>
                             <td colspan="2">
                                 <input name="sgBaseProjectInfo.xmszd"
-							data-options="prompt:'请输入项目所在地',required:true,
+							data-options="prompt:'请输入项目所在地',required:true, 
 							url:'<%=path %>/select/queryDictTree?dictTypeId=XMDY'"
 							class="easyui-combotree" style="width: 100%">
                             </td>
                             <td colspan="1" style="background-color:#ECECFF;color:darkgrey" align="right">投资来源</td>
                             <td colspan="2">
                                 <input name="sgBaseProjectInfo.tzly" class="easyui-combotree"
-						data-options="prompt:'请输入投资来源',required:true,
+						data-options="prompt:'请输入投资来源',required:true, 
 							url:'<%=path  %>/select/queryDictTree?dictTypeId=TZLY',"
 							style="width: 100%">
                             </td>
@@ -332,7 +308,9 @@
                     </form>
 			<!--分割线-->
 			<form id="jtsgProjectandContract">
-                        <table  style="table-layout:fixed;width:100%" align="center" border="1" cellspacing="0" bordercolor="#a0c6e5" style="border-collapse:collapse;">
+							<div id="divParent1"style="margin:10px 0;">  
+							<input id="sgcontractid" class="easyui-textbox" name="jtsgProjectandContract.sgcontractid" > </div> 
+                <table  style="table-layout:fixed;width:100%" align="center" border="1" cellspacing="0" bordercolor="#a0c6e5" style="border-collapse:collapse;">
                         <tr>
                             <td colspan="1" style="background-color:#ECECFF" align="right">监理单位</td>
                             <td colspan="5">
@@ -511,10 +489,10 @@
                         <tr>
                             <td colspan="1" style="background-color:#ECECFF" align="right">合同额及币种（*）</td>
                             <td colspan="1">
-                                <input name="jtsgProjectandContract.hte" class="easyui-textbox" data-options="required:true" enabled="false" style="width:100%;"  />
+                                <input name="jtsgProjectandContract.htewy" class="easyui-textbox" data-options="required:true" enabled="false" style="width:100%;"  />
                             </td>
                             <td colspan="1">
-                                <input name="jtsgProjectandContract.jedw" class="easyui-combobox" enabled="false" style="width:100%;" 
+                                <input name="jtsgProjectandContract.hetdw" class="easyui-combobox" enabled="false" style="width:100%;" 
                                 data-options="prompt:'折合美元',
 	                                url:'<%=path %>/select/queryDict?dictTypeId=JSJEDW',
 						        	method:'get',	valueField:'dictid',
@@ -526,7 +504,7 @@
                                 <input name="jtsgProjectandContract.zzcdhte" class="easyui-textbox" data-options="required:true" enabled="false" style="width:100%;"  />
                             </td>
                         </tr>
-                        <tr>
+                       <%--  <tr>
                             <td colspan="1" style="background-color:#ECECFF;color:darkgrey" align="right">变更后合同额及币种（*）</td>
                             <td colspan="1">
                                 <input name="jtsgProjectandContract.hte" class="easyui-textbox" data-options="required:true" enabled="false" style="width:100%;"  />
@@ -543,8 +521,8 @@
                             <td colspan="2">
                                 <input name="jtsgProjectandContract.zzcdhte" class="easyui-textbox" data-options="required:true" enabled="false" style="width:100%;"  />
                             </td>
-                        </tr>
-                        <tr>
+                        </tr> --%>
+                        <%-- <tr>
                             <td colspan="1" style="background-color:#ECECFF;color:darkgrey" align="right">变更后自主承担合同额及币种（*）</td>
                             <td colspan="1">
                                 <input name="jtsgProjectandContract.hte" class="easyui-textbox" data-options="required:true" enabled="false" style="width:100%;"  />
@@ -561,16 +539,16 @@
                             <td colspan="2">
                                 <input name="jtsgProjectandContract.zzcdhte" class="easyui-textbox" data-options="required:true" enabled="false" style="width:100%;"  />
                             </td>
-                        </tr>
+                        </tr> --%>
                         <tr>
                             <td colspan="1" style="background-color:#ECECFF" align="right">合同工期（月）（*）</td>
                             <td colspan="2">
                                 <input name="jtsgProjectandContract.htgq" class="easyui-textbox" data-options="required:true" enabled="false" style="width:100%;"  />
                             </td>
-                            <td colspan="1" style="background-color:#ECECFF;color:darkgrey;color:darkgrey" align="right">变更后合同工期（月）</td>
+                            <!-- <td colspan="1" style="background-color:#ECECFF;color:darkgrey;color:darkgrey" align="right">变更后合同工期（月）</td>
                             <td colspan="2">
                                 <input name="jtsgProjectandContract.bghtgq" class="easyui-textbox" enabled="false" style="width:100%;" />
-                            </td>
+                            </td> -->
                         </tr>
                         <tr>
                             <td colspan="1" style="background-color:#ECECFF" align="right">合同开工日期（*）</td>
@@ -580,15 +558,15 @@
                             </td>
                             <td colspan="1" style="background-color:#ECECFF" align="right">合同交（竣）工日期（*）</td>
                             <td colspan="2">
-                                <input name="jtsgProjectandContract.htwgrq" class="easyui-datebox" enabled="false" style="width:100%;" 
+                                <input name="jtsgProjectandContract.htjgrq" class="easyui-datebox" enabled="false" style="width:100%;" 
                                 data-options="prompt:'请输入合同完工日期'" />
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="1" style="background-color:#ECECFF" align="right">合同扫描件</td>
+                            <!-- <td colspan="1" style="background-color:#ECECFF" align="right">合同扫描件</td>
                             <td colspan="2">
                                 <input name="jtsgProjectandContract.sjwgrq" class="easyui-textbox" data-options="required:true" enabled="false" style="width:100%;"  />
-                            </td>
+                            </td> -->
                             <td colspan="1" style="background-color:#ECECFF" align="right">是否分包给集团内其他二级单位（*）</td>
                             <td colspan="2">
                                 <input name="jtsgProjectandContract.sffb" class="easyui-combobox" enabled="false" style="width:100%;" 
@@ -616,39 +594,39 @@
                         <tr>
                             <td colspan="1" style="background-color:#ECECFF" align="right">签约单位（资质）名称（*）</td>
                             <td colspan="5">
-                                <input name="jtsgProjectandContract.qyzzmc" class="easyui-textbox"  enabled="false" style="width:100%;"  />
+                                <input name="jtsgProjectandContract.jtpp" class="easyui-textbox"  enabled="false" style="width:100%;"  />
                             </td>
                         </tr>
                         <tr>
                             <td colspan="1" style="background-color:#ECECFF" align="right">实施单位名称（*）</td>
                             <td colspan="5">
-                                <input name="jtsgProjectandContract.qyzzmc" class="easyui-textbox"  enabled="false" style="width:100%;"  />
+                                <input name="jtsgProjectandContract.ssdwmc" class="easyui-textbox"  enabled="false" style="width:100%;"  />
                             </td>
                         </tr>
                         <tr>
                             <td colspan="1" style="background-color:#ECECFF" align="right">预付款比例（%）</td>
                             <td colspan="2">
-                                <input name="jtsgProjectandContract.xmszd" class="easyui-textbox" enabled="false" style="width:100%;"  />
+                                <input name="jtsgProjectandContract.ysyfkbl" class="easyui-textbox" enabled="false" style="width:100%;"  />
                             </td>
                             <td colspan="1" style="background-color:#ECECFF" align="right">合同约定工程进度款支付比例（%）</td>
                             <td colspan="2">
-                                <input name="jtsgProjectandContract.tzly" class="easyui-textbox" enabled="false" style="width:100%;"  />
+                                <input name="jtsgProjectandContract.ysjdkzfbl" class="easyui-textbox" enabled="false" style="width:100%;"  />
                             </td>
                         </tr>
                         <tr>
                             <td colspan="1" style="background-color:#ECECFF" align="right">质保金比例（%）</td>
                             <td colspan="2">
-                                <input name="jtsgProjectandContract.xmszd" class="easyui-textbox" enabled="false" style="width:100%;"  />
+                                <input name="jtsgProjectandContract.yszbjbl" class="easyui-textbox" enabled="false" style="width:100%;"  />
                             </td>
                             <td colspan="1" style="background-color:#ECECFF" align="right">质保金期限（年）</td>
                             <td colspan="2">
-                                <input name="jtsgProjectandContract.tzly" class="easyui-textbox" enabled="false" style="width:100%;"  />
+                                <input name="jtsgProjectandContract.yszbjqx" class="easyui-textbox" enabled="false" style="width:100%;"  />
                             </td>
                         </tr>
                         <tr>
                             <td colspan="1" style="background-color:#ECECFF" align="right">履约保证方式</td>
                             <td colspan="2">
-                                <input name="jtsgProjectandContract.dwqypp" class="easyui-combobox" enabled="false" style="width:100%;" 
+                                <input name="jtsgProjectandContract.yslybzfs" class="easyui-combobox" enabled="false" style="width:100%;" 
                                 data-options="prompt:'请输入对外签约品牌',required:true,
 	                                url:'<%=path %>/select/queryDict?dictTypeId=DWQYPP',
 						        	method:'get',	valueField:'dictid',
@@ -657,21 +635,21 @@
                             </td>
                             <td colspan="1" style="background-color:#ECECFF;color:darkgrey" align="right">履约保证金额及币种（*）</td>
                             <td colspan="1">
-                                <input name="jtsgProjectandContract.hte" class="easyui-textbox" data-options="required:true" enabled="false" style="width:100%;"  />
+                                <input name="jtsgProjectandContract.yslybzje" class="easyui-textbox" data-options="required:true" enabled="false" style="width:100%;"  />
                             </td>
-                            <td colspan="1">
+                            <%-- <td colspan="1">
                                 <input name="jtsgProjectandContract.jedw" class="easyui-combobox" enabled="false" style="width:100%;" 
                                 data-options="prompt:'折合美元',
 	                                url:'<%=path %>/select/queryDict?dictTypeId=JSJEDW',
 						        	method:'get',	valueField:'dictid',
 							        textField:'dictname',
 							        panelHeight:'auto'"   />
-                            </td>
+                            </td> --%>
                         </tr>
                         <tr>
                             <td colspan="1" style="background-color:#ECECFF" align="right">主要条款描述</td>
                             <td colspan="5">
-                                <input name="" class="easyui-textbox" data-options="multiline:true" enabled="false" style="width:100%;"/>
+                                <input name="jtsgProjectandContract.zytkmsbz" class="easyui-textbox" data-options="multiline:true" enabled="false" style="width:100%;"/>
                             </td>
                         </tr>
                         <tr>
@@ -681,37 +659,37 @@
                         <tr>
                             <td colspan="1" style="background-color:#ECECFF" align="right">项目部经理</td>
                             <td colspan="2">
-                                <input name="jtsgProjectandContract.xmszd" class="easyui-textbox" enabled="false" style="width:100%;"  />
+                                <input name="jtsgProjectandContract.xmjl" class="easyui-textbox" enabled="false" style="width:100%;"  />
                             </td>
                             <td colspan="1" style="background-color:#ECECFF" align="right">项目部经理联系电话</td>
                             <td colspan="2">
-                                <input name="jtsgProjectandContract.tzly" class="easyui-textbox" enabled="false" style="width:100%;"  />
+                                <input name="jtsgProjectandContract.xmjldh" class="easyui-textbox" enabled="false" style="width:100%;"  />
                             </td>
                         </tr>
                         <tr>
                             <td colspan="1" style="background-color:#ECECFF" align="right">总工</td>
                             <td colspan="2">
-                                <input name="jtsgProjectandContract.xmszd" class="easyui-textbox" enabled="false" style="width:100%;"  />
+                                <input name="jtsgProjectandContract.zg" class="easyui-textbox" enabled="false" style="width:100%;"  />
                             </td>
                             <td colspan="1" style="background-color:#ECECFF" align="right">总工联系电话</td>
                             <td colspan="2">
-                                <input name="jtsgProjectandContract.tzly" class="easyui-textbox" enabled="false" style="width:100%;"  />
+                                <input name="jtsgProjectandContract.zglxdh" class="easyui-textbox" enabled="false" style="width:100%;"  />
                             </td>
                         </tr>
                         <tr>
                             <td colspan="1" style="background-color:#ECECFF" align="right">邮政编码</td>
                             <td colspan="2">
-                                <input name="jtsgProjectandContract.xmszd" class="easyui-textbox" enabled="false" style="width:100%;"  />
+                                <input name="jtsgProjectandContract.yzbm" class="easyui-textbox" enabled="false" style="width:100%;"  />
                             </td>
                             <td colspan="1" style="background-color:#ECECFF" align="right">办公司电话</td>
                             <td colspan="2">
-                                <input name="jtsgProjectandContract.tzly" class="easyui-textbox" enabled="false" style="width:100%;"  />
+                                <input name="jtsgProjectandContract.bgsdh" class="easyui-textbox" enabled="false" style="width:100%;"  />
                             </td>
                         </tr>
                         <tr>
                             <td colspan="1" style="background-color:#ECECFF" align="right">项目详细通讯地址</td>
                             <td colspan="5">
-                                <input name="jtsgProjectandContract.xmszd" class="easyui-textbox" enabled="false" style="width:100%;"  />
+                                <input name="jtsgProjectandContract.xmxxtxdz" class="easyui-textbox" enabled="false" style="width:100%;"  />
                             </td>
                         </tr>
                         <tr>
@@ -721,24 +699,24 @@
                         <tr>
                             <td colspan="1" style="background-color:#ECECFF" align="right">项目所在地GPS坐标</td>
                             <td colspan="5">
-                                <input name="jtsgProjectandContract.xmszd" class="easyui-textbox" enabled="false" style="width:100%;"  />
+                                <input name="jtsgProjectandContract.gpszb" class="easyui-textbox" enabled="false" style="width:100%;"  />
                             </td>
                         </tr>
                         <tr>
                             <td colspan="1" style="background-color:#ECECFF" align="right">设计采用规范（*）</td>
                             <td colspan="2">
-                                <input name="jtsgProjectandContract.dwqypp" class="easyui-combobox" enabled="false" style="width:100%;" 
+                                <input name="jtsgProjectandContract.sjgf" class="easyui-combobox" enabled="false" style="width:100%;" 
                                 data-options="prompt:'请输入对外签约品牌',required:true,
-	                                url:'<%=path %>/select/queryDict?dictTypeId=DWQYPP',
+	                                url:'<%=path %>/select/queryDict?dictTypeId=sjgf',
 						        	method:'get',	valueField:'dictid',
 							        textField:'dictname',
 							        panelHeight:'auto'" />
                             </td>
                             <td colspan="1" style="background-color:#ECECFF;color:darkgrey" align="right">施工采用规范（*）</td>
                             <td colspan="2">
-                                <input name="jtsgProjectandContract.jedw" class="easyui-combobox" enabled="false" style="width:100%;" 
+                                <input name="jtsgProjectandContract.sggf" class="easyui-combobox" enabled="false" style="width:100%;" 
                                 data-options="prompt:'折合美元',
-	                                url:'<%=path %>/select/queryDict?dictTypeId=JSJEDW',
+	                                url:'<%=path %>/select/queryDict?dictTypeId=sggf',
 						        	method:'get',	valueField:'dictid',
 							        textField:'dictname',
 							        panelHeight:'auto'"   />
@@ -747,33 +725,33 @@
                         <tr>
                             <td colspan="1" style="background-color:#ECECFF" align="right">项目合同语言（*）</td>
                             <td colspan="2">
-                                <input name="jtsgProjectandContract.xmszd" class="easyui-textbox" enabled="false" style="width:100%;"  />
+                                <input name="jtsgProjectandContract.xmhtyy" class="easyui-textbox" enabled="false" style="width:100%;"  />
                             </td>
                             <td colspan="1" style="background-color:#ECECFF" align="right">项目交流语言（*）</td>
                             <td colspan="2">
-                                <input name="jtsgProjectandContract.tzly" class="easyui-textbox" enabled="false" style="width:100%;"  />
+                                <input name="jtsgProjectandContract.xmjlyy" class="easyui-textbox" enabled="false" style="width:100%;"  />
                             </td>
                         </tr>
                         <tr>
                             <td colspan="1" style="background-color:#ECECFF" align="right">预付款比例（*）</td>
                             <td colspan="1">
-                                <input name="jtsgProjectandContract.hte" class="easyui-textbox" data-options="required:true" enabled="false" style="width:100%;"  />
+                                <input name="jtsgProjectandContract.yfkbl" class="easyui-textbox" data-options="required:true" enabled="false" style="width:100%;"  />
                             </td>
                             <td colspan="1" style="background-color:#ECECFF" align="right">%</td>
                             <td colspan="1" style="background-color:#ECECFF" align="right">项目预付款（*）</td>
                             <td colspan="1">
-                                <input name="jtsgProjectandContract.zzcdhte" class="easyui-textbox" data-options="required:true" enabled="false" style="width:100%;"  />
+                                <input name="jtsgProjectandContract.xmyfk" class="easyui-textbox" data-options="required:true" enabled="false" style="width:100%;"  />
                             </td>
                             <td colspan="1" style="background-color:#ECECFF" align="right">美元</td>
                         </tr>
-                        <tr>
+                        <!-- <tr>
                             <td colspan="1" style="background-color:#ECECFF" align="right">合同文件中译本</td>
                             <td colspan="5">
                                 <input name="jtsgProjectandContract.xmszd" class="easyui-textbox" enabled="false" style="width:100%;"  />
                             </td>
-                        </tr>
+                        </tr> -->
                     </table>
-                  </from>
+            </from>
 			</div>	
 		</fieldset>
 		</div>

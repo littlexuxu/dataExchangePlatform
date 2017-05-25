@@ -122,7 +122,8 @@
 	//显示弹出窗口 新增：row为空 编辑:row有值
 	function doUpdate(row) {
 		var _url = "<%=request.getContextPath()%>/construction/updateConstructionContract";
-		
+		console.log(row.sgcontractid);
+		console.log(row.baserecid);
 	    //弹出对话窗口
 	    sgContract_dialog = $('<div/>').dialog({
 	    	title : "项目及合同信息",
@@ -136,50 +137,24 @@
 	        onLoad: function () {
 	        	if(row){
 	        		$.ajax({
-		        		url : "<%=request.getContextPath()%>/construction/getConstructionProjectBase/",
+		        		url : "<%=request.getContextPath()%>/construction/getSgScontractAndSgBaseInfo/",
 		    			type:"POST",
 		    			data : {
-		    				'id':row.sgbaseid,
-		    			},
-		    			async:false,
-		    			
-		    			success: function(h) {
-		    				var data = eval('(' + h + ')');
-		    				data = allPrpos(data,'sgbase');
-		    				console.log(data);
-		    				$("#sgbase").form('load',data);
-		    				//$("#sgbase").fill(data);
-		    			}
-		    		});
-	        		$.ajax({
-		        		url : "<%=request.getContextPath()%>/construction/getConstructionProjectTrack/",
-		    			type:"POST",
-		    			data : {
-		    				'id':row.sgbaseid,
+		    				'sgcontractId':row.sgcontractid,
+		    				'sgbasereceid':row.baserecid
 		    			},
 		    			async:false,
 		    			success: function(h) {
 		    				var data = eval('(' + h + ')');
-		    				data = allPrpos1(data,'sgtrack');
+		    				console.log(h);
+		    				console.log(data); 
+		    				datasgbase = allPrpos(data.sgbase,'sgBaseProjectInfo');
+		    				datasgcontract = allPrpos(data.sgcontract,'jtsgProjectandContract');
 		    				console.log(data);
-		    				$("#sgtrack").form('load',data);
-		    				//$("#sgbase").fill(data);
-		    			}
-		    		});
-	        		$.ajax({
-		        		url : "<%=request.getContextPath()%>/construction/getJtOtherCompnayBids/",
-		    			type:"POST",
-		    			data : {
-		    				'id':row.sgbaseid,
-		    			},
-		    			async:false,
-		    			success: function(h) {
-		    				var data = eval('(' + h + ')');
-		    				//data = allPrpos1(data,'sgtrack');
-		    				console.log(data);
-		    				//$("#dgOtherBid").datagrid('load',data);
-		    				$('#dgOtherBid').datagrid({ data: data });
-		    				//$("#sgbase").fill(data);
+		    				$("#sgBaseProjectInfo").form('load',datasgbase);
+		    				$("#jtsgProjectandContract").form('load',datasgcontract);
+		    				$("#cxmid").combogrid("setValue",datasgcontract.cxmid);
+		    				//$("#sgbase").fill(data); */
 		    			}
 		    		});
 	        	}
@@ -189,7 +164,7 @@
 	                text: '保存',
 	                iconCls: 'icon-save',
 	                handler: function () {
-	                	saveSgProject();
+	                	saveSgProjectContract();
 	                }
 	            },
 	            {
@@ -208,8 +183,9 @@
 
 	//编辑
 	function doEdit() {
-		//选中的行（第一次选择的行）
+		//获取选中的行（第一次选择的行）
 		var row = $('#sgContractDataGrid').datagrid('getSelected');
+		console.log(row);
 		if (row) {
 			doUpdate(row);
 		} else {
@@ -217,20 +193,31 @@
 		}
 	}
 	
-	function doDelete(){ 
+	
+	function doDelete(){
 		var row = $('#sgContractDataGrid').datagrid('getSelected');
 		if(row){
-			$.messager.confirm('提示', '确定要删除吗?',function(r){ if(r){$.post("<%=request.getContextPath()%>/construction/deleteConstructionProjectBase",{"id":row.sgbaseid},
-			  function(data){
-				var obj = JSON.parse(data);
-				$.messager.alert("提示",obj.returnMsg);
-				sgContractDataGrid.datagrid('reload');
-			  },
-			  "text")}});//这里返回的类型有：json,html,xml,text
-			}else{
+			$.messager.confirm('提示', '确定要删除吗?',function(r){
+				if(r){
+					$.ajax({
+						url : "<%=request.getContextPath()%>/construction/deleteConstructionProjectContract",
+	    			type:"POST",
+	    			data : {
+	    				'sgcontractid':row.sgcontractid
+	    			},
+	    			async:false,
+	    			success: function(h) {
+	    				//$.messager.alert("提示",h.returnMsg);
+	    				$("#sgContractDataGrid").datagrid('reload');
+	    			}
+	    		});
+	    	}
+			});
+		}else{
 			$.messager.alert("提示","请选择要删除的记录");
 		}
 	}
+	
 	//清空查询条件
     function clearfrom() {
         $('#searchSgContractForm').form('clear');
@@ -244,13 +231,10 @@
 				class="easyui-linkbutton" onclick="doUpdate();">新增</a> <a
 				href="javascript:void(0);"
 				data-options="iconCls:'icon-edit',plain:true"
-				class="easyui-linkbutton" onclick="doUpdate();">修改</a> <a
+				class="easyui-linkbutton" onclick="doEdit();">修改</a> <a
 				href="javascript:void(0);"
 				data-options="iconCls:'icon-remove',plain:true"
-				class="easyui-linkbutton" onclick="doUpdate();">删除</a> <a
-				href="javascript:void(0);"
-				data-options="iconCls:'icon-cut',plain:true"
-				class="easyui-linkbutton" onclick="doUpdate();">导出</a> <br> <span>组织机构</span>
+				class="easyui-linkbutton" onclick="doDelete();">删除</a><br> <span>组织机构</span>
 			<input name="sgProjectBase.orgunit_=" class="easyui-textbox">
 			<span>中交行业分类</span> <input name="sgProjectBase.zjhyflx_="
 				data-options="prompt:'请输入中交行业分类',
