@@ -177,13 +177,13 @@
 	//显示弹出窗口 新增：row为空 编辑:row有值
 	//显示弹出窗口 新增：row为空 编辑:row有值
 	function doUpdate(row) {
-		var _url = "<%=request.getContextPath()%>/construction/updateConstructionContract";
+		var _url = "<%=request.getContextPath()%>/construction/updateConstructionContractChange";
 		
 	    //弹出对话窗口
 	    sgContract_dialog = $('<div/>').dialog({
-	    	title : "项目及合同信息",
+	    	title : "合同变更信息",
 			top: 0,
-			width : 1000,
+			width : 850,
 			height : '100%',
 	        modal: true, 
 	        minimizable: true,
@@ -192,21 +192,18 @@
 	        onLoad: function () {
 	        	if(row){
 	        		$.ajax({
-		        		url : "<%=request.getContextPath()%>/construction/getSgScontractAndSgBaseInfo/",
+		        		url : "<%=request.getContextPath()%>/construction/getSgcontractInfo/",
 		    			type:"POST",
 		    			data : {
-		    				'sgcontractId':row.sgcontractid,
-		    				'sgbasereceid':row.baserecid
+		    				'sgcontractId':row.sgcontractid
 		    			},
 		    			async:false,
 		    			success: function(h) {
 		    				var data = eval('(' + h + ')');
-		    				console.log(h);
-		    				console.log(data); 
-		    				datasgbase = allPrpos(data.sgbase,'sgcontrackChange');
+		    				datasgcontract = allPrpos(data.sgcontract,'sgcontract');
 		    				console.log(data);
+		    				$("#sgcontract").form('load',datasgcontract);
 		    				$("#sgcontrackChange").form('load',datasgcontract);
-		    				$("#cxmid").combogrid("setValue",datasgcontract.cxmid);
 		    				//$("#sgbase").fill(data); */
 		    			}
 		    		});
@@ -290,10 +287,7 @@
 				class="easyui-linkbutton" onclick="doEdit();">修改</a> <a
 				href="javascript:void(0);"
 				data-options="iconCls:'icon-remove',plain:true"
-				class="easyui-linkbutton" onclick="doDelete();">删除</a><br>
-				<a href="javascript:void(0);"
-				data-options="iconCls:'icon-edit',plain:true"
-				class="easyui-linkbutton" onclick="doChange();">添加变更合同</a> <!-- <span>组织机构</span>
+				class="easyui-linkbutton" onclick="doDelete();">删除</a><br> <!-- <span>组织机构</span>
 			<input name="sgProjectBase.orgunit_=" class="easyui-textbox"> -->
 			<span>中交行业分类</span> <input name="sgProjectBase.zjhyflx_="
 				data-options="prompt:'请输入中交行业分类',

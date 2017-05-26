@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Entity
 @Table(name="jt_sg_project_base")
 @NamedQuery(name="SgProjectBase.findAll", query="SELECT s FROM SgProjectBase s")
-public class SgProjectBase implements Serializable {
+public class JtSgProjectBase implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -88,7 +88,7 @@ public class SgProjectBase implements Serializable {
 
 	private String zygcnr;
 
-	public SgProjectBase() {
+	public JtSgProjectBase() {
 	}
 
 	public int getSgbaseid() {

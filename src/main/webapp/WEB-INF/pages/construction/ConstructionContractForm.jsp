@@ -37,13 +37,8 @@
 				}
 			});
 		});
-    	
-
-		
 		//设置form表单为只读
-		readonlyForm("sgBaseProjectInfo",true);
-		
-		
+		//readonlyForm("sgBaseProjectInfo",true);
 		
 		$('#cxmid').combogrid({
 		    url:'<%=path %>/select/queryProject?projectType=sg',
@@ -56,23 +51,17 @@
 		    ]],
 		    fitColumns: true,
 		    onSelect:function(index,row,value){
-		    	//console.log(row);
-		    	console.log(row.ssyw);//所属业务
-		    	console.log(row.xmmcyw);//项目名称
-		    	console.log(row.xmbd);//项目标段
-		    	//$("#ssyw").setValue(row.ssyw);
-		    	console.log(row);
 		    	var record = allPrpos(row,'sgBaseProjectInfo');
-		    	/* $("#xmmcyw").textbox("setValue",row.xmmcyw);
-		    	$("#xmbd").textbox("setValue",row.xmbd);
-		    	$('#ssyw').combobox('setValue',4); */
-		    	//$('#ssyw').combobox('setText',row.ssywdtname);
+		    	console.log(row);
+		    	$('#cxmid').combogrid('setValue',record.sgbaseid);
+		    	$('#cxmid').combogrid('setText',record.stdname);
 		    	$("#sgBaseProjectInfo").form("load",record);
 
 		    }
 		});
 	});
 	
+
 	
 	function allPrpos(obj,formId) { 
 		var returnMess = {};
@@ -85,7 +74,6 @@
 	}
 	
 	function saveSgProjectContract() {
-    	
     	if($('#jtsgProjectandContract').form('validate')){
     		var sgcontract = $("#jtsgProjectandContract").serializeJson();
     		$.ajax({
@@ -105,53 +93,6 @@
         	});		
     	} 
     }
-	
-	var sgContract_dialog;
-	//显示弹出窗口 新增：row为空 编辑:row有值
-	function doUpdate(row) {
-		var _url = "<%=request.getContextPath() %>/construction/updateConstructionContract";
-		if (row != undefined && row.id) {
-			//_url = ctx+"/userAction/toUpdate/"+row.id;
-		}
-	    //弹出对话窗口
-	    sgContract_dialog = $('<div/>').dialog({
-	    	title : "项目及市场经营信息",
-			top: 0,
-			width : 1000,
-			height : '100%',
-	        modal: true,
-	        minimizable: true,
-	        maximizable: true,
-	        href: _url,
-	        onLoad: function () {
-	            if (row) {
-	            	$('#sgProjectBaseForm').form('load', row);
-	            } else {
-	            	
-	            }
-
-	        },
-	        buttons: [
-	            {
-	                text: '保存',
-	                iconCls: 'icon-save',
-	                handler: function () {
-	                	$('#sgProjectBaseForm').submit();
-	                }
-	            },
-	            {
-	                text: '关闭',
-	                iconCls: 'icon-cancel',
-	                handler: function () {
-	                	sgContract_dialog.dialog('destroy');
-	                }
-	            }
-	        ],
-	        onClose: function () {
-	        	sgContract_dialog.dialog('destroy');
-	        }
-	    });
-	}
 	
 	</script>
     <div class="easyui-layout" data-options="fit:true,border:false">
@@ -198,7 +139,7 @@
                      	<tr>
                             <td colspan="1" style="background-color:#ECECFF;color:darkgrey" align="right">项目名称</td>
                             <td colspan="5">
-                                <input id="xmmcyw" name="sgBaseProjectInfo.xmmcyw" class="easyui-textbox" enabled="false" style="width:100%;"  />
+                                <input id="xmmcyw" name="sgBaseProjectInfo.stdname" class="easyui-textbox" enabled="false" style="width:100%;"  />
                             </td>
                         </tr>
                         <tr>

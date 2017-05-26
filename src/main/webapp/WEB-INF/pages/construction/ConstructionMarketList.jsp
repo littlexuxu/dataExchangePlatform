@@ -10,40 +10,6 @@
 </head>
 <body>
 	<script>
-	 var dict = {	
-			 /*
-			 getDictName: function(f, d) {
-				debugger;
-				var e = '';
-				for (var g = 0, c = f.length; g < c; g++) {
-					var
-					h = f[g];
-					if (h.dictid == d) { e = h.dictname }
-				}
-				return e;
-			}, */
-			getDictText: function(c, e) {
-				var d = c;
-				var f = "";
-				$.ajax({
-					url:  "${pageContext.request.contextPath}/select/queryDict",
-					type:"POST",
-					data : {
-						'dictTypeId':c
-					},
-					async:false,
-					success: function(h) {
-						var g = h;
-						for (var i = 0; i < h.length; i++) {
-				            if (h[i].dictid == e) {
-				                f = h[i].dictname;
-				            }
-				        }
-					}
-				});
-				return f;
-			}
-	} 
 	
 	/**
 	 * 
@@ -65,8 +31,6 @@
 			return value;
 		}
 	}
-	
-	
 	
 	 /* function getArray(data, id) {
 		    var dictName = "";
@@ -182,26 +146,7 @@
 	});
 	
 	
-	function allPrpos(obj,formId) { 
-		var returnMess = {};
-		for (var p in obj){ 
-			if(obj[p] != null || obj[p] != "null" || obj[p] != "" || obj[p] != undefined) {
-				returnMess[formId+'.' + p] = obj[p];
-			}
-		} 
-		return returnMess;
-	}
 	
-	function allPrpos1(obj,formId) { 
-		var obj = obj[0];
-		var returnMess = {};
-		for (var p in obj){ 
-			if(obj[p] != null || obj[p] != "null" || obj[p] != "" || obj[p] != undefined) {
-				returnMess[formId+'.' + p] = obj[p];
-			}
-		} 
-		return returnMess;
-	}
 	
 
 	function doSearch() {
@@ -354,8 +299,8 @@
 				class="easyui-linkbutton" onclick="doDelete();">删除</a> <!-- <a
 				href="javascript:void(0);"
 				data-options="iconCls:'icon-cut',plain:true"
-				class="easyui-linkbutton" onclick="doUpdate();">导出</a>  --><br> <span>组织机构</span>
-			<input name="sgProjectBase.orgunit_=" class="easyui-textbox">
+				class="easyui-linkbutton" onclick="doUpdate();">导出</a>  --><br> <!-- span>所属单位</span>
+			<input name="sgProjectBase.orgunit_=" class="easyui-textbox"> -->
 			<span>中交行业分类</span> <input name="sgProjectBase.zjhyflx_="
 				data-options="prompt:'请输入中交行业分类',
 								url:'<%=request.getContextPath()%>/select/queryDictTree?dictTypeId=ZJHYFL'"

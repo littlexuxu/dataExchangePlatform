@@ -5,6 +5,81 @@
  *
  */
 
+
+
+/**
+ * 
+ * 拼接表单name
+ * @param {any} obj  json格式数据
+ * @param {any} formId form表单Id
+ * @returns 
+ */
+function allPrpos(obj,formId) { 
+		var returnMess = {};
+		for (var p in obj){ 
+			if(obj[p] != null || obj[p] != "null" || obj[p] != "" || obj[p] != undefined) {
+				returnMess[formId+'.' + p] = obj[p];
+			}
+		} 
+		return returnMess;
+	}
+
+
+/**
+ * 
+ * 拼接表单name
+ * @param {any} obj  json格式数据
+ * @param {any} formId form表单Id
+ * @returns 
+ */
+function allPrpos1(obj,formId) { 
+	var obj = obj[0];
+	var returnMess = {};
+	for (var p in obj){ 
+		if(obj[p] != null || obj[p] != "null" || obj[p] != "" || obj[p] != undefined) {
+			returnMess[formId+'.' + p] = obj[p];
+		}
+	} 
+	return returnMess;
+}
+
+//获取当前应用上下文
+function getContextPath() { 
+	 var contextPath = document.location.pathname; 
+	 var index =contextPath.substr(1).indexOf("/"); 
+	 contextPath = contextPath.substr(0,index+1); 
+	 delete index; 
+	 return contextPath; 
+} 
+
+
+//查询数据字典
+var dict = {
+		getDictText: function(c, e) {
+			var contextPath = getContextPath();
+			var d = c;
+			var f = "";
+			$.ajax({
+				url:  contextPath+"/select/queryDict",
+				type:"POST",
+				data : {
+					'dictTypeId':c
+				},
+				async:false,
+				success: function(h) {
+					var g = h;
+					for (var i = 0; i < h.length; i++) {
+			            if (h[i].dictid == e) {
+			                f = h[i].dictname;
+			            }
+			        }
+				}
+			});
+			return f;
+		}
+} 
+
+
 function SetCookie(sName, sValue) {
     date = new Date();
     document.cookie = sName + "=" + escape(sValue) + "; expires=Fri, 31 Dec 2099 23:59:59 GMT;";
@@ -107,7 +182,8 @@ formatDate = function (v, format) {
         }
     }
     return format;
-};
+};
+
 
 // 删除url中某个参数,返回删除后的参数
 function funcUrlDel(query, name) {

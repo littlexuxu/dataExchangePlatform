@@ -13,7 +13,7 @@ import java.util.Date;
 @Entity
 @Table(name="jt_sg_project_track")
 @NamedQuery(name="SgProjectTrack.findAll", query="SELECT s FROM SgProjectTrack s")
-public class SgProjectTrack implements Serializable {
+public class JtSgProjectTrack implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -111,7 +111,7 @@ public class SgProjectTrack implements Serializable {
 
 	private String zztbfs;
 
-	public SgProjectTrack() {
+	public JtSgProjectTrack() {
 	}
 
 	public int getSgtrackid() {

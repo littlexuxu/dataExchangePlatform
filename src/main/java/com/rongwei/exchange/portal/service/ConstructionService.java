@@ -9,9 +9,9 @@ import com.rongwei.exchange.portal.dao.BaseDao;
 import com.rongwei.exchange.portal.dao.ConstructionDao;
 import com.rongwei.exchange.portal.dao.SgProjectContractDao;
 import com.rongwei.exchange.portal.dao.SgProjectTrackDao;
-import com.rongwei.exchange.portal.model.SgProjectBase;
-import com.rongwei.exchange.portal.model.SgProjectContract;
-import com.rongwei.exchange.portal.model.SgProjectTrack;
+import com.rongwei.exchange.portal.model.JtSgProjectBase;
+import com.rongwei.exchange.portal.model.JtSgProjectContract;
+import com.rongwei.exchange.portal.model.JtSgProjectTrack;
 import com.rongwei.exchange.portal.utils.QueryUtils;
 
 @Service
@@ -101,7 +101,7 @@ public class ConstructionService {
 	 * @param id
 	 * @return
 	 */
-	public SgProjectBase getSgProjectBaseById(Integer id){
+	public JtSgProjectBase getSgProjectBaseById(Integer id){
 		return constructionDao.findOne(id);
 	}
 	
@@ -141,8 +141,8 @@ public class ConstructionService {
 	 * 保存项目基础信息
 	 * @param sgProjectBase
 	 */
-	public SgProjectBase saveSgProjectBase(SgProjectBase sgProjectBase) {
-		SgProjectBase sgProjectBase2 = constructionDao.saveAndFlush(sgProjectBase);
+	public JtSgProjectBase saveSgProjectBase(JtSgProjectBase sgProjectBase) {
+		JtSgProjectBase sgProjectBase2 = constructionDao.saveAndFlush(sgProjectBase);
 		return sgProjectBase2;
 	}
 	
@@ -152,7 +152,7 @@ public class ConstructionService {
 	 * 保存项目市场信息
 	 * @param sgProjectTrack
 	 */
-	public void saveSgProjectTrack(SgProjectTrack sgProjectTrack) {
+	public void saveSgProjectTrack(JtSgProjectTrack sgProjectTrack) {
 		projectTrackDao.save(sgProjectTrack);
 	}
 	
@@ -164,13 +164,13 @@ public class ConstructionService {
 		projectContractDao.delete(Integer.valueOf(id));
 	}
 
-	public void saveSgProjectContract(SgProjectContract sgProjectContract) {
+	public void saveSgProjectContract(JtSgProjectContract sgProjectContract) {
 		// TODO Auto-generated method stub
 		projectContractDao.save(sgProjectContract);
 	}
 
 	
-	public SgProjectContract getSgProjectContract(Integer id){
+	public JtSgProjectContract getSgProjectContract(Integer id){
 		return projectContractDao.findOne(id);
 	}
 

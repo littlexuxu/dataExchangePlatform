@@ -13,7 +13,7 @@ import java.util.Date;
 @Entity
 @Table(name="jt_sg_project_contract")
 @NamedQuery(name="SgProjectContract.findAll", query="SELECT s FROM SgProjectContract s")
-public class SgProjectContract implements Serializable {
+public class JtSgProjectContract implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -159,7 +159,7 @@ public class SgProjectContract implements Serializable {
 
 	private BigDecimal zzcdhte;
 
-	public SgProjectContract() {
+	public JtSgProjectContract() {
 	}
 
 	public int getSgcontractid() {
