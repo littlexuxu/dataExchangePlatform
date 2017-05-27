@@ -233,6 +233,61 @@
 	        }
 	    });
 	}
+	
+	function addContractChg(row){
+		var _url = "<%=request.getContextPath()%>/construction/updateConstructionContractChange";
+		
+	    //弹出对话窗口
+	    sgContract_dialog = $('<div/>').dialog({
+	    	title : "合同变更信息",
+			top: 0,
+			width : 850,
+			height : '100%',
+	        modal: true, 
+	        minimizable: true,
+	        maximizable: true,
+	        href: _url,
+	        onLoad: function () {
+	        	if(row){
+	        		$.ajax({
+		        		url : "<%=request.getContextPath()%>/construction/getSgcontractInfo/",
+		    			type:"POST",
+		    			data : {
+		    				'sgcontractId':row.sgcontractid
+		    			},
+		    			async:false,
+		    			success: function(h) {
+		    				var data = eval('(' + h + ')');
+		    				datasgcontract = allPrpos(data.sgcontract,'sgcontract');
+		    				console.log(data);
+		    				$("#sgcontract").form('load',datasgcontract);
+		    				$("#sgcontrackChange").form('load',datasgcontract);
+		    				//$("#sgbase").fill(data); */
+		    			}
+		    		});
+	        	}
+	        },
+	        buttons: [
+	            {
+	                text: '保存',
+	                iconCls: 'icon-save',
+	                handler: function () {
+	                	saveSgProjectContratChg();
+	                }
+	            },
+	            {
+	                text: '关闭',
+	                iconCls: 'icon-cancel',
+	                handler: function () {
+	                	sgContract_dialog.dialog('destroy');
+	                }
+	            }
+	        ],
+	        onClose: function () {
+	        	sgContract_dialog.dialog('destroy');
+	        }
+	    });
+	}
 
 	//编辑
 	function doEdit() {
@@ -241,11 +296,23 @@
 		console.log(row);
 		if (row) {
 			doUpdate(row);
+			
 		} else {
 			$.messager.alert("提示", "您未选择任何操作对象，请选择一行数据！");
 		}
 	}
 	
+	
+	function doAddChgContract(){
+		//获取选中的行（第一次选择的行）
+		var row = $('#sgContractDataGrid').datagrid('getSelected');
+		console.log(row);
+		if (row) {
+			addContractChg(row);
+		} else {
+			$.messager.alert("提示", "您未选择任何操作对象，请选择一行数据！");
+		}
+	}
 	
 	function doDelete(){
 		var context = getContextPath();
@@ -290,10 +357,10 @@
 				class="easyui-linkbutton" onclick="doEdit();">修改</a> <a
 				href="javascript:void(0);"
 				data-options="iconCls:'icon-remove',plain:true"
-				class="easyui-linkbutton" onclick="doDelete();">删除</a><br>
+				class="easyui-linkbutton" onclick="doDelete();">删除</a>
 				<a href="javascript:void(0);"
 				data-options="iconCls:'icon-edit',plain:true"
-				class="easyui-linkbutton" onclick="doChange();">添加变更合同</a> <!-- <span>组织机构</span>
+				class="easyui-linkbutton" onclick="doAddChgContract();">新增合同变更</a> <br><!-- <span>组织机构</span>
 			<input name="sgProjectBase.orgunit_=" class="easyui-textbox"> -->
 			<span>中交行业分类</span> <input name="sgProjectBase.zjhyflx_="
 				data-options="prompt:'请输入中交行业分类',

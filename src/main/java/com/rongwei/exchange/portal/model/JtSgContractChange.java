@@ -45,6 +45,8 @@ public class JtSgContractChange implements Serializable {
 	private String zhtmc;
 
 	private String zybgtk;
+	
+	private int sgcontractid;
 
 	public JtSgContractChange() {
 	}
@@ -167,6 +169,14 @@ public class JtSgContractChange implements Serializable {
 
 	public void setZybgtk(String zybgtk) {
 		this.zybgtk = zybgtk;
+	}
+	
+	public int getSgcontractid() {
+		return this.sgcontractid;
+	}
+
+	public void setSgcontractid(int sgcontractid) {
+		this.sgcontractid = sgcontractid;
 	}
 
 }

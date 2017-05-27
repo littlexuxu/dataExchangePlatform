@@ -39,8 +39,25 @@
 	<body>
 		<script type="text/javascript">
 			$(function () {
-				$("#divParent").css("display", "none");
-				$("#divParent1").css("display", "none");
+				
+				$("#bgzjhte").numberbox({
+					"onChange":function(){
+						var htewy = $("#htewy").numberbox("getValue");
+						var bgzjhte = $("#bgzjhte").numberbox("getValue");
+						$("#bghtewy").numberbox("setValue",getSum(htewy,bgzjhte));
+					}
+				});
+				
+				
+				$("#bgzjzzcdhte").numberbox({
+					"onChange":function(){
+						var zzcdhte = $("#zzcdhte").numberbox("getValue");
+						var bgzjzzcdhte = $("#bgzjzzcdhte").numberbox("getValue");
+						$("#bgzzcdhte").numberbox("setValue",getSum(zzcdhte,bgzjzzcdhte));
+					}
+				});
+				
+				
 				/* $("#ID").parent().css("display", "none"); */
 				$.each($("input[class='easyui-combotree']"), function (i, val) {
 					var combotree = $("input[name='" + val.name + "']");
@@ -53,87 +70,36 @@
 					});
 				});
 			});
-
-
-			// datagrid行点击事件
-			function onClickRow(index, row) {
-				if (editIndex != index) {
-					if (endEditing()) {
-						$("#dgOtherBid").datagrid("selectRow", index).datagrid("beginEdit", index);
-						editIndex = index;
-					} else {
-						$("#dgOtherBid").datagrid("selectRow", editIndex);
-					}
-				}
-			}
-
-			// 添加一行
-			function addRow() {
-				var dg = $("#dgOtherBid").datagrid();
-				if (endEditing()) {
-					$("#dgOtherBid").datagrid("appendRow", {
-						otherbidid: "",
-						dwmc: "",
-						tbbj: "",
-						//tbbjb: "",
-						sfzb: "",
-						zbe: "",
-						jedw: ""
-					});
-					editIndex = $("#dgOtherBid").datagrid("getRows").length - 1;
-					$("#dgOtherBid").datagrid("selectRow", editIndex).datagrid("beginEdit", editIndex);
-				}
-			}
-
-			// 删除一行
-			function delRow() {
-				if (editIndex == null) { return }
-				$('#dgOtherBid').datagrid('cancelEdit', editIndex).datagrid('deleteRow', editIndex);
-				editIndex = null;
-			}
-			// 撤销修改
-			function rejectRow() {
-				$('#dgOtherBid').datagrid('rejectChanges');
-				editIndex = null;
-			}
-
-
-			// 判断时候存在编辑中的行
-			var editIndex = null;
-			function endEditing() {
-				if (editIndex == null) { return true }
-				if ($('#dgOtherBid').datagrid('validateRow', editIndex)) {
-					$('#dgOtherBid').datagrid('endEdit', editIndex);
-					editIndex = null;
-					return true;
-				} else {
-					return false;
+			 
+			
+			
+			function getSum(cAmount,chgAmout){ 
+				if(chgAmout.indexOf('-') >= 0){
+					chgAmout = chgAmout.substring(1,chgAmout.length);
+					return parseFloat(cAmount) - parseFloat(chgAmout);
+				}else{
+					return parseFloat(cAmount) + parseFloat(chgAmout);
 				}
 			}
 
 
-			function saveSgProject() {
-				var gridData;
-				try {
-					gridData = $('#dgOtherBid').datagrid('getChanges');
-					$('#dgOtherBid').datagrid('acceptChanges');
-				}
-				catch (e) {
-					console.log(e);
-					gridData = "";
-				}
-
+			function saveSgProjectContratChg() {
+				var sgcontract = $("#sgcontrackChange").serializeJsonContain("sgcontract");
+				var sgcontrackChange = $("#sgcontrackChange").serializeJsonContain("sgcontrackChange");
+				
+				// $("form[name='form1']").children().not($('input[type="hidden"]')).serialize()
+				/* $("form[name='form1']").not($("input[type='hidden']")).not($("input[class='flau_u_ro']")).serialize(); 
+				$("form[name='sgcontrackChange']").children().not($('input[name^='sgcontract']')).serialize(); */
 				//提交改变行数据，否则通过getChanges获取新增、或者修改行拿不到最后一次编辑的row
-				console.log(gridData)
-
-				var sgBase = $("#sgbase").serializeJson();
-				var sgtrack = $("#sgtrack").serializeJson();
-
-				if ($('#sgbase').form('validate') && $('#sgtrack').form('validate')) {
+				console.log(sgcontract);
+				console.log(sgcontrackChange);
+				var sgcontract = $("#sgcontrackChange").serializeJsonContain("sgcontract");
+				var sgcontrackChange = $("#sgcontrackChange").serializeJsonContain("sgcontrackChange");
+				if ($('#sgcontrackChange').form('validate')) {
 					$.ajax({
-						url: '<%=path %>/construction/saveConstructionBaseAndTrack',
+						url: '<%=path %>/construction/saveConstructionContractAndChg',
 						type: 'POST',
-						data: { 'sgbase': JSON.stringify(sgBase), 'sgtrack': JSON.stringify(sgtrack), 'otherbids': JSON.stringify(gridData) },
+						data: { 'sgcontract': JSON.stringify(sgcontract), 'sgcontractChg': JSON.stringify(sgcontrackChange)},
 						success: function (result) {
 							console.log(result)
 							if (result.returnMsg == 'Success') {
@@ -168,25 +134,11 @@
 					<div>
 						<legend></legend>
 						<legend align="center"></legend>
-						<!--<form id="sgcontract" method="post" style="width:100%;margin:0 auto;">
-							<div id="divParent" style="margin:10px 0;">
-								<input id="sgbaseid" class="easyui-textbox" name="sgbase.sgbaseid"> </div>
-							<table align="center" border="collapse" bordercolor="#a0c6e5" cellspacing="0" style="width:100%;table-layout:fixed;">
-								<tr style="background-color:#DDDDFF">
-									<td colspan="6" align="center">
-										<font style="font-weight:bold;" face="黑体" size="3">合同变更信息</font>
-									</td>
-								</tr>
-								<tr>
-									<th colspan="1"><label for="name">主合同名称</label></th>
-									<td colspan="5" word-wrap:break-word;>
-										<input class="easyui-textbox" name="sgcontract.htmc" data-options="required:true,readonly:true" style="width: 100%" ;>
-								</tr>
-						</form>-->
 						<!--分割线-->
-						<form id="sgcontrackChange" method="post" style="width:100%;margin:0 auto;">
-							<div id="divParent1" style="margin:10px 0;">
-								<input name="sgcontrackChange.sjchangeid"> </div>
+						<form id="sgcontrackChange" name="form1" method="post" style="width:100%;margin:0 auto;">
+						
+							
+								<input name="sgcontract.sgcontractid" type="hidden">
 							<table align="center" border="collapse" bordercolor="#a0c6e5" cellspacing="0" style="width:100%;table-layout:fixed;">
 								<tr style="background-color:#DDDDFF">
 									<td colspan="6" align="center">
@@ -206,40 +158,49 @@
 
 								<tr>
 									<th colspan="1">纳入系统管理时间</th>
-									<td colspan="2"><input class="easyui-datebox" style="width:100%; " name=""></td>
+									<td colspan="2"><input class="easyui-datebox" style="width:100%;" id="tjgsyf" name="sgcontract.tjgsyf"></td>
 									<th colspan="1">变更日期(*)</th>
 									<td colspan="2"><input name="sgcontrackChange.bgrq" vtype="float" class="easyui-datebox" style="width: 100%" data-options="min:0,precision:2"
 										/></td>
 								</tr>
 								<tr>
-									<th colspan="1">变更增加合同额(*)</th>
-									<td colspan="1"><input class="easyui-numberbox" style="width:100%; " name="sgcontrackChange.bgzjhte"></td>
-									<td colspan="1"><input name="sgtrack.bgzjhte" class="easyui-numberbox" style="width: 100%"></td>
+									<th colspan="1">变更增减合同额(*)</th>
+									<td colspan="1"><input class="easyui-textbox" style="width:100%" id="bgzjhte" name="sgcontrackChange.bgzjhte"></td>
+									<td colspan="1"><input name="sgcontract.hetdw" readonly='readonly' class="easyui-combobox" style="width:100%;" 
+                                data-options="prompt:'折合美元',
+	                                url:'<%=path %>/select/queryDict?dictTypeId=JSJEDW',
+						        	method:'get',	valueField:'dictid',
+							        textField:'dictname',
+							        panelHeight:'auto'"   />
 									<th colspan="1">变更增减自主承担合同额</th>
-									<td colspan="2"><input name="sgcontrackChange.bgzjzzcdhte" vtype="float" class="easyui-numberbox" style="width: 100%" data-options="min:0,precision:2"
-										/></td>
+									<td colspan="2"><input name="sgcontrackChange.bgzjzzcdhte" id="bgzjzzcdhte" class="easyui-textbox" style="width: 100%"/></td>
 								</tr>
 								<tr>
 									<th colspan="1">是否纳入新签</th>
-									<td colspan="2"><input class="easyui-textbox" style="width:100%; " name="sgcontrackChange.sfnrxq"></td>
+									<td colspan="2"><input name="" readonly="readonly" class="easyui-combobox" style="width:100%;" 
+                                data-options="prompt:'是否纳入新签',
+	                                url:'<%=path %>/select/queryDict?dictTypeId=sF',
+						        	method:'get',value=1,alueField:'dictid',
+							        textField:'dictname',
+							        panelHeight:'auto'"/></td>
 									<th colspan="1"></th>
 									<td colspan="2"></td>
 								</tr>
 								<tr>
 									<th style="color:darkgrey">变更前合同额</th>
-									<td colspan="2"><input name="sgcontract.htewy" vtype="float" class="easyui-numberbox" style="width: 100%" data-options="min:0,precision:4"
+									<td colspan="2"><input name="sgcontract.htewy" id="htewy" vtype="float" class="easyui-numberbox" style="width: 100%" data-options="min:0,precision:4"
 										/></td>
 									<th style="color:darkgrey">变更后总合同额</th>
-									<td colspan="2"><input name="sgcontract.htermb" vtype="float" class="easyui-numberbox" style="width: 100%" data-options="min:0,precision:4"
+									<td colspan="2"><input name="sgcontract.bghtewy" id="bghtewy" vtype="float" class="easyui-numberbox" style="width: 100%" data-options="min:0,precision:4"
 										/></td>
 								</tr>
 								<tr>
 									<th style="color:darkgrey">其中：变更前自主承担合同额</th>
-									<td colspan="2"><input name="sgcontract.zzcdhte" vtype="float" class="easyui-numberbox" style="width: 100%" data-options="min:0,precision:4"
+									<td colspan="2"><input name="sgcontract.zzcdhte" id="zzcdhte" vtype="float" class="easyui-numberbox" style="width: 100%" data-options="min:0,precision:4"
 										/></td>
 
-									<th style="color:darkgrey">变更前自主承担合同额</th>
-									<td colspan="2"><input name="sgcontract.htermb" vtype="float" class="easyui-numberbox" style="width: 100%" data-options="min:0,precision:4"
+									<th style="color:darkgrey">变更后自主承担合同额</th>
+									<td colspan="2"><input name="sgcontract.bgzzcdhte" id="bgzzcdhte" vtype="float" class="easyui-numberbox" style="width: 100%" data-options="min:0,precision:4"
 										/></td>
 								</tr>
 								<tr>
@@ -247,7 +208,7 @@
 									<td colspan="2"><input name="sgcontract.htgq" vtype="float" class="easyui-numberbox" style="width: 100%" data-options="min:0,precision:4"
 										/></td>
 
-									<th style="color:darkgrey">变更后合同工期</th>
+									<th>变更后合同工期</th>
 									<td colspan="2"><input name="sgcontrackChange.bghhtgq" vtype="float" class="easyui-numberbox" style="width: 100%" data-options="min:0,precision:4"
 										/></td>
 								</tr>

@@ -43,6 +43,7 @@
             rownumbers : false,
             pagination : true,
             singleSelect : true,
+            width:'auto',
             pageSize : 15,
             pageList : [ 15, 30, 50, 100, 300, 500, 1000, 2000 ],
             columns : [ [ {
@@ -282,7 +283,6 @@
 			<a href="javascript:void(0);" class="easyui-linkbutton" onclick="doUpdate();">新增</a>
 			<a href="javascript:void(0);" class="easyui-linkbutton" onclick="doUpdate();">修改</a>
 			<a href="javascript:void(0);" class="easyui-linkbutton" onclick="doUpdate();">删除</a>
-			<a href="javascript:void(0);" class="easyui-linkbutton" onclick="doUpdate();">导出</a>
 			<br>
 			<span>项目ID</span>
 			<input name="qtProjectBase.qtbaseid_=" class="easyui-textbox">

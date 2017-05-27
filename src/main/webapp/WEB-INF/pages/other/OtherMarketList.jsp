@@ -30,6 +30,7 @@
             rownumbers : false,
             pagination : true,
             singleSelect : true,
+            width:'auto',
             idField : 'sjbaseid',
             pageSize : 15,
             pageList : [ 15, 30, 50, 100, 300, 500, 1000, 2000 ],
@@ -150,7 +151,6 @@
 			<a href="javascript:void(0);" class="easyui-linkbutton" onclick="doUpdate();">新增</a>
 			<a href="javascript:void(0);" class="easyui-linkbutton" onclick="doUpdate();">修改</a>
 			<a href="javascript:void(0);" class="easyui-linkbutton" onclick="doUpdate();">删除</a>
-			<a href="javascript:void(0);" class="easyui-linkbutton" onclick="doUpdate();">导出</a>
 			<br>
 			<span>组织机构</span>
 			<input name="qtProjectBase.orgunit_=" class="easyui-textbox">

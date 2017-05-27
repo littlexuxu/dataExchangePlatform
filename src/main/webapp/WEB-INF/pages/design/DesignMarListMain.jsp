@@ -295,15 +295,13 @@
     	console.log($("#sgtrack").serializeJson());
     }
 </script>	
-<div class="easyui-layout" data-options="fit:true,border:false">
-    <div data-options="region:'center',border:false" title="" style="overflow: auto;padding: 3px;">
-    	<form name="ContractMess">
+<div id="tb" style="padding: 3px">
+		<form id="searchSgBaseForm">
 			<a href="javascript:void(0);" class="easyui-linkbutton" onclick="doAdd();">新增</a>
 			<a href="javascript:void(0);" class="easyui-linkbutton" onclick="doUpdate();">修改</a>
-			<a href="javascript:void(0);" class="easyui-linkbutton" onclick="doDelete();">删除</a>
-			<a href="javascript:void(0);" class="easyui-linkbutton" onclick="doExport();">导出</a>
+			<a href="javascript:void(0);" class="easyui-linkbutton" onclick="doDelete();">删除</a> 
 			<br>
-			<span>组织机构</span>
+			<span>组织22机构</span>
 			<input name="sgProjectBase.orgunit_=" class="easyui-combotree">
 			<span>中交行业分类</span>
 			<input name="sgProjectBase.zjhyflx_=" class="easyui-combotree" data-options=" multiple:true">
@@ -321,19 +319,10 @@
 			<a href="javascript:void(0);" class="easyui-linkbutton" onclick="doSearch();">查询</a>
 			<a href="javascript:void(0);" class="easyui-linkbutton" onclick="resize();" id="btn">清空</a>
 		</form>
-		<fieldset class="easyui-panel" style="width:90%;margin:0 auto;">
-			<div>
-			<legend></legend>
-			<legend align="center" ></legend>
-			<form id="sjbase" method="post"  style="width:100%;margin:0 auto;">
-				<table id="sjxmhtDataGrid" class="easyui-datagrid" style="width:100%;height:610px"
+	</div>
+<table id="sjxmhtDataGrid" class="easyui-datagrid" style="width:95%;height:610px"
 			rownumbers="true" pagination="true">
-		</table>
-				</form>
-			</div>	
-		</fieldset>
-        
-    </div>
-</div>
+	</table>
+
 </body>
 </html>

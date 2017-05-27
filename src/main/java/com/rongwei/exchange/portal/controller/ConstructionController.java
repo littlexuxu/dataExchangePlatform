@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.aspectj.weaver.ast.Var;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,9 +22,10 @@ import com.ajie.wechat.util.JtConstant;
 import com.ajie.wechat.util.PageQuery;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.rongwei.exchange.portal.model.JtSgProjectBase;
-import com.rongwei.exchange.portal.model.JtSgProjectContract;
-import com.rongwei.exchange.portal.model.JtSgProjectTrack;
+import com.rongwei.exchange.portal.model.JtSgContractChange;
+import com.rongwei.exchange.portal.model.SgProjectBase;
+import com.rongwei.exchange.portal.model.SgProjectContract;
+import com.rongwei.exchange.portal.model.SgProjectTrack;
 import com.rongwei.exchange.portal.service.ConstructionService;
 
 @Controller
@@ -89,7 +91,7 @@ public class ConstructionController {
 	 * @return
 	 */
 	@RequestMapping(value = "/saveConstructionBaseProject", method = RequestMethod.POST)
-	public @ResponseBody Map<String, Object> saveConstructionBaseProject(JtSgProjectBase sgProjectBase) {
+	public @ResponseBody Map<String, Object> saveConstructionBaseProject(SgProjectBase sgProjectBase) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		try {
 			constructionService.saveSgProjectBase(sgProjectBase);
@@ -112,7 +114,7 @@ public class ConstructionController {
 		Map<String, Object> map = new HashMap<String,Object>();
 		ObjectMapper mapper = new ObjectMapper();
 		try {
-			JtSgProjectContract sgProjectContract = mapper.readValue(sgcontract, JtSgProjectContract.class);
+			SgProjectContract sgProjectContract = mapper.readValue(sgcontract, SgProjectContract.class);
 			sgProjectContract.setBaserecid(Integer.valueOf(sgbaseid));
 			constructionService.saveSgProjectContract(sgProjectContract);
 			map.put("returnMsg", JtConstant.SUCCESS);
@@ -130,7 +132,7 @@ public class ConstructionController {
 	@ResponseBody
 	public String getConstructionProjectBase(HttpServletRequest request) throws Exception {
 		String sgId = request.getParameter("id");
-		JtSgProjectBase sgProjectBase = constructionService.getSgProjectBaseById(Integer.valueOf(sgId));
+		SgProjectBase sgProjectBase = constructionService.getSgProjectBaseById(Integer.valueOf(sgId));
 		ObjectMapper objectMapper = new ObjectMapper();
 		String jsonBase = objectMapper.writeValueAsString(sgProjectBase);
 		return jsonBase;
@@ -152,8 +154,8 @@ public class ConstructionController {
 		String jsonBase = "";
 		String jsonContract = "";
 		try{
-			JtSgProjectContract sgProjectContract = constructionService.getSgProjectContract(Integer.valueOf(sgcontractId));
-			JtSgProjectBase sgProjectBase = constructionService.getSgProjectBaseById(Integer.valueOf(sgbasereceid));
+			SgProjectContract sgProjectContract = constructionService.getSgProjectContract(Integer.valueOf(sgcontractId));
+			SgProjectBase sgProjectBase = constructionService.getSgProjectBaseById(Integer.valueOf(sgbasereceid));
 			jsonBase = objectMapper.writeValueAsString(sgProjectBase);
 			jsonContract = objectMapper.writeValueAsString(sgProjectContract);
 			
@@ -219,9 +221,9 @@ public class ConstructionController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		ObjectMapper mapper = new ObjectMapper();
 		try {
-			JtSgProjectBase sgProjectBase = mapper.readValue(sgbase, JtSgProjectBase.class);
-			JtSgProjectTrack sgProjectTrack = mapper.readValue(sgtrack, JtSgProjectTrack.class);
-			JtSgProjectBase sgProjectBase1 = constructionService.saveSgProjectBase(sgProjectBase);
+			SgProjectBase sgProjectBase = mapper.readValue(sgbase, SgProjectBase.class);
+			SgProjectTrack sgProjectTrack = mapper.readValue(sgtrack, SgProjectTrack.class);
+			SgProjectBase sgProjectBase1 = constructionService.saveSgProjectBase(sgProjectBase);
 			sgProjectTrack.setBaserecid(sgProjectBase1.getSgbaseid());
 			otherbids = otherbids.trim();
 			constructionService.saveSgProjectTrack(sgProjectTrack);
@@ -312,7 +314,7 @@ public class ConstructionController {
 		ObjectMapper objectMapper = new ObjectMapper();
 		try {
 			String sgcontractId = request.getParameter("sgcontractId");
-			JtSgProjectContract sgProjectContract = constructionService.getSgProjectContract(Integer.valueOf(sgcontractId));
+			SgProjectContract sgProjectContract = constructionService.getSgProjectContract(Integer.valueOf(sgcontractId));
 			jsonContract = objectMapper.writeValueAsString(sgProjectContract);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -320,5 +322,31 @@ public class ConstructionController {
 		sb.append(jsonContract).append("}");
 		return sb.toString();
 	}
+	
+	/**
+	 * 
+	 * @param sgcontract
+	 * @param sgcontractChg
+	 * @return
+	 */
+	@RequestMapping(value = "/saveConstructionContractAndChg", method = RequestMethod.POST)
+	public @ResponseBody Map<String, Object> saveConstructionContractAndChg(String sgcontract, String sgcontractChg) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			SgProjectContract sgProjectContract = mapper.readValue(sgcontract, SgProjectContract.class);
+			JtSgContractChange sgContractChg = mapper.readValue(sgcontractChg, JtSgContractChange.class);
+			SgProjectContract sgProjectContract1 = constructionService.getSgProjectContract(sgContractChg.getSgcontractid());
+			constructionService.saveSgProjectContract(sgProjectContract);
+			sgContractChg.setSgcontractid(sgProjectContract.getSgcontractid());
+			constructionService.saveSgProjectContractChg(sgContractChg);		
+			map.put("returnMsg", JtConstant.SUCCESS);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			map.put("returnMsg", JtConstant.FAILURE);
+		}
+		return map;
+	}
+ 
 
 }

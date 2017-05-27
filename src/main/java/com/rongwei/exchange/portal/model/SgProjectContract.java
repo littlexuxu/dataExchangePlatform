@@ -13,7 +13,7 @@ import java.util.Date;
 @Entity
 @Table(name="jt_sg_project_contract")
 @NamedQuery(name="SgProjectContract.findAll", query="SELECT s FROM SgProjectContract s")
-public class JtSgProjectContract implements Serializable {
+public class SgProjectContract implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -45,6 +45,10 @@ public class JtSgProjectContract implements Serializable {
 	private String htbh;
 
 	private BigDecimal htewy;
+	
+	private BigDecimal bghtewy;//2017年5月27日新增--变更后总合同额
+	
+	private BigDecimal bgzzcdhte;//2017年5月27日新增--变更后自主承担合同额
 
 	private BigDecimal htgq;
 
@@ -159,7 +163,7 @@ public class JtSgProjectContract implements Serializable {
 
 	private BigDecimal zzcdhte;
 
-	public JtSgProjectContract() {
+	public SgProjectContract() {
 	}
 
 	public int getSgcontractid() {
@@ -272,6 +276,14 @@ public class JtSgProjectContract implements Serializable {
 
 	public void setHtewy(BigDecimal htewy) {
 		this.htewy = htewy;
+	}
+	
+	public BigDecimal getBghtewy() {
+		return this.bghtewy;
+	}
+
+	public void setBghtewy(BigDecimal bghtewy) {
+		this.bghtewy = bghtewy;
 	}
 
 	public BigDecimal getHtgq() {
@@ -704,6 +716,14 @@ public class JtSgProjectContract implements Serializable {
 
 	public void setZzcdhte(BigDecimal zzcdhte) {
 		this.zzcdhte = zzcdhte;
+	}
+	
+	public BigDecimal getBgzzcdhte() {
+		return this.bgzzcdhte;
+	}
+
+	public void setBgzzcdhte(BigDecimal bgzzcdhte) {
+		this.bgzzcdhte = bgzzcdhte;
 	}
 
 }

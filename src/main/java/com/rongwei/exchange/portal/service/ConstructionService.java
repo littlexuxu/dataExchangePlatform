@@ -7,11 +7,13 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ajie.wechat.util.PageQuery;
 import com.rongwei.exchange.portal.dao.BaseDao;
 import com.rongwei.exchange.portal.dao.ConstructionDao;
+import com.rongwei.exchange.portal.dao.SgProjectContractChgDao;
 import com.rongwei.exchange.portal.dao.SgProjectContractDao;
 import com.rongwei.exchange.portal.dao.SgProjectTrackDao;
-import com.rongwei.exchange.portal.model.JtSgProjectBase;
-import com.rongwei.exchange.portal.model.JtSgProjectContract;
-import com.rongwei.exchange.portal.model.JtSgProjectTrack;
+import com.rongwei.exchange.portal.model.JtSgContractChange;
+import com.rongwei.exchange.portal.model.SgProjectBase;
+import com.rongwei.exchange.portal.model.SgProjectContract;
+import com.rongwei.exchange.portal.model.SgProjectTrack;
 import com.rongwei.exchange.portal.utils.QueryUtils;
 
 @Service
@@ -26,6 +28,9 @@ public class ConstructionService {
 	
 	@Autowired
 	private SgProjectContractDao projectContractDao;
+	
+	@Autowired
+	private SgProjectContractChgDao projectContractChgDao;
 	
 	@Autowired
 	private BaseDao baseDao;
@@ -101,7 +106,7 @@ public class ConstructionService {
 	 * @param id
 	 * @return
 	 */
-	public JtSgProjectBase getSgProjectBaseById(Integer id){
+	public SgProjectBase getSgProjectBaseById(Integer id){
 		return constructionDao.findOne(id);
 	}
 	
@@ -141,8 +146,8 @@ public class ConstructionService {
 	 * 保存项目基础信息
 	 * @param sgProjectBase
 	 */
-	public JtSgProjectBase saveSgProjectBase(JtSgProjectBase sgProjectBase) {
-		JtSgProjectBase sgProjectBase2 = constructionDao.saveAndFlush(sgProjectBase);
+	public SgProjectBase saveSgProjectBase(SgProjectBase sgProjectBase) {
+		SgProjectBase sgProjectBase2 = constructionDao.saveAndFlush(sgProjectBase);
 		return sgProjectBase2;
 	}
 	
@@ -152,7 +157,7 @@ public class ConstructionService {
 	 * 保存项目市场信息
 	 * @param sgProjectTrack
 	 */
-	public void saveSgProjectTrack(JtSgProjectTrack sgProjectTrack) {
+	public void saveSgProjectTrack(SgProjectTrack sgProjectTrack) {
 		projectTrackDao.save(sgProjectTrack);
 	}
 	
@@ -164,14 +169,22 @@ public class ConstructionService {
 		projectContractDao.delete(Integer.valueOf(id));
 	}
 
-	public void saveSgProjectContract(JtSgProjectContract sgProjectContract) {
+	public void saveSgProjectContract(SgProjectContract sgProjectContract) {
 		// TODO Auto-generated method stub
 		projectContractDao.save(sgProjectContract);
 	}
 
 	
-	public JtSgProjectContract getSgProjectContract(Integer id){
+	public SgProjectContract getSgProjectContract(Integer id){
 		return projectContractDao.findOne(id);
+	}
+	
+	public JtSgContractChange saveSgProjectContractChg(JtSgContractChange jtSgContractChange){
+		return projectContractChgDao.save(jtSgContractChange);
+	}
+	
+	public void deleteSgContractChangeById(String id){
+		projectContractChgDao.delete(Integer.valueOf(id));
 	}
 
 	

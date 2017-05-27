@@ -202,7 +202,6 @@
 		    				var data = eval('(' + h + ')');
 		    				datasgcontract = allPrpos(data.sgcontract,'sgcontract');
 		    				console.log(data);
-		    				$("#sgcontract").form('load',datasgcontract);
 		    				$("#sgcontrackChange").form('load',datasgcontract);
 		    				//$("#sgbase").fill(data); */
 		    			}
